@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Div ve Span — HTML'in Kapsayıcı Elementleri - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Div ve Span — HTML'in Kapsayıcı Elementleri</h1>
+    <p class="desc">Div (block-level) ve span (inline-level) elementlerinin detaylı anlatımı. Gruplama, sayfa düzeni, metin içi stilleme, pratik örnekler ve sık yapılan hatalar.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Div ve Span Kavramları - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;html-div-span.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📦 &lt;span class=&quot;highlight&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt; ve &lt;span class=&quot;highlight&quot;&gt;&amp;lt;span&amp;gt;&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;HTML'in En Temel Kapsayıcı Elementleri — Gruplama ve Stil Verme&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 0: Giriş --&gt;
+  &lt;h2&gt;🎯 Giriş: Neden Div ve Span?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;&amp;lt;div&amp;gt;&lt;/strong&gt; ve &lt;strong&gt;&amp;lt;span&amp;gt;&lt;/strong&gt;, HTML'in &lt;strong&gt;en çok kullanılan&lt;/strong&gt; elementleridir. Tek başlarına hiçbir anlamları yoktur, ancak diğer elementleri &lt;strong&gt;gruplamak&lt;/strong&gt; ve onlara &lt;strong&gt;CSS veya JavaScript ile müdahale etmek&lt;/strong&gt; için kullanılırlar.&lt;/p&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Altın Kural:&lt;/strong&gt; Div ve span'ın tek amacı &lt;strong&gt;kapsayıcı (container)&lt;/strong&gt; olmaktır. Onlar olmadan sayfalarımızı düzenlemek çok zor olurdu!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: Div Elementi --&gt;
+  &lt;h2&gt;🔷 &amp;lt;div&amp;gt; — Block Seviye Kapsayıcı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📦 Division / Bölüm&lt;/div&gt;
+    
+    &lt;div class=&quot;element-list&quot;&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;display: block (varsayılan)&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;&amp;lt;div&amp;gt;&lt;/strong&gt; (division), &lt;strong&gt;block-level&lt;/strong&gt; bir elementtir. Sayfada &lt;strong&gt;yeni bir satır başlatır&lt;/strong&gt; ve bulunduğu kabın &lt;strong&gt;tüm genişliğini kaplar&lt;/strong&gt;.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;kutu&quot;&amp;gt;
+  &amp;lt;h1&amp;gt;Başlık&amp;lt;/h1&amp;gt;
+  &amp;lt;p&amp;gt;Bu bir paragraf. Div içinde gruplanmış içerik.&amp;lt;/p&amp;gt;
+  &amp;lt;button&amp;gt;Tıkla&amp;lt;/button&amp;gt;
+&amp;lt;/div&amp;gt;
+
+&amp;lt;div class=&quot;kutu&quot;&amp;gt;
+  &amp;lt;p&amp;gt;İkinci div yeni satırda başlar&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Div ile Gruplama Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container div-demo&quot;&gt;
+        &lt;div&gt;🔹 1. Div: İçinde her türlü element olabilir&lt;/div&gt;
+        &lt;div&gt;🔹 2. Div: Her div yeni satırda başlar&lt;/div&gt;
+        &lt;div&gt;🔹 3. Div: Tam genişliği kaplar (kırmızı çizgi border)&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;🎨 Div ile Sayfa Düzeni Oluşturma&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;page-layout&quot;&amp;gt;
+  &amp;lt;div class=&quot;header&quot;&amp;gt;Üst Menü&amp;lt;/div&amp;gt;
+  &amp;lt;div class=&quot;nav&quot;&amp;gt;Navigasyon&amp;lt;/div&amp;gt;
+  &amp;lt;div class=&quot;main&quot;&amp;gt;
+    &amp;lt;div class=&quot;content&quot;&amp;gt;Ana İçerik&amp;lt;/div&amp;gt;
+    &amp;lt;div class=&quot;sidebar&quot;&amp;gt;Yan Menü&amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+  &amp;lt;div class=&quot;footer&quot;&amp;gt;Alt Bilgi&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Div ile Yapılmış Sayfa Düzeni&lt;/h4&gt;
+      &lt;div class=&quot;page-layout&quot;&gt;
+        &lt;div class=&quot;layout-header&quot;&gt;📰 HEADER (Üst Bölüm)&lt;/div&gt;
+        &lt;div class=&quot;layout-nav&quot;&gt;🔗 NAV (Menü Bağlantıları)&lt;/div&gt;
+        &lt;div class=&quot;layout-main&quot;&gt;
+          &lt;div class=&quot;layout-content&quot;&gt;
+            &lt;strong&gt;MAIN CONTENT (Ana İçerik)&lt;/strong&gt;&lt;br&gt;
+            Burası div ile gruplanmış ana içerik alanı. Blog yazıları, makaleler burada olabilir.
+          &lt;/div&gt;
+          &lt;div class=&quot;layout-sidebar&quot;&gt;
+            &lt;strong&gt;SIDEBAR (Yan Menü)&lt;/strong&gt;&lt;br&gt;
+            Kategoriler, popüler yazılar, reklamlar...
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;layout-footer&quot;&gt;© FOOTER (Alt Bilgi) — Tüm hakları saklıdır.&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Div Kullanım Alanları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Sayfa bölümlerini ayırmak (header, main, footer, sidebar)&lt;/li&gt;
+        &lt;li&gt;Form grupları oluşturmak&lt;/li&gt;
+        &lt;li&gt;CSS Grid veya Flexbox ile düzen oluşturmak&lt;/li&gt;
+        &lt;li&gt;JavaScript ile müdahale edilecek alanları belirlemek&lt;/li&gt;
+        &lt;li&gt;Kartlar, galeriler, modal pencereler gibi UI bileşenleri yapmak&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Span Elementi --&gt;
+  &lt;h2&gt;🔹 &amp;lt;span&amp;gt; — Inline Seviye Kapsayıcı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📝 Span / Aralık&lt;/div&gt;
+    
+    &lt;div class=&quot;element-list&quot;&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;span&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;display: inline (varsayılan)&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;&amp;lt;span&amp;gt;&lt;/strong&gt;, &lt;strong&gt;inline-level&lt;/strong&gt; bir elementtir. &lt;strong&gt;Yeni satır başlatmaz&lt;/strong&gt;, sadece &lt;strong&gt;içeriği kadar yer kaplar&lt;/strong&gt;. Genellikle metin içindeki küçük parçaları stillendirmek için kullanılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;p&amp;gt;
+  Bugün &amp;lt;span class=&quot;highlight&quot;&amp;gt;HTML&amp;lt;/span&amp;gt; öğreniyoruz.
+  &amp;lt;span class=&quot;important&quot;&amp;gt;Div ve span&amp;lt;/span&amp;gt; çok önemli!
+&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Span ile Metin İçi Stilleme&lt;/h4&gt;
+      &lt;div class=&quot;demo-container span-demo&quot; style=&quot;background: #1a1a20;&quot;&gt;
+        &lt;p style=&quot;margin: 0; color: #fff;&quot;&gt;
+          Bugün &lt;span style=&quot;background: #e8ff47; color: #000; padding: 0.2rem 0.4rem;&quot;&gt;HTML&lt;/span&gt; öğreniyoruz. 
+          &lt;span style=&quot;background: #ffaa44; color: #000; padding: 0.2rem 0.4rem;&quot;&gt;Div ve span&lt;/span&gt; çok önemli 
+          elementlerdir. Ayrıca &lt;span style=&quot;background: #6bcb77; color: #000; padding: 0.2rem 0.4rem;&quot;&gt;inline&lt;/span&gt; 
+          elementlerdir.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;🎨 Span ile Detaylı Örnek&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;p&amp;gt;
+  Bugün &amp;lt;span style=&quot;color: red;&quot;&amp;gt;hava&amp;lt;/span&amp;gt; çok güzel.
+  Fiyat: &amp;lt;span style=&quot;font-weight: bold; color: green;&quot;&amp;gt;$49.99&amp;lt;/span&amp;gt;
+  &amp;lt;span style=&quot;text-decoration: line-through;&quot;&amp;gt;$99.99&amp;lt;/span&amp;gt;
+&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Span ile Detaylı Stilleme&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; style=&quot;background: #1a1a20;&quot;&gt;
+        &lt;p style=&quot;margin: 0; color: #fff;&quot;&gt;
+          Bugün &lt;span style=&quot;color: #ff6464;&quot;&gt;hava&lt;/span&gt; çok güzel.&lt;br&gt;
+          Fiyat: &lt;span style=&quot;font-weight: bold; color: #6bcb77;&quot;&gt;$49.99&lt;/span&gt;
+          &lt;span style=&quot;text-decoration: line-through; color: #888;&quot;&gt;$99.99&lt;/span&gt;&lt;br&gt;
+          Durum: &lt;span style=&quot;background: #e8ff47; color: #000; padding: 0.2rem 0.5rem; border-radius: 20px;&quot;&gt;Stokta var&lt;/span&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Span Kullanım Alanları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Metin içinde belirli kelimeleri renklendirmek&lt;/li&gt;
+        &lt;li&gt;Fiyat etiketleri, indirim bilgileri göstermek&lt;/li&gt;
+        &lt;li&gt;Icon veya küçük elementleri metinle aynı satırda göstermek&lt;/li&gt;
+        &lt;li&gt;JavaScript ile metin içindeki belirli alanları yakalamak&lt;/li&gt;
+        &lt;li&gt;Tooltip, badge gibi küçük UI elementleri oluşturmak&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ ÖNEMLİ:&lt;/strong&gt; Span inline element olduğu için &lt;strong&gt;width ve height&lt;/strong&gt; özellikleri &lt;strong&gt;ÇALIŞMAZ&lt;/strong&gt;. Genişlik/yükseklik vermek istersen &lt;code&gt;display: inline-block;&lt;/code&gt; kullanmalısın!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: Div vs Span Karşılaştırması --&gt;
+  &lt;h2&gt;📊 Div vs Span — Karşılaştırma Tablosu&lt;/h2&gt;
+  &lt;table class=&quot;comparison-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;&amp;lt;div&amp;gt;&lt;/th&gt;&lt;th&gt;&amp;lt;span&amp;gt;&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Display tipi&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;block&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;inline&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Yeni satır başlatır&lt;/strong&gt;&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Genişlik&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Tam genişlik kaplar&lt;/td&gt;&lt;td&gt;İçerik kadar&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;width/height ayarlanabilir&lt;/strong&gt;&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır (inline-block gerekir)&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Kullanım amacı&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Büyük blokları gruplama&lt;/td&gt;&lt;td&gt;Metin parçalarını gruplama&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;İçinde ne olabilir?&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Her türlü element&lt;/td&gt;&lt;td&gt;Inline elementler veya metin&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 4: Pratik Örnekler --&gt;
+  &lt;h2&gt;🎯 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;!-- Örnek 1: Kart Galerisi (Div ile) --&gt;
+  &lt;h3&gt;📸 Örnek 1: Kart Galerisi (Div ile)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;gallery&quot;&amp;gt;
+  &amp;lt;div class=&quot;card&quot;&amp;gt;
+    &amp;lt;h4&amp;gt;Ürün 1&amp;lt;/h4&amp;gt;
+    &amp;lt;p&amp;gt;Açıklama...&amp;lt;/p&amp;gt;
+    &amp;lt;span&amp;gt;$49.99&amp;lt;/span&amp;gt;
+  &amp;lt;/div&amp;gt;
+  &amp;lt;div class=&quot;card&quot;&amp;gt;
+    &amp;lt;h4&amp;gt;Ürün 2&amp;lt;/h4&amp;gt;
+    &amp;lt;p&amp;gt;Açıklama...&amp;lt;/p&amp;gt;
+    &amp;lt;span&amp;gt;$59.99&amp;lt;/span&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;gallery&quot;&gt;
+      &lt;div class=&quot;gallery-card&quot;&gt;
+        &lt;h4&gt;📱 Ürün 1&lt;/h4&gt;
+        &lt;p&gt;Akıllı telefon&lt;/p&gt;
+        &lt;span style=&quot;color: #e8ff47; font-weight: bold;&quot;&gt;$499&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;gallery-card&quot;&gt;
+        &lt;h4&gt;💻 Ürün 2&lt;/h4&gt;
+        &lt;p&gt;Dizüstü bilgisayar&lt;/p&gt;
+        &lt;span style=&quot;color: #e8ff47; font-weight: bold;&quot;&gt;$1299&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;gallery-card&quot;&gt;
+        &lt;h4&gt;🎧 Ürün 3&lt;/h4&gt;
+        &lt;p&gt;Kulaklık&lt;/p&gt;
+        &lt;span style=&quot;color: #e8ff47; font-weight: bold;&quot;&gt;$79&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Örnek 2: Ürün Kartı (Div + Span birlikte) --&gt;
+  &lt;h3&gt;🏷️ Örnek 2: Ürün Kartı (Div + Span Birlikte)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;product-card&quot;&amp;gt;
+  &amp;lt;h3&amp;gt;Süper Ürün&amp;lt;/h3&amp;gt;
+  &amp;lt;p&amp;gt;Bu ürün &amp;lt;span class=&quot;highlight&quot;&amp;gt;%50 indirimli&amp;lt;/span&amp;gt;!&amp;lt;/p&amp;gt;
+  &amp;lt;div class=&quot;price&quot;&amp;gt;
+    &amp;lt;span class=&quot;old-price&quot;&amp;gt;$200&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&quot;new-price&quot;&amp;gt;$100&amp;lt;/span&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px; max-width: 300px;&quot;&gt;
+        &lt;h3 style=&quot;margin: 0 0 0.5rem 0;&quot;&gt;✨ Süper Ürün&lt;/h3&gt;
+        &lt;p style=&quot;margin: 0 0 0.5rem 0;&quot;&gt;Bu ürün &lt;span style=&quot;background: #e8ff47; color: #000; padding: 0.2rem 0.4rem; border-radius: 4px;&quot;&gt;%50 indirimli&lt;/span&gt;!&lt;/p&gt;
+        &lt;div style=&quot;margin-top: 0.5rem;&quot;&gt;
+          &lt;span style=&quot;text-decoration: line-through; color: #888;&quot;&gt;$200&lt;/span&gt;
+          &lt;span style=&quot;color: #e8ff47; font-size: 1.2rem; font-weight: bold; margin-left: 0.5rem;&quot;&gt;$100&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Örnek 3: Form Gruplama (Div ile) --&gt;
+  &lt;h3&gt;📝 Örnek 3: Form Gruplama (Div ile)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;form-group&quot;&amp;gt;
+  &amp;lt;label&amp;gt;Ad Soyad:&amp;lt;/label&amp;gt;
+  &amp;lt;input type=&quot;text&quot; placeholder=&quot;Adınız&quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;form-group&quot;&amp;gt;
+  &amp;lt;label&amp;gt;E-posta:&amp;lt;/label&amp;gt;
+  &amp;lt;input type=&quot;email&quot; placeholder=&quot;ornek@mail.com&quot;&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;div style=&quot;margin-bottom: 1rem;&quot;&gt;
+          &lt;label style=&quot;display: block; margin-bottom: 0.3rem; color: #e8ff47;&quot;&gt;👤 Ad Soyad:&lt;/label&gt;
+          &lt;input type=&quot;text&quot; placeholder=&quot;Adınız&quot; style=&quot;width: 100%; padding: 0.5rem; border-radius: 4px; border: none;&quot;&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+          &lt;label style=&quot;display: block; margin-bottom: 0.3rem; color: #e8ff47;&quot;&gt;📧 E-posta:&lt;/label&gt;
+          &lt;input type=&quot;email&quot; placeholder=&quot;ornek@mail.com&quot; style=&quot;width: 100%; padding: 0.5rem; border-radius: 4px; border: none;&quot;&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Örnek 4: Bildirim Mesajları (Div + Span) --&gt;
+  &lt;h3&gt;🔔 Örnek 4: Bildirim Mesajları&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;alert success&quot;&amp;gt;
+  &amp;lt;span&amp;gt;✓&amp;lt;/span&amp;gt; İşlem başarıyla tamamlandı!
+&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;alert error&quot;&amp;gt;
+  &amp;lt;span&amp;gt;⚠&amp;lt;/span&amp;gt; Bir hata oluştu!
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: rgba(107, 203, 119, 0.2); border-left: 4px solid #6bcb77; padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 4px;&quot;&gt;
+        &lt;span style=&quot;color: #6bcb77; font-weight: bold;&quot;&gt;✓&lt;/span&gt; İşlem başarıyla tamamlandı!
+      &lt;/div&gt;
+      &lt;div style=&quot;background: rgba(255, 100, 100, 0.2); border-left: 4px solid #ff6464; padding: 0.8rem; border-radius: 4px;&quot;&gt;
+        &lt;span style=&quot;color: #ff6464; font-weight: bold;&quot;&gt;⚠&lt;/span&gt; Bir hata oluştu! Lütfen tekrar deneyin.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Span'i Block Yapmak / Div'i Inline Yapmak --&gt;
+  &lt;h2&gt;🔄 Display Özelliği ile Tip Değiştirme&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;CSS'in &lt;code&gt;display&lt;/code&gt; özelliği ile bir elementin görüntüleme tipini &lt;strong&gt;değiştirebilirsiniz&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Span'i block gibi davranmaya zorla */
+span {
+  display: block;
+}
+
+/* Div'i inline gibi davranmaya zorla */
+div {
+  display: inline;
+}
+
+/* Her ikisini de inline-block yap */
+span, div {
+  display: inline-block;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Span display: block yapıldı&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;span style=&quot;display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;&quot;&gt;Bu span normalde inline ama display: block yapıldı&lt;/span&gt;
+        &lt;span style=&quot;display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;&quot;&gt;İkinci span da block, yeni satırda başlıyor!&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Div display: inline yapıldı&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;display: inline; background: #3a3a4a; padding: 0.5rem;&quot;&gt;Div 1&lt;/div&gt;
+        &lt;div style=&quot;display: inline; background: #3a3a4a; padding: 0.5rem;&quot;&gt;Div 2&lt;/div&gt;
+        &lt;div style=&quot;display: inline; background: #3a3a4a; padding: 0.5rem;&quot;&gt;Div 3&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Normalde her div yeni satırda başlardı, ama &lt;code&gt;display: inline&lt;/code&gt; ile yan yana dizildiler!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: En Sık Yapılan Hatalar --&gt;
+  &lt;h2&gt;⚠️ En Sık Yapılan Hatalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; Span'e width/height vermeye çalışmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+span {
+  width: 200px;   /* ❌ ÇALIŞMAZ! Span inline elementtir */
+  height: 100px;  /* ❌ ÇALIŞMAZ! */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;display: inline-block;&lt;/code&gt; ekleyin!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; Div içine sadece inline element koyup stillendirmeye çalışmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;span&amp;gt;Metin&amp;lt;/span&amp;gt;
+  &amp;lt;span&amp;gt;Metin&amp;lt;/span&amp;gt;
+&amp;lt;/div&amp;gt;
+/* Div'e text-align: center yaparsan içindeki span'ler ortalanır */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Div block olduğu için içindeki inline elementleri hizalamak için div'e &lt;code&gt;text-align&lt;/code&gt; verebilirsiniz.
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 3:&lt;/strong&gt; Anlamsal elementler yerine sürekli div kullanmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;div class=&quot;header&quot;&amp;gt;...&amp;lt;/div&amp;gt;  ⚠️ Daha iyisi: &amp;lt;header&amp;gt;...&amp;lt;/header&amp;gt;
+&amp;lt;div class=&quot;nav&quot;&amp;gt;...&amp;lt;/div&amp;gt;     ⚠️ Daha iyisi: &amp;lt;nav&amp;gt;...&amp;lt;/nav&amp;gt;
+&amp;lt;div class=&quot;footer&quot;&amp;gt;...&amp;lt;/div&amp;gt;  ⚠️ Daha iyisi: &amp;lt;footer&amp;gt;...&amp;lt;/footer&amp;gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; HTML5'te anlamsal elementler (&lt;code&gt;header, nav, main, article, section, footer&lt;/code&gt;) varken, anlamlı bir element yoksa div kullanın!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Özet --&gt;
+  &lt;h2&gt;📋 Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📦 &lt;strong&gt;&amp;lt;div&amp;gt;&lt;/strong&gt; = Block element → &lt;strong&gt;Büyük blokları&lt;/strong&gt; gruplamak için (sayfa düzeni, kartlar, formlar)&lt;/li&gt;
+      &lt;li&gt;📝 &lt;strong&gt;&amp;lt;span&amp;gt;&lt;/strong&gt; = Inline element → &lt;strong&gt;Metin içindeki küçük parçaları&lt;/strong&gt; gruplamak için (renk, vurgu, fiyat)&lt;/li&gt;
+      &lt;li&gt;🎯 Div ve span'ın tek amacı &lt;strong&gt;kapsayıcı (container)&lt;/strong&gt; olmaktır&lt;/li&gt;
+      &lt;li&gt;🔄 &lt;code&gt;display&lt;/code&gt; özelliği ile tiplerini değiştirebilirsiniz&lt;/li&gt;
+      &lt;li&gt;⚠️ Span'e width/height vermek için &lt;code&gt;display: inline-block&lt;/code&gt; kullanın&lt;/li&gt;
+      &lt;li&gt;🏷️ Anlamlı bir element yoksa div/span kullanın (header, nav, footer gibi elementler varken onları tercih edin)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — &amp;lt;div&amp;gt; ve &amp;lt;span&amp;gt; | HTML'in En Temel Kapsayıcı Elementleri
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* html-div-span.css - Div ve Span Kavramları */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Div demo */
+.div-demo div {
+  background: #3a3a4a;
+  margin: 0.5rem 0;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border-left: 3px solid #ff6464;
+}
+
+/* Span demo */
+.span-demo span {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin: 0 0.1rem;
+}
+
+/* Div ile yapılmış sayfa düzeni */
+.page-layout {
+  background: #1a1a20;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.layout-header {
+  background: #3a3a4a;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #e8ff47;
+}
+
+.layout-nav {
+  background: #2a2a32;
+  padding: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #444;
+}
+
+.layout-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.layout-content {
+  flex: 2;
+  padding: 1rem;
+  background: #222;
+}
+
+.layout-sidebar {
+  flex: 1;
+  padding: 1rem;
+  background: #1a1a20;
+  border-left: 1px solid #444;
+}
+
+.layout-footer {
+  background: #3a3a4a;
+  padding: 0.8rem;
+  text-align: center;
+  border-top: 1px solid #444;
+}
+
+/* Kart galerisi (div ile) */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.gallery-card {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  width: calc(33.333% - 0.7rem);
+  min-width: 150px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.gallery-card:hover {
+  transform: translateY(-3px);
+  background: #3a3a4a;
+}
+
+.gallery-card h4 {
+  color: #e8ff47;
+  margin: 0 0 0.5rem 0;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.check {
+  color: #6bcb77;
+}
+
+.cross {
+  color: #ff6464;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Element listesi */
+.element-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.element-tag {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .gallery-card {
+    width: calc(50% - 0.5rem);
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-card {
+    width: 100%;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Div ve Span Kavramları - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="html-div-span.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📦 <span class="highlight">&lt;div&gt;</span> ve <span class="highlight">&lt;span&gt;</span></h1>
+  <div class="subtitle">HTML'in En Temel Kapsayıcı Elementleri — Gruplama ve Stil Verme</div>
+
+  <!-- BÖLÜM 0: Giriş -->
+  <h2>🎯 Giriş: Neden Div ve Span?</h2>
+  <div class="card">
+    <p><strong>&lt;div&gt;</strong> ve <strong>&lt;span&gt;</strong>, HTML'in <strong>en çok kullanılan</strong> elementleridir. Tek başlarına hiçbir anlamları yoktur, ancak diğer elementleri <strong>gruplamak</strong> ve onlara <strong>CSS veya JavaScript ile müdahale etmek</strong> için kullanılırlar.</p>
+    <div class="info-note">
+      <strong>💡 Altın Kural:</strong> Div ve span'ın tek amacı <strong>kapsayıcı (container)</strong> olmaktır. Onlar olmadan sayfalarımızı düzenlemek çok zor olurdu!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 1: Div Elementi -->
+  <h2>🔷 &lt;div&gt; — Block Seviye Kapsayıcı</h2>
+  <div class="card">
+    <div class="card-header">📦 Division / Bölüm</div>
+    
+    <div class="element-list">
+      <span class="element-tag">&lt;div&gt;</span>
+      <span class="element-tag">display: block (varsayılan)</span>
+    </div>
+
+    <p><strong>&lt;div&gt;</strong> (division), <strong>block-level</strong> bir elementtir. Sayfada <strong>yeni bir satır başlatır</strong> ve bulunduğu kabın <strong>tüm genişliğini kaplar</strong>.</p>
+
+    <div class="code-block">
+      <pre>
+&lt;div class="kutu"&gt;
+  &lt;h1&gt;Başlık&lt;/h1&gt;
+  &lt;p&gt;Bu bir paragraf. Div içinde gruplanmış içerik.&lt;/p&gt;
+  &lt;button&gt;Tıkla&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div class="kutu"&gt;
+  &lt;p&gt;İkinci div yeni satırda başlar&lt;/p&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Div ile Gruplama Örneği</h4>
+      <div class="demo-container div-demo">
+        <div>🔹 1. Div: İçinde her türlü element olabilir</div>
+        <div>🔹 2. Div: Her div yeni satırda başlar</div>
+        <div>🔹 3. Div: Tam genişliği kaplar (kırmızı çizgi border)</div>
+      </div>
+    </div>
+
+    <h3>🎨 Div ile Sayfa Düzeni Oluşturma</h3>
+    <div class="code-block">
+      <pre>
+&lt;div class="page-layout"&gt;
+  &lt;div class="header"&gt;Üst Menü&lt;/div&gt;
+  &lt;div class="nav"&gt;Navigasyon&lt;/div&gt;
+  &lt;div class="main"&gt;
+    &lt;div class="content"&gt;Ana İçerik&lt;/div&gt;
+    &lt;div class="sidebar"&gt;Yan Menü&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="footer"&gt;Alt Bilgi&lt;/div&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Div ile Yapılmış Sayfa Düzeni</h4>
+      <div class="page-layout">
+        <div class="layout-header">📰 HEADER (Üst Bölüm)</div>
+        <div class="layout-nav">🔗 NAV (Menü Bağlantıları)</div>
+        <div class="layout-main">
+          <div class="layout-content">
+            <strong>MAIN CONTENT (Ana İçerik)</strong><br>
+            Burası div ile gruplanmış ana içerik alanı. Blog yazıları, makaleler burada olabilir.
+          </div>
+          <div class="layout-sidebar">
+            <strong>SIDEBAR (Yan Menü)</strong><br>
+            Kategoriler, popüler yazılar, reklamlar...
+          </div>
+        </div>
+        <div class="layout-footer">© FOOTER (Alt Bilgi) — Tüm hakları saklıdır.</div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Div Kullanım Alanları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Sayfa bölümlerini ayırmak (header, main, footer, sidebar)</li>
+        <li>Form grupları oluşturmak</li>
+        <li>CSS Grid veya Flexbox ile düzen oluşturmak</li>
+        <li>JavaScript ile müdahale edilecek alanları belirlemek</li>
+        <li>Kartlar, galeriler, modal pencereler gibi UI bileşenleri yapmak</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Span Elementi -->
+  <h2>🔹 &lt;span&gt; — Inline Seviye Kapsayıcı</h2>
+  <div class="card">
+    <div class="card-header">📝 Span / Aralık</div>
+    
+    <div class="element-list">
+      <span class="element-tag">&lt;span&gt;</span>
+      <span class="element-tag">display: inline (varsayılan)</span>
+    </div>
+
+    <p><strong>&lt;span&gt;</strong>, <strong>inline-level</strong> bir elementtir. <strong>Yeni satır başlatmaz</strong>, sadece <strong>içeriği kadar yer kaplar</strong>. Genellikle metin içindeki küçük parçaları stillendirmek için kullanılır.</p>
+
+    <div class="code-block">
+      <pre>
+&lt;p&gt;
+  Bugün &lt;span class="highlight"&gt;HTML&lt;/span&gt; öğreniyoruz.
+  &lt;span class="important"&gt;Div ve span&lt;/span&gt; çok önemli!
+&lt;/p&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Span ile Metin İçi Stilleme</h4>
+      <div class="demo-container span-demo" style="background: #1a1a20;">
+        <p style="margin: 0; color: #fff;">
+          Bugün <span style="background: #e8ff47; color: #000; padding: 0.2rem 0.4rem;">HTML</span> öğreniyoruz. 
+          <span style="background: #ffaa44; color: #000; padding: 0.2rem 0.4rem;">Div ve span</span> çok önemli 
+          elementlerdir. Ayrıca <span style="background: #6bcb77; color: #000; padding: 0.2rem 0.4rem;">inline</span> 
+          elementlerdir.
+        </p>
+      </div>
+    </div>
+
+    <h3>🎨 Span ile Detaylı Örnek</h3>
+    <div class="code-block">
+      <pre>
+&lt;p&gt;
+  Bugün &lt;span style="color: red;"&gt;hava&lt;/span&gt; çok güzel.
+  Fiyat: &lt;span style="font-weight: bold; color: green;"&gt;$49.99&lt;/span&gt;
+  &lt;span style="text-decoration: line-through;"&gt;$99.99&lt;/span&gt;
+&lt;/p&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Span ile Detaylı Stilleme</h4>
+      <div class="demo-container" style="background: #1a1a20;">
+        <p style="margin: 0; color: #fff;">
+          Bugün <span style="color: #ff6464;">hava</span> çok güzel.<br>
+          Fiyat: <span style="font-weight: bold; color: #6bcb77;">$49.99</span>
+          <span style="text-decoration: line-through; color: #888;">$99.99</span><br>
+          Durum: <span style="background: #e8ff47; color: #000; padding: 0.2rem 0.5rem; border-radius: 20px;">Stokta var</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Span Kullanım Alanları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Metin içinde belirli kelimeleri renklendirmek</li>
+        <li>Fiyat etiketleri, indirim bilgileri göstermek</li>
+        <li>Icon veya küçük elementleri metinle aynı satırda göstermek</li>
+        <li>JavaScript ile metin içindeki belirli alanları yakalamak</li>
+        <li>Tooltip, badge gibi küçük UI elementleri oluşturmak</li>
+      </ul>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ ÖNEMLİ:</strong> Span inline element olduğu için <strong>width ve height</strong> özellikleri <strong>ÇALIŞMAZ</strong>. Genişlik/yükseklik vermek istersen <code>display: inline-block;</code> kullanmalısın!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: Div vs Span Karşılaştırması -->
+  <h2>📊 Div vs Span — Karşılaştırma Tablosu</h2>
+  <table class="comparison-table">
+    <thead>
+      <tr><th>Özellik</th><th>&lt;div&gt;</th><th>&lt;span&gt;</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Display tipi</strong></td><td><code>block</code></td><td><code>inline</code></td></tr>
+      <tr><td><strong>Yeni satır başlatır</strong></td><td class="check">✅ Evet</td><td class="cross">❌ Hayır</td></tr>
+      <tr><td><strong>Genişlik</strong></td><td>Tam genişlik kaplar</td><td>İçerik kadar</td></tr>
+      <tr><td><strong>width/height ayarlanabilir</strong></td><td class="check">✅ Evet</td><td class="cross">❌ Hayır (inline-block gerekir)</td></tr>
+      <tr><td><strong>Kullanım amacı</strong></td><td>Büyük blokları gruplama</td><td>Metin parçalarını gruplama</td></tr>
+      <tr><td><strong>İçinde ne olabilir?</strong></td><td>Her türlü element</td><td>Inline elementler veya metin</td></tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 4: Pratik Örnekler -->
+  <h2>🎯 Pratik Örnekler</h2>
+
+  <!-- Örnek 1: Kart Galerisi (Div ile) -->
+  <h3>📸 Örnek 1: Kart Galerisi (Div ile)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div class="gallery"&gt;
+  &lt;div class="card"&gt;
+    &lt;h4&gt;Ürün 1&lt;/h4&gt;
+    &lt;p&gt;Açıklama...&lt;/p&gt;
+    &lt;span&gt;$49.99&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="card"&gt;
+    &lt;h4&gt;Ürün 2&lt;/h4&gt;
+    &lt;p&gt;Açıklama...&lt;/p&gt;
+    &lt;span&gt;$59.99&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+    <div class="gallery">
+      <div class="gallery-card">
+        <h4>📱 Ürün 1</h4>
+        <p>Akıllı telefon</p>
+        <span style="color: #e8ff47; font-weight: bold;">$499</span>
+      </div>
+      <div class="gallery-card">
+        <h4>💻 Ürün 2</h4>
+        <p>Dizüstü bilgisayar</p>
+        <span style="color: #e8ff47; font-weight: bold;">$1299</span>
+      </div>
+      <div class="gallery-card">
+        <h4>🎧 Ürün 3</h4>
+        <p>Kulaklık</p>
+        <span style="color: #e8ff47; font-weight: bold;">$79</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Örnek 2: Ürün Kartı (Div + Span birlikte) -->
+  <h3>🏷️ Örnek 2: Ürün Kartı (Div + Span Birlikte)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div class="product-card"&gt;
+  &lt;h3&gt;Süper Ürün&lt;/h3&gt;
+  &lt;p&gt;Bu ürün &lt;span class="highlight"&gt;%50 indirimli&lt;/span&gt;!&lt;/p&gt;
+  &lt;div class="price"&gt;
+    &lt;span class="old-price"&gt;$200&lt;/span&gt;
+    &lt;span class="new-price"&gt;$100&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="background: #2a2a32; padding: 1rem; border-radius: 8px; max-width: 300px;">
+        <h3 style="margin: 0 0 0.5rem 0;">✨ Süper Ürün</h3>
+        <p style="margin: 0 0 0.5rem 0;">Bu ürün <span style="background: #e8ff47; color: #000; padding: 0.2rem 0.4rem; border-radius: 4px;">%50 indirimli</span>!</p>
+        <div style="margin-top: 0.5rem;">
+          <span style="text-decoration: line-through; color: #888;">$200</span>
+          <span style="color: #e8ff47; font-size: 1.2rem; font-weight: bold; margin-left: 0.5rem;">$100</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Örnek 3: Form Gruplama (Div ile) -->
+  <h3>📝 Örnek 3: Form Gruplama (Div ile)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div class="form-group"&gt;
+  &lt;label&gt;Ad Soyad:&lt;/label&gt;
+  &lt;input type="text" placeholder="Adınız"&gt;
+&lt;/div&gt;
+&lt;div class="form-group"&gt;
+  &lt;label&gt;E-posta:&lt;/label&gt;
+  &lt;input type="email" placeholder="ornek@mail.com"&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; margin-bottom: 0.3rem; color: #e8ff47;">👤 Ad Soyad:</label>
+          <input type="text" placeholder="Adınız" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: none;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 0.3rem; color: #e8ff47;">📧 E-posta:</label>
+          <input type="email" placeholder="ornek@mail.com" style="width: 100%; padding: 0.5rem; border-radius: 4px; border: none;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Örnek 4: Bildirim Mesajları (Div + Span) -->
+  <h3>🔔 Örnek 4: Bildirim Mesajları</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div class="alert success"&gt;
+  &lt;span&gt;✓&lt;/span&gt; İşlem başarıyla tamamlandı!
+&lt;/div&gt;
+&lt;div class="alert error"&gt;
+  &lt;span&gt;⚠&lt;/span&gt; Bir hata oluştu!
+&lt;/div&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="background: rgba(107, 203, 119, 0.2); border-left: 4px solid #6bcb77; padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 4px;">
+        <span style="color: #6bcb77; font-weight: bold;">✓</span> İşlem başarıyla tamamlandı!
+      </div>
+      <div style="background: rgba(255, 100, 100, 0.2); border-left: 4px solid #ff6464; padding: 0.8rem; border-radius: 4px;">
+        <span style="color: #ff6464; font-weight: bold;">⚠</span> Bir hata oluştu! Lütfen tekrar deneyin.
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Span'i Block Yapmak / Div'i Inline Yapmak -->
+  <h2>🔄 Display Özelliği ile Tip Değiştirme</h2>
+  <div class="card">
+    <p>CSS'in <code>display</code> özelliği ile bir elementin görüntüleme tipini <strong>değiştirebilirsiniz</strong>!</p>
+
+    <div class="code-block">
+      <pre>
+/* Span'i block gibi davranmaya zorla */
+span {
+  display: block;
+}
+
+/* Div'i inline gibi davranmaya zorla */
+div {
+  display: inline;
+}
+
+/* Her ikisini de inline-block yap */
+span, div {
+  display: inline-block;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Span display: block yapıldı</h4>
+      <div class="demo-container">
+        <span style="display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;">Bu span normalde inline ama display: block yapıldı</span>
+        <span style="display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;">İkinci span da block, yeni satırda başlıyor!</span>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Div display: inline yapıldı</h4>
+      <div class="demo-container">
+        <div style="display: inline; background: #3a3a4a; padding: 0.5rem;">Div 1</div>
+        <div style="display: inline; background: #3a3a4a; padding: 0.5rem;">Div 2</div>
+        <div style="display: inline; background: #3a3a4a; padding: 0.5rem;">Div 3</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Normalde her div yeni satırda başlardı, ama <code>display: inline</code> ile yan yana dizildiler!</p>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: En Sık Yapılan Hatalar -->
+  <h2>⚠️ En Sık Yapılan Hatalar</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> Span'e width/height vermeye çalışmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+span {
+  width: 200px;   /* ❌ ÇALIŞMAZ! Span inline elementtir */
+  height: 100px;  /* ❌ ÇALIŞMAZ! */
+}
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>display: inline-block;</code> ekleyin!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> Div içine sadece inline element koyup stillendirmeye çalışmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;div&gt;
+  &lt;span&gt;Metin&lt;/span&gt;
+  &lt;span&gt;Metin&lt;/span&gt;
+&lt;/div&gt;
+/* Div'e text-align: center yaparsan içindeki span'ler ortalanır */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> Div block olduğu için içindeki inline elementleri hizalamak için div'e <code>text-align</code> verebilirsiniz.
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 3:</strong> Anlamsal elementler yerine sürekli div kullanmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;div class="header"&gt;...&lt;/div&gt;  ⚠️ Daha iyisi: &lt;header&gt;...&lt;/header&gt;
+&lt;div class="nav"&gt;...&lt;/div&gt;     ⚠️ Daha iyisi: &lt;nav&gt;...&lt;/nav&gt;
+&lt;div class="footer"&gt;...&lt;/div&gt;  ⚠️ Daha iyisi: &lt;footer&gt;...&lt;/footer&gt;
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> HTML5'te anlamsal elementler (<code>header, nav, main, article, section, footer</code>) varken, anlamlı bir element yoksa div kullanın!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: Özet -->
+  <h2>📋 Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📦 <strong>&lt;div&gt;</strong> = Block element → <strong>Büyük blokları</strong> gruplamak için (sayfa düzeni, kartlar, formlar)</li>
+      <li>📝 <strong>&lt;span&gt;</strong> = Inline element → <strong>Metin içindeki küçük parçaları</strong> gruplamak için (renk, vurgu, fiyat)</li>
+      <li>🎯 Div ve span'ın tek amacı <strong>kapsayıcı (container)</strong> olmaktır</li>
+      <li>🔄 <code>display</code> özelliği ile tiplerini değiştirebilirsiniz</li>
+      <li>⚠️ Span'e width/height vermek için <code>display: inline-block</code> kullanın</li>
+      <li>🏷️ Anlamlı bir element yoksa div/span kullanın (header, nav, footer gibi elementler varken onları tercih edin)</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — &lt;div&gt; ve &lt;span&gt; | HTML'in En Temel Kapsayıcı Elementleri
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* html-div-span.css - Div ve Span Kavramları */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Div demo */
+.div-demo div {
+  background: #3a3a4a;
+  margin: 0.5rem 0;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border-left: 3px solid #ff6464;
+}
+
+/* Span demo */
+.span-demo span {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  margin: 0 0.1rem;
+}
+
+/* Div ile yapılmış sayfa düzeni */
+.page-layout {
+  background: #1a1a20;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.layout-header {
+  background: #3a3a4a;
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 2px solid #e8ff47;
+}
+
+.layout-nav {
+  background: #2a2a32;
+  padding: 0.8rem;
+  text-align: center;
+  border-bottom: 1px solid #444;
+}
+
+.layout-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.layout-content {
+  flex: 2;
+  padding: 1rem;
+  background: #222;
+}
+
+.layout-sidebar {
+  flex: 1;
+  padding: 1rem;
+  background: #1a1a20;
+  border-left: 1px solid #444;
+}
+
+.layout-footer {
+  background: #3a3a4a;
+  padding: 0.8rem;
+  text-align: center;
+  border-top: 1px solid #444;
+}
+
+/* Kart galerisi (div ile) */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.gallery-card {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  width: calc(33.333% - 0.7rem);
+  min-width: 150px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.gallery-card:hover {
+  transform: translateY(-3px);
+  background: #3a3a4a;
+}
+
+.gallery-card h4 {
+  color: #e8ff47;
+  margin: 0 0 0.5rem 0;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.check {
+  color: #6bcb77;
+}
+
+.cross {
+  color: #ff6464;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Element listesi */
+.element-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.element-tag {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .gallery-card {
+    width: calc(50% - 0.5rem);
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-card {
+    width: 100%;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=div-ve-span-htmlin-kapsayici-elementleri" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Div ve Span — HTML'in Kapsayıcı Elementleri — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Div ve Span Kavramları - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"html-div-span.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📦 <span class=\"highlight\">&lt;div&gt;</span> ve <span class=\"highlight\">&lt;span&gt;</span></h1>\n  <div class=\"subtitle\">HTML'in En Temel Kapsayıcı Elementleri — Gruplama ve Stil Verme</div>\n\n  <!-- BÖLÜM 0: Giriş -->\n  <h2>🎯 Giriş: Neden Div ve Span?</h2>\n  <div class=\"card\">\n    <p><strong>&lt;div&gt;</strong> ve <strong>&lt;span&gt;</strong>, HTML'in <strong>en çok kullanılan</strong> elementleridir. Tek başlarına hiçbir anlamları yoktur, ancak diğer elementleri <strong>gruplamak</strong> ve onlara <strong>CSS veya JavaScript ile müdahale etmek</strong> için kullanılırlar.</p>\n    <div class=\"info-note\">\n      <strong>💡 Altın Kural:</strong> Div ve span'ın tek amacı <strong>kapsayıcı (container)</strong> olmaktır. Onlar olmadan sayfalarımızı düzenlemek çok zor olurdu!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 1: Div Elementi -->\n  <h2>🔷 &lt;div&gt; — Block Seviye Kapsayıcı</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📦 Division / Bölüm</div>\n    \n    <div class=\"element-list\">\n      <span class=\"element-tag\">&lt;div&gt;</span>\n      <span class=\"element-tag\">display: block (varsayılan)</span>\n    </div>\n\n    <p><strong>&lt;div&gt;</strong> (division), <strong>block-level</strong> bir elementtir. Sayfada <strong>yeni bir satır başlatır</strong> ve bulunduğu kabın <strong>tüm genişliğini kaplar</strong>.</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"kutu\"&gt;\n  &lt;h1&gt;Başlık&lt;/h1&gt;\n  &lt;p&gt;Bu bir paragraf. Div içinde gruplanmış içerik.&lt;/p&gt;\n  &lt;button&gt;Tıkla&lt;/button&gt;\n&lt;/div&gt;\n\n&lt;div class=\"kutu\"&gt;\n  &lt;p&gt;İkinci div yeni satırda başlar&lt;/p&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Div ile Gruplama Örneği</h4>\n      <div class=\"demo-container div-demo\">\n        <div>🔹 1. Div: İçinde her türlü element olabilir</div>\n        <div>🔹 2. Div: Her div yeni satırda başlar</div>\n        <div>🔹 3. Div: Tam genişliği kaplar (kırmızı çizgi border)</div>\n      </div>\n    </div>\n\n    <h3>🎨 Div ile Sayfa Düzeni Oluşturma</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"page-layout\"&gt;\n  &lt;div class=\"header\"&gt;Üst Menü&lt;/div&gt;\n  &lt;div class=\"nav\"&gt;Navigasyon&lt;/div&gt;\n  &lt;div class=\"main\"&gt;\n    &lt;div class=\"content\"&gt;Ana İçerik&lt;/div&gt;\n    &lt;div class=\"sidebar\"&gt;Yan Menü&lt;/div&gt;\n  &lt;/div&gt;\n  &lt;div class=\"footer\"&gt;Alt Bilgi&lt;/div&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Div ile Yapılmış Sayfa Düzeni</h4>\n      <div class=\"page-layout\">\n        <div class=\"layout-header\">📰 HEADER (Üst Bölüm)</div>\n        <div class=\"layout-nav\">🔗 NAV (Menü Bağlantıları)</div>\n        <div class=\"layout-main\">\n          <div class=\"layout-content\">\n            <strong>MAIN CONTENT (Ana İçerik)</strong><br>\n            Burası div ile gruplanmış ana içerik alanı. Blog yazıları, makaleler burada olabilir.\n          </div>\n          <div class=\"layout-sidebar\">\n            <strong>SIDEBAR (Yan Menü)</strong><br>\n            Kategoriler, popüler yazılar, reklamlar...\n          </div>\n        </div>\n        <div class=\"layout-footer\">© FOOTER (Alt Bilgi) — Tüm hakları saklıdır.</div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Div Kullanım Alanları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Sayfa bölümlerini ayırmak (header, main, footer, sidebar)</li>\n        <li>Form grupları oluşturmak</li>\n        <li>CSS Grid veya Flexbox ile düzen oluşturmak</li>\n        <li>JavaScript ile müdahale edilecek alanları belirlemek</li>\n        <li>Kartlar, galeriler, modal pencereler gibi UI bileşenleri yapmak</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Span Elementi -->\n  <h2>🔹 &lt;span&gt; — Inline Seviye Kapsayıcı</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📝 Span / Aralık</div>\n    \n    <div class=\"element-list\">\n      <span class=\"element-tag\">&lt;span&gt;</span>\n      <span class=\"element-tag\">display: inline (varsayılan)</span>\n    </div>\n\n    <p><strong>&lt;span&gt;</strong>, <strong>inline-level</strong> bir elementtir. <strong>Yeni satır başlatmaz</strong>, sadece <strong>içeriği kadar yer kaplar</strong>. Genellikle metin içindeki küçük parçaları stillendirmek için kullanılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;p&gt;\n  Bugün &lt;span class=\"highlight\"&gt;HTML&lt;/span&gt; öğreniyoruz.\n  &lt;span class=\"important\"&gt;Div ve span&lt;/span&gt; çok önemli!\n&lt;/p&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Span ile Metin İçi Stilleme</h4>\n      <div class=\"demo-container span-demo\" style=\"background: #1a1a20;\">\n        <p style=\"margin: 0; color: #fff;\">\n          Bugün <span style=\"background: #e8ff47; color: #000; padding: 0.2rem 0.4rem;\">HTML</span> öğreniyoruz. \n          <span style=\"background: #ffaa44; color: #000; padding: 0.2rem 0.4rem;\">Div ve span</span> çok önemli \n          elementlerdir. Ayrıca <span style=\"background: #6bcb77; color: #000; padding: 0.2rem 0.4rem;\">inline</span> \n          elementlerdir.\n        </p>\n      </div>\n    </div>\n\n    <h3>🎨 Span ile Detaylı Örnek</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;p&gt;\n  Bugün &lt;span style=\"color: red;\"&gt;hava&lt;/span&gt; çok güzel.\n  Fiyat: &lt;span style=\"font-weight: bold; color: green;\"&gt;$49.99&lt;/span&gt;\n  &lt;span style=\"text-decoration: line-through;\"&gt;$99.99&lt;/span&gt;\n&lt;/p&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Span ile Detaylı Stilleme</h4>\n      <div class=\"demo-container\" style=\"background: #1a1a20;\">\n        <p style=\"margin: 0; color: #fff;\">\n          Bugün <span style=\"color: #ff6464;\">hava</span> çok güzel.<br>\n          Fiyat: <span style=\"font-weight: bold; color: #6bcb77;\">$49.99</span>\n          <span style=\"text-decoration: line-through; color: #888;\">$99.99</span><br>\n          Durum: <span style=\"background: #e8ff47; color: #000; padding: 0.2rem 0.5rem; border-radius: 20px;\">Stokta var</span>\n        </p>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Span Kullanım Alanları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Metin içinde belirli kelimeleri renklendirmek</li>\n        <li>Fiyat etiketleri, indirim bilgileri göstermek</li>\n        <li>Icon veya küçük elementleri metinle aynı satırda göstermek</li>\n        <li>JavaScript ile metin içindeki belirli alanları yakalamak</li>\n        <li>Tooltip, badge gibi küçük UI elementleri oluşturmak</li>\n      </ul>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ ÖNEMLİ:</strong> Span inline element olduğu için <strong>width ve height</strong> özellikleri <strong>ÇALIŞMAZ</strong>. Genişlik/yükseklik vermek istersen <code>display: inline-block;</code> kullanmalısın!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: Div vs Span Karşılaştırması -->\n  <h2>📊 Div vs Span — Karşılaştırma Tablosu</h2>\n  <table class=\"comparison-table\">\n    <thead>\n      <tr><th>Özellik</th><th>&lt;div&gt;</th><th>&lt;span&gt;</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><strong>Display tipi</strong></td><td><code>block</code></td><td><code>inline</code></td></tr>\n      <tr><td><strong>Yeni satır başlatır</strong></td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Hayır</td></tr>\n      <tr><td><strong>Genişlik</strong></td><td>Tam genişlik kaplar</td><td>İçerik kadar</td></tr>\n      <tr><td><strong>width/height ayarlanabilir</strong></td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Hayır (inline-block gerekir)</td></tr>\n      <tr><td><strong>Kullanım amacı</strong></td><td>Büyük blokları gruplama</td><td>Metin parçalarını gruplama</td></tr>\n      <tr><td><strong>İçinde ne olabilir?</strong></td><td>Her türlü element</td><td>Inline elementler veya metin</td></tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 4: Pratik Örnekler -->\n  <h2>🎯 Pratik Örnekler</h2>\n\n  <!-- Örnek 1: Kart Galerisi (Div ile) -->\n  <h3>📸 Örnek 1: Kart Galerisi (Div ile)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"gallery\"&gt;\n  &lt;div class=\"card\"&gt;\n    &lt;h4&gt;Ürün 1&lt;/h4&gt;\n    &lt;p&gt;Açıklama...&lt;/p&gt;\n    &lt;span&gt;$49.99&lt;/span&gt;\n  &lt;/div&gt;\n  &lt;div class=\"card\"&gt;\n    &lt;h4&gt;Ürün 2&lt;/h4&gt;\n    &lt;p&gt;Açıklama...&lt;/p&gt;\n    &lt;span&gt;$59.99&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n    <div class=\"gallery\">\n      <div class=\"gallery-card\">\n        <h4>📱 Ürün 1</h4>\n        <p>Akıllı telefon</p>\n        <span style=\"color: #e8ff47; font-weight: bold;\">$499</span>\n      </div>\n      <div class=\"gallery-card\">\n        <h4>💻 Ürün 2</h4>\n        <p>Dizüstü bilgisayar</p>\n        <span style=\"color: #e8ff47; font-weight: bold;\">$1299</span>\n      </div>\n      <div class=\"gallery-card\">\n        <h4>🎧 Ürün 3</h4>\n        <p>Kulaklık</p>\n        <span style=\"color: #e8ff47; font-weight: bold;\">$79</span>\n      </div>\n    </div>\n  </div>\n\n  <!-- Örnek 2: Ürün Kartı (Div + Span birlikte) -->\n  <h3>🏷️ Örnek 2: Ürün Kartı (Div + Span Birlikte)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"product-card\"&gt;\n  &lt;h3&gt;Süper Ürün&lt;/h3&gt;\n  &lt;p&gt;Bu ürün &lt;span class=\"highlight\"&gt;%50 indirimli&lt;/span&gt;!&lt;/p&gt;\n  &lt;div class=\"price\"&gt;\n    &lt;span class=\"old-price\"&gt;$200&lt;/span&gt;\n    &lt;span class=\"new-price\"&gt;$100&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"background: #2a2a32; padding: 1rem; border-radius: 8px; max-width: 300px;\">\n        <h3 style=\"margin: 0 0 0.5rem 0;\">✨ Süper Ürün</h3>\n        <p style=\"margin: 0 0 0.5rem 0;\">Bu ürün <span style=\"background: #e8ff47; color: #000; padding: 0.2rem 0.4rem; border-radius: 4px;\">%50 indirimli</span>!</p>\n        <div style=\"margin-top: 0.5rem;\">\n          <span style=\"text-decoration: line-through; color: #888;\">$200</span>\n          <span style=\"color: #e8ff47; font-size: 1.2rem; font-weight: bold; margin-left: 0.5rem;\">$100</span>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Örnek 3: Form Gruplama (Div ile) -->\n  <h3>📝 Örnek 3: Form Gruplama (Div ile)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"form-group\"&gt;\n  &lt;label&gt;Ad Soyad:&lt;/label&gt;\n  &lt;input type=\"text\" placeholder=\"Adınız\"&gt;\n&lt;/div&gt;\n&lt;div class=\"form-group\"&gt;\n  &lt;label&gt;E-posta:&lt;/label&gt;\n  &lt;input type=\"email\" placeholder=\"ornek@mail.com\"&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <div style=\"margin-bottom: 1rem;\">\n          <label style=\"display: block; margin-bottom: 0.3rem; color: #e8ff47;\">👤 Ad Soyad:</label>\n          <input type=\"text\" placeholder=\"Adınız\" style=\"width: 100%; padding: 0.5rem; border-radius: 4px; border: none;\">\n        </div>\n        <div>\n          <label style=\"display: block; margin-bottom: 0.3rem; color: #e8ff47;\">📧 E-posta:</label>\n          <input type=\"email\" placeholder=\"ornek@mail.com\" style=\"width: 100%; padding: 0.5rem; border-radius: 4px; border: none;\">\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- Örnek 4: Bildirim Mesajları (Div + Span) -->\n  <h3>🔔 Örnek 4: Bildirim Mesajları</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"alert success\"&gt;\n  &lt;span&gt;✓&lt;/span&gt; İşlem başarıyla tamamlandı!\n&lt;/div&gt;\n&lt;div class=\"alert error\"&gt;\n  &lt;span&gt;⚠&lt;/span&gt; Bir hata oluştu!\n&lt;/div&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"background: rgba(107, 203, 119, 0.2); border-left: 4px solid #6bcb77; padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 4px;\">\n        <span style=\"color: #6bcb77; font-weight: bold;\">✓</span> İşlem başarıyla tamamlandı!\n      </div>\n      <div style=\"background: rgba(255, 100, 100, 0.2); border-left: 4px solid #ff6464; padding: 0.8rem; border-radius: 4px;\">\n        <span style=\"color: #ff6464; font-weight: bold;\">⚠</span> Bir hata oluştu! Lütfen tekrar deneyin.\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Span'i Block Yapmak / Div'i Inline Yapmak -->\n  <h2>🔄 Display Özelliği ile Tip Değiştirme</h2>\n  <div class=\"card\">\n    <p>CSS'in <code>display</code> özelliği ile bir elementin görüntüleme tipini <strong>değiştirebilirsiniz</strong>!</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Span'i block gibi davranmaya zorla */\nspan {\n  display: block;\n}\n\n/* Div'i inline gibi davranmaya zorla */\ndiv {\n  display: inline;\n}\n\n/* Her ikisini de inline-block yap */\nspan, div {\n  display: inline-block;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Span display: block yapıldı</h4>\n      <div class=\"demo-container\">\n        <span style=\"display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;\">Bu span normalde inline ama display: block yapıldı</span>\n        <span style=\"display: block; background: #3a3a4a; margin: 0.3rem 0; padding: 0.5rem;\">İkinci span da block, yeni satırda başlıyor!</span>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Div display: inline yapıldı</h4>\n      <div class=\"demo-container\">\n        <div style=\"display: inline; background: #3a3a4a; padding: 0.5rem;\">Div 1</div>\n        <div style=\"display: inline; background: #3a3a4a; padding: 0.5rem;\">Div 2</div>\n        <div style=\"display: inline; background: #3a3a4a; padding: 0.5rem;\">Div 3</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Normalde her div yeni satırda başlardı, ama <code>display: inline</code> ile yan yana dizildiler!</p>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: En Sık Yapılan Hatalar -->\n  <h2>⚠️ En Sık Yapılan Hatalar</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> Span'e width/height vermeye çalışmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nspan {\n  width: 200px;   /* ❌ ÇALIŞMAZ! Span inline elementtir */\n  height: 100px;  /* ❌ ÇALIŞMAZ! */\n}\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>display: inline-block;</code> ekleyin!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> Div içine sadece inline element koyup stillendirmeye çalışmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;div&gt;\n  &lt;span&gt;Metin&lt;/span&gt;\n  &lt;span&gt;Metin&lt;/span&gt;\n&lt;/div&gt;\n/* Div'e text-align: center yaparsan içindeki span'ler ortalanır */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> Div block olduğu için içindeki inline elementleri hizalamak için div'e <code>text-align</code> verebilirsiniz.\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 3:</strong> Anlamsal elementler yerine sürekli div kullanmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;div class=\"header\"&gt;...&lt;/div&gt;  ⚠️ Daha iyisi: &lt;header&gt;...&lt;/header&gt;\n&lt;div class=\"nav\"&gt;...&lt;/div&gt;     ⚠️ Daha iyisi: &lt;nav&gt;...&lt;/nav&gt;\n&lt;div class=\"footer\"&gt;...&lt;/div&gt;  ⚠️ Daha iyisi: &lt;footer&gt;...&lt;/footer&gt;\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> HTML5'te anlamsal elementler (<code>header, nav, main, article, section, footer</code>) varken, anlamlı bir element yoksa div kullanın!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: Özet -->\n  <h2>📋 Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📦 <strong>&lt;div&gt;</strong> = Block element → <strong>Büyük blokları</strong> gruplamak için (sayfa düzeni, kartlar, formlar)</li>\n      <li>📝 <strong>&lt;span&gt;</strong> = Inline element → <strong>Metin içindeki küçük parçaları</strong> gruplamak için (renk, vurgu, fiyat)</li>\n      <li>🎯 Div ve span'ın tek amacı <strong>kapsayıcı (container)</strong> olmaktır</li>\n      <li>🔄 <code>display</code> özelliği ile tiplerini değiştirebilirsiniz</li>\n      <li>⚠️ Span'e width/height vermek için <code>display: inline-block</code> kullanın</li>\n      <li>🏷️ Anlamlı bir element yoksa div/span kullanın (header, nav, footer gibi elementler varken onları tercih edin)</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — &lt;div&gt; ve &lt;span&gt; | HTML'in En Temel Kapsayıcı Elementleri\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* html-div-span.css - Div ve Span Kavramları */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\nh4 {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #aaa;\n  margin: 1rem 0 0.5rem 0;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Demo kutuları */\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n/* Div demo */\n.div-demo div {\n  background: #3a3a4a;\n  margin: 0.5rem 0;\n  padding: 0.8rem;\n  border-radius: 6px;\n  border-left: 3px solid #ff6464;\n}\n\n/* Span demo */\n.span-demo span {\n  background: #e8ff47;\n  color: #000;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  margin: 0 0.1rem;\n}\n\n/* Div ile yapılmış sayfa düzeni */\n.page-layout {\n  background: #1a1a20;\n  border-radius: 8px;\n  overflow: hidden;\n}\n\n.layout-header {\n  background: #3a3a4a;\n  padding: 1rem;\n  text-align: center;\n  border-bottom: 2px solid #e8ff47;\n}\n\n.layout-nav {\n  background: #2a2a32;\n  padding: 0.8rem;\n  text-align: center;\n  border-bottom: 1px solid #444;\n}\n\n.layout-main {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.layout-content {\n  flex: 2;\n  padding: 1rem;\n  background: #222;\n}\n\n.layout-sidebar {\n  flex: 1;\n  padding: 1rem;\n  background: #1a1a20;\n  border-left: 1px solid #444;\n}\n\n.layout-footer {\n  background: #3a3a4a;\n  padding: 0.8rem;\n  text-align: center;\n  border-top: 1px solid #444;\n}\n\n/* Kart galerisi (div ile) */\n.gallery {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n  margin: 1rem 0;\n}\n\n.gallery-card {\n  background: #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  width: calc(33.333% - 0.7rem);\n  min-width: 150px;\n  text-align: center;\n  transition: transform 0.2s;\n}\n\n.gallery-card:hover {\n  transform: translateY(-3px);\n  background: #3a3a4a;\n}\n\n.gallery-card h4 {\n  color: #e8ff47;\n  margin: 0 0 0.5rem 0;\n}\n\n/* Tablo */\n.comparison-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.comparison-table th,\n.comparison-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.comparison-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.comparison-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.comparison-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n.check {\n  color: #6bcb77;\n}\n\n.cross {\n  color: #ff6464;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n/* Element listesi */\n.element-list {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.8rem;\n  margin: 1rem 0;\n}\n\n.element-tag {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  padding: 0.3rem 0.8rem;\n  border-radius: 20px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .gallery-card {\n    width: calc(50% - 0.5rem);\n  }\n  .comparison-table th,\n  .comparison-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}\n\n@media (max-width: 480px) {\n  .gallery-card {\n    width: 100%;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
