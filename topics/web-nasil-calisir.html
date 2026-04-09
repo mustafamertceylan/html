@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>web nasıl çalışır - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>web nasıl çalışır</h1>
+    <p class="desc"></p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Web Nasıl Çalışır? - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;web-how-it-works.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;🌐 &lt;span class=&quot;highlight&quot;&gt;Web&lt;/span&gt; Nasıl Çalışır?&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Browsers · Internet · Web Servers · HTML&lt;/div&gt;
+
+  &lt;!-- SECTION 1: Tarayıcılar --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;🖥️&lt;/span&gt; Browsers! (Tarayıcılar)&lt;/h2&gt;
+    &lt;p&gt;Tarayıcılar, &lt;strong&gt;web sayfalarını gösterebilen uygulamalardır&lt;/strong&gt;. İnternete girdiğinizde kullandığınız her araç bir tarayıcıdır.&lt;/p&gt;
+    &lt;div class=&quot;browser-list&quot;&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Chrome&lt;/span&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Firefox&lt;/span&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Safari&lt;/span&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Edge&lt;/span&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Internet Explorer&lt;/span&gt;
+      &lt;span class=&quot;browser-tag&quot;&gt;Opera&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;p&gt;Tarayıcıların görevi: &lt;strong&gt;HTML okuyup yorumlamak&lt;/strong&gt; ve ekrana görsel olarak çizmek.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 2: Web Sayfaları HTML ile Yazılır --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;📝&lt;/span&gt; Web Sayfaları HTML ile Yazılır&lt;/h2&gt;
+    &lt;p&gt;Web sayfaları &lt;strong&gt;HTML&lt;/strong&gt; adında bir işaretleme diliyle yazılır. Tarayıcılar, bir web sayfasını göstermek için &lt;strong&gt;HTML kodunu okur ve yorumlar&lt;/strong&gt;.&lt;/p&gt;
+    &lt;div class=&quot;schema&quot;&gt;
+      &lt;pre&gt;
+┌─────────────────────────────────────────┐
+│  HTML Kodu (örnek)                       │
+│  &amp;lt;h1&amp;gt;Merhaba Dünya!&amp;lt;/h1&amp;gt;                │
+│  &amp;lt;p&amp;gt;Bu bir paragraf.&amp;lt;/p&amp;gt;                │
+└─────────────────────────────────────────┘
+                    ↓
+              Tarayıcı okur &amp; yorumlar
+                    ↓
+┌─────────────────────────────────────────┐
+│  Ekranda Görünen                         │
+│                                          │
+│     Merhaba Dünya!                       │
+│     Bu bir paragraf.                     │
+└─────────────────────────────────────────┘
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 3: HTML Diğer Kaynaklara Link Verir --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;🔗&lt;/span&gt; HTML Başka Kaynaklara Link Verir&lt;/h2&gt;
+    &lt;p&gt;Bir HTML dosyası, diğer kaynaklara (resimler, videolar, CSS stilleri, JavaScript dosyaları) &lt;strong&gt;link&lt;/strong&gt; (bağlantı) verebilir. Tarayıcı bu kaynakları da ayrıca yükler.&lt;/p&gt;
+    &lt;div class=&quot;schema&quot;&gt;
+      &lt;pre&gt;
+HTML dosyası içinde:
+─────────────────────────────────────────────────
+  &amp;lt;img src=&quot;foto.jpg&quot;&amp;gt;        → resim yüklenir
+  &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&amp;gt; → CSS yüklenir
+  &amp;lt;script src=&quot;kod.js&quot;&amp;gt;&amp;lt;/script&amp;gt; → JavaScript yüklenir
+  &amp;lt;video src=&quot;film.mp4&quot;&amp;gt;&amp;lt;/video&amp;gt; → video yüklenir
+─────────────────────────────────────────────────
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 4: Web Sunucusu --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;🗄️&lt;/span&gt; Web Server (Web Sunucusu)&lt;/h2&gt;
+    &lt;p&gt;Bir &lt;strong&gt;web sunucusu&lt;/strong&gt;, bir bilgisayarda çalışan ve isteklere yanıt olarak web sayfalarını teslim eden bir programdır. Sayfaları ya &lt;strong&gt;saklar&lt;/strong&gt; (statik) ya da &lt;strong&gt;anında oluşturur&lt;/strong&gt; (dinamik).&lt;/p&gt;
+    &lt;div class=&quot;schema&quot;&gt;
+      &lt;pre&gt;
+┌──────────────┐      İstek (Request)      ┌──────────────┐
+│   Tarayıcı   │ ───────────────────────→  │  Web Sunucusu │
+│   (Browser)  │                           │  (Server)     │
+│              │ ←───────────────────────  │              │
+└──────────────┘      Cevap (Response)     └──────────────┘
+                      (HTML dosyası)
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 5: Adım Adım Süreç --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;⚙️&lt;/span&gt; Adım Adım Web Sayfası Yüklenmesi&lt;/h2&gt;
+    &lt;div class=&quot;steps&quot;&gt;
+
+      &lt;div class=&quot;step&quot;&gt;
+        &lt;div class=&quot;step-number&quot;&gt;1&lt;/div&gt;
+        &lt;div class=&quot;step-content&quot;&gt;
+          &lt;strong&gt;URL girilir&lt;/strong&gt;
+          &lt;p&gt;Tarayıcıya bir &lt;strong&gt;URL&lt;/strong&gt; (adres) yazarsınız. Bu, internetteki HTML dosyasının adresidir.&lt;/p&gt;
+          &lt;div class=&quot;url-example&quot;&gt;cs193x.stanford.edu&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;step&quot;&gt;
+        &lt;div class=&quot;step-number&quot;&gt;2&lt;/div&gt;
+        &lt;div class=&quot;step-content&quot;&gt;
+          &lt;strong&gt;Tarayıcı, web sunucusuna sorar&lt;/strong&gt;
+          &lt;p&gt;Tarayıcı, o belgeyi barındıran web sunucusuna &lt;strong&gt;&quot;Bu belgeyi gönder&quot;&lt;/strong&gt; diye bir istek yapar.&lt;/p&gt;
+          &lt;div class=&quot;diagram&quot;&gt;
+            &lt;div class=&quot;diagram-row&quot;&gt;
+              &lt;span class=&quot;request&quot;&gt;📤 GET /index.html&lt;/span&gt;
+              &lt;span class=&quot;arrow&quot;&gt;→&lt;/span&gt;
+              &lt;span&gt;Tarayıcı → Sunucu: &quot;HTML dosyasını ister&quot;&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;step&quot;&gt;
+        &lt;div class=&quot;step-number&quot;&gt;3&lt;/div&gt;
+        &lt;div class=&quot;step-content&quot;&gt;
+          &lt;strong&gt;Web sunucusu cevap verir&lt;/strong&gt;
+          &lt;p&gt;Sunucu, tarayıcıya &lt;strong&gt;istenen HTML dosyasını&lt;/strong&gt; gönderir.&lt;/p&gt;
+          &lt;div class=&quot;diagram&quot;&gt;
+            &lt;div class=&quot;diagram-row&quot;&gt;
+              &lt;span class=&quot;response&quot;&gt;📥 OK + HTML içeriği&lt;/span&gt;
+              &lt;span class=&quot;arrow&quot;&gt;←&lt;/span&gt;
+              &lt;span&gt;Sunucu → Tarayıcı: &quot;İşte HTML dosyan&quot;&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;step&quot;&gt;
+        &lt;div class=&quot;step-number&quot;&gt;4&lt;/div&gt;
+        &lt;div class=&quot;step-content&quot;&gt;
+          &lt;strong&gt;Tarayıcı gömülü kaynakları da ister&lt;/strong&gt;
+          &lt;p&gt;Tarayıcı HTML'i okur, gömülü kaynakları (resim, CSS, JS) görür ve sunucudan &lt;strong&gt;onları da ister&lt;/strong&gt;.&lt;/p&gt;
+          &lt;div class=&quot;diagram&quot;&gt;
+            &lt;div class=&quot;diagram-row&quot;&gt;
+              &lt;span class=&quot;request&quot;&gt;📤 GET /style.css&lt;/span&gt;
+              &lt;span class=&quot;response&quot;&gt;📥 OK + CSS&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;diagram-row&quot;&gt;
+              &lt;span class=&quot;request&quot;&gt;📤 GET /script.js&lt;/span&gt;
+              &lt;span class=&quot;response&quot;&gt;📥 OK + JavaScript&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;diagram-row&quot;&gt;
+              &lt;span class=&quot;request&quot;&gt;📤 GET /image.png&lt;/span&gt;
+              &lt;span class=&quot;response&quot;&gt;📥 OK + Resim&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;step&quot;&gt;
+        &lt;div class=&quot;step-number&quot;&gt;5&lt;/div&gt;
+        &lt;div class=&quot;step-content&quot;&gt;
+          &lt;strong&gt;Sayfa yüklenir ve görüntülenir&lt;/strong&gt;
+          &lt;p&gt;&lt;strong&gt;Tüm kaynaklar&lt;/strong&gt; (HTML, CSS, JS, resimler, videolar) getirildiğinde ve tarayıcı tarafından yorumlandığında, &lt;strong&gt;web sayfası tamamen görüntülenir&lt;/strong&gt;.&lt;/p&gt;
+          &lt;div class=&quot;url-example&quot; style=&quot;background:#e8ff47; color:#000;&quot;&gt;✨ Sayfa hazır! ✨&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 6: Özet Diyagram --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;🔄&lt;/span&gt; Tam Süreç Özeti&lt;/h2&gt;
+    &lt;div class=&quot;schema&quot;&gt;
+      &lt;pre&gt;
+┌─────────┐   1. URL girilir    ┌─────────────┐
+│ Kullanıcı│ ─────────────────→ │  Tarayıcı   │
+└─────────┘                     └──────┬──────┘
+                                       │
+                                       │ 2. GET /index.html
+                                       ↓
+                                 ┌─────────────┐
+                                 │Web Sunucusu │
+                                 └──────┬──────┘
+                                       │
+                                       │ 3. OK + HTML
+                                       ↓
+┌─────────┐                     ┌──────┬──────┐
+│Kullanıcı│ ←─────────────────  │Tarayıcı│
+│ Sayfayı  │   5. Sayfa görünür  └──────┬──────┘
+│  görür   │                            │
+└─────────┘                             │ 4. GET /style.css
+                                        │    GET /script.js
+                                        │    GET /image.png
+                                        ↓
+                                  ┌─────────────┐
+                                  │Web Sunucusu │
+                                  └─────────────┘
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- SECTION 7: Anahtar Kavramlar --&gt;
+  &lt;div class=&quot;section&quot;&gt;
+    &lt;h2&gt;&lt;span class=&quot;icon&quot;&gt;📚&lt;/span&gt; Anahtar Kavramlar&lt;/h2&gt;
+    &lt;div class=&quot;schema&quot;&gt;
+      &lt;pre&gt;
+┌─────────────────────────────────────────────────────────────────┐
+│  TERİM         │  AÇIKLAMA                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Browser       │  Web sayfasını gösteren uygulama (Chrome vb.)  │
+│  HTML          │  Sayfanın içeriğini ve yapısını belirten dil    │
+│  Web Server    │  İsteklere yanıt olarak HTML dosyası gönderen   │
+│  URL           │  İnternetteki bir kaynağın adresi               │
+│  Request       │  Tarayıcının sunucuya yaptığı &quot;ver&quot; isteği      │
+│  Response      │  Sunucunun tarayıcıya gönderdiği cevap          │
+│  GET           │  &quot;Bu dosyayı bana ver&quot; anlamına gelen istek türü│
+│  Static Page   │  Sunucuda hazır duran, değişmeyen sayfa         │
+│  Dynamic Page  │  İstek anında oluşturulan (kişiye özel) sayfa   │
+└─────────────────────────────────────────────────────────────────┘
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Web Nasıl Çalışır? | Browsers · Internet · Web Servers · HTML
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* web-how-it-works.css - Web Nasıl Çalışır? Sayfası Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Ana içerik */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+/* Başlık stilleri */
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  margin-bottom: 3rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+/* Bölüm stilleri */
+.section {
+  margin-bottom: 4rem;
+  border-left: 1px solid #2a2a32;
+  padding-left: 1.5rem;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section h2 .icon {
+  font-size: 2rem;
+}
+
+.section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.5rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+.section p {
+  color: #c0c0d0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Tarayıcı listesi */
+.browser-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+.browser-tag {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  padding: 0.5rem 1.2rem;
+  border-radius: 40px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: #e8e8f0;
+  transition: all 0.15s;
+}
+
+.browser-tag:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
+
+/* Şema / Diyagram stilleri */
+.schema {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.schema pre {
+  color: #b0c4de;
+  white-space: pre;
+  font-family: 'Space Mono', monospace;
+  line-height: 1.5;
+}
+
+/* Adım adım süreç */
+.steps {
+  margin: 2rem 0;
+}
+
+.step {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.step-number {
+  background: #e8ff47;
+  color: #000;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+}
+
+.step-content p {
+  margin: 0.3rem 0 0 0;
+}
+
+/* URL örneği */
+.url-example {
+  background: #16161a;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  display: inline-block;
+  border: 1px solid #2a2a32;
+  color: #e8ff47;
+  margin: 0.5rem 0;
+}
+
+/* İletişim diyagramı (GET/OK) */
+.diagram {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.diagram-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #2a2a32;
+}
+
+.diagram-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.request {
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.response {
+  color: #6bcb77;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.arrow {
+  color: #7a7a8c;
+  font-size: 1.2rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1rem;
+  }
+  .section {
+    padding-left: 1rem;
+  }
+  .step {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .diagram-row {
+    flex-direction: column;
+    text-align: center;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Nasıl Çalışır? - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="web-how-it-works.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>🌐 <span class="highlight">Web</span> Nasıl Çalışır?</h1>
+  <div class="subtitle">Browsers · Internet · Web Servers · HTML</div>
+
+  <!-- SECTION 1: Tarayıcılar -->
+  <div class="section">
+    <h2><span class="icon">🖥️</span> Browsers! (Tarayıcılar)</h2>
+    <p>Tarayıcılar, <strong>web sayfalarını gösterebilen uygulamalardır</strong>. İnternete girdiğinizde kullandığınız her araç bir tarayıcıdır.</p>
+    <div class="browser-list">
+      <span class="browser-tag">Chrome</span>
+      <span class="browser-tag">Firefox</span>
+      <span class="browser-tag">Safari</span>
+      <span class="browser-tag">Edge</span>
+      <span class="browser-tag">Internet Explorer</span>
+      <span class="browser-tag">Opera</span>
+    </div>
+    <p>Tarayıcıların görevi: <strong>HTML okuyup yorumlamak</strong> ve ekrana görsel olarak çizmek.</p>
+  </div>
+
+  <!-- SECTION 2: Web Sayfaları HTML ile Yazılır -->
+  <div class="section">
+    <h2><span class="icon">📝</span> Web Sayfaları HTML ile Yazılır</h2>
+    <p>Web sayfaları <strong>HTML</strong> adında bir işaretleme diliyle yazılır. Tarayıcılar, bir web sayfasını göstermek için <strong>HTML kodunu okur ve yorumlar</strong>.</p>
+    <div class="schema">
+      <pre>
+┌─────────────────────────────────────────┐
+│  HTML Kodu (örnek)                       │
+│  &lt;h1&gt;Merhaba Dünya!&lt;/h1&gt;                │
+│  &lt;p&gt;Bu bir paragraf.&lt;/p&gt;                │
+└─────────────────────────────────────────┘
+                    ↓
+              Tarayıcı okur & yorumlar
+                    ↓
+┌─────────────────────────────────────────┐
+│  Ekranda Görünen                         │
+│                                          │
+│     Merhaba Dünya!                       │
+│     Bu bir paragraf.                     │
+└─────────────────────────────────────────┘
+      </pre>
+    </div>
+  </div>
+
+  <!-- SECTION 3: HTML Diğer Kaynaklara Link Verir -->
+  <div class="section">
+    <h2><span class="icon">🔗</span> HTML Başka Kaynaklara Link Verir</h2>
+    <p>Bir HTML dosyası, diğer kaynaklara (resimler, videolar, CSS stilleri, JavaScript dosyaları) <strong>link</strong> (bağlantı) verebilir. Tarayıcı bu kaynakları da ayrıca yükler.</p>
+    <div class="schema">
+      <pre>
+HTML dosyası içinde:
+─────────────────────────────────────────────────
+  &lt;img src="foto.jpg"&gt;        → resim yüklenir
+  &lt;link rel="stylesheet" href="style.css"&gt; → CSS yüklenir
+  &lt;script src="kod.js"&gt;&lt;/script&gt; → JavaScript yüklenir
+  &lt;video src="film.mp4"&gt;&lt;/video&gt; → video yüklenir
+─────────────────────────────────────────────────
+      </pre>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Web Sunucusu -->
+  <div class="section">
+    <h2><span class="icon">🗄️</span> Web Server (Web Sunucusu)</h2>
+    <p>Bir <strong>web sunucusu</strong>, bir bilgisayarda çalışan ve isteklere yanıt olarak web sayfalarını teslim eden bir programdır. Sayfaları ya <strong>saklar</strong> (statik) ya da <strong>anında oluşturur</strong> (dinamik).</p>
+    <div class="schema">
+      <pre>
+┌──────────────┐      İstek (Request)      ┌──────────────┐
+│   Tarayıcı   │ ───────────────────────→  │  Web Sunucusu │
+│   (Browser)  │                           │  (Server)     │
+│              │ ←───────────────────────  │              │
+└──────────────┘      Cevap (Response)     └──────────────┘
+                      (HTML dosyası)
+      </pre>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Adım Adım Süreç -->
+  <div class="section">
+    <h2><span class="icon">⚙️</span> Adım Adım Web Sayfası Yüklenmesi</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <strong>URL girilir</strong>
+          <p>Tarayıcıya bir <strong>URL</strong> (adres) yazarsınız. Bu, internetteki HTML dosyasının adresidir.</p>
+          <div class="url-example">cs193x.stanford.edu</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <strong>Tarayıcı, web sunucusuna sorar</strong>
+          <p>Tarayıcı, o belgeyi barındıran web sunucusuna <strong>"Bu belgeyi gönder"</strong> diye bir istek yapar.</p>
+          <div class="diagram">
+            <div class="diagram-row">
+              <span class="request">📤 GET /index.html</span>
+              <span class="arrow">→</span>
+              <span>Tarayıcı → Sunucu: "HTML dosyasını ister"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <strong>Web sunucusu cevap verir</strong>
+          <p>Sunucu, tarayıcıya <strong>istenen HTML dosyasını</strong> gönderir.</p>
+          <div class="diagram">
+            <div class="diagram-row">
+              <span class="response">📥 OK + HTML içeriği</span>
+              <span class="arrow">←</span>
+              <span>Sunucu → Tarayıcı: "İşte HTML dosyan"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <strong>Tarayıcı gömülü kaynakları da ister</strong>
+          <p>Tarayıcı HTML'i okur, gömülü kaynakları (resim, CSS, JS) görür ve sunucudan <strong>onları da ister</strong>.</p>
+          <div class="diagram">
+            <div class="diagram-row">
+              <span class="request">📤 GET /style.css</span>
+              <span class="response">📥 OK + CSS</span>
+            </div>
+            <div class="diagram-row">
+              <span class="request">📤 GET /script.js</span>
+              <span class="response">📥 OK + JavaScript</span>
+            </div>
+            <div class="diagram-row">
+              <span class="request">📤 GET /image.png</span>
+              <span class="response">📥 OK + Resim</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <strong>Sayfa yüklenir ve görüntülenir</strong>
+          <p><strong>Tüm kaynaklar</strong> (HTML, CSS, JS, resimler, videolar) getirildiğinde ve tarayıcı tarafından yorumlandığında, <strong>web sayfası tamamen görüntülenir</strong>.</p>
+          <div class="url-example" style="background:#e8ff47; color:#000;">✨ Sayfa hazır! ✨</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 6: Özet Diyagram -->
+  <div class="section">
+    <h2><span class="icon">🔄</span> Tam Süreç Özeti</h2>
+    <div class="schema">
+      <pre>
+┌─────────┐   1. URL girilir    ┌─────────────┐
+│ Kullanıcı│ ─────────────────→ │  Tarayıcı   │
+└─────────┘                     └──────┬──────┘
+                                       │
+                                       │ 2. GET /index.html
+                                       ↓
+                                 ┌─────────────┐
+                                 │Web Sunucusu │
+                                 └──────┬──────┘
+                                       │
+                                       │ 3. OK + HTML
+                                       ↓
+┌─────────┐                     ┌──────┬──────┐
+│Kullanıcı│ ←─────────────────  │Tarayıcı│
+│ Sayfayı  │   5. Sayfa görünür  └──────┬──────┘
+│  görür   │                            │
+└─────────┘                             │ 4. GET /style.css
+                                        │    GET /script.js
+                                        │    GET /image.png
+                                        ↓
+                                  ┌─────────────┐
+                                  │Web Sunucusu │
+                                  └─────────────┘
+      </pre>
+    </div>
+  </div>
+
+  <!-- SECTION 7: Anahtar Kavramlar -->
+  <div class="section">
+    <h2><span class="icon">📚</span> Anahtar Kavramlar</h2>
+    <div class="schema">
+      <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│  TERİM         │  AÇIKLAMA                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Browser       │  Web sayfasını gösteren uygulama (Chrome vb.)  │
+│  HTML          │  Sayfanın içeriğini ve yapısını belirten dil    │
+│  Web Server    │  İsteklere yanıt olarak HTML dosyası gönderen   │
+│  URL           │  İnternetteki bir kaynağın adresi               │
+│  Request       │  Tarayıcının sunucuya yaptığı "ver" isteği      │
+│  Response      │  Sunucunun tarayıcıya gönderdiği cevap          │
+│  GET           │  "Bu dosyayı bana ver" anlamına gelen istek türü│
+│  Static Page   │  Sunucuda hazır duran, değişmeyen sayfa         │
+│  Dynamic Page  │  İstek anında oluşturulan (kişiye özel) sayfa   │
+└─────────────────────────────────────────────────────────────────┘
+      </pre>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Web Nasıl Çalışır? | Browsers · Internet · Web Servers · HTML
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* web-how-it-works.css - Web Nasıl Çalışır? Sayfası Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Ana içerik */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+/* Başlık stilleri */
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  margin-bottom: 3rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+/* Bölüm stilleri */
+.section {
+  margin-bottom: 4rem;
+  border-left: 1px solid #2a2a32;
+  padding-left: 1.5rem;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section h2 .icon {
+  font-size: 2rem;
+}
+
+.section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.5rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+.section p {
+  color: #c0c0d0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Tarayıcı listesi */
+.browser-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+.browser-tag {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  padding: 0.5rem 1.2rem;
+  border-radius: 40px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: #e8e8f0;
+  transition: all 0.15s;
+}
+
+.browser-tag:hover {
+  border-color: #e8ff47;
+  color: #e8ff47;
+}
+
+/* Şema / Diyagram stilleri */
+.schema {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.schema pre {
+  color: #b0c4de;
+  white-space: pre;
+  font-family: 'Space Mono', monospace;
+  line-height: 1.5;
+}
+
+/* Adım adım süreç */
+.steps {
+  margin: 2rem 0;
+}
+
+.step {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.step-number {
+  background: #e8ff47;
+  color: #000;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+}
+
+.step-content p {
+  margin: 0.3rem 0 0 0;
+}
+
+/* URL örneği */
+.url-example {
+  background: #16161a;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  display: inline-block;
+  border: 1px solid #2a2a32;
+  color: #e8ff47;
+  margin: 0.5rem 0;
+}
+
+/* İletişim diyagramı (GET/OK) */
+.diagram {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.diagram-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #2a2a32;
+}
+
+.diagram-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.request {
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.response {
+  color: #6bcb77;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.arrow {
+  color: #7a7a8c;
+  font-size: 1.2rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1rem;
+  }
+  .section {
+    padding-left: 1rem;
+  }
+  .step {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .diagram-row {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=web-nasil-calisir" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>web nasıl çalışır — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Web Nasıl Çalışır? - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"web-how-it-works.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>🌐 <span class=\"highlight\">Web</span> Nasıl Çalışır?</h1>\n  <div class=\"subtitle\">Browsers · Internet · Web Servers · HTML</div>\n\n  <!-- SECTION 1: Tarayıcılar -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">🖥️</span> Browsers! (Tarayıcılar)</h2>\n    <p>Tarayıcılar, <strong>web sayfalarını gösterebilen uygulamalardır</strong>. İnternete girdiğinizde kullandığınız her araç bir tarayıcıdır.</p>\n    <div class=\"browser-list\">\n      <span class=\"browser-tag\">Chrome</span>\n      <span class=\"browser-tag\">Firefox</span>\n      <span class=\"browser-tag\">Safari</span>\n      <span class=\"browser-tag\">Edge</span>\n      <span class=\"browser-tag\">Internet Explorer</span>\n      <span class=\"browser-tag\">Opera</span>\n    </div>\n    <p>Tarayıcıların görevi: <strong>HTML okuyup yorumlamak</strong> ve ekrana görsel olarak çizmek.</p>\n  </div>\n\n  <!-- SECTION 2: Web Sayfaları HTML ile Yazılır -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">📝</span> Web Sayfaları HTML ile Yazılır</h2>\n    <p>Web sayfaları <strong>HTML</strong> adında bir işaretleme diliyle yazılır. Tarayıcılar, bir web sayfasını göstermek için <strong>HTML kodunu okur ve yorumlar</strong>.</p>\n    <div class=\"schema\">\n      <pre>\n┌─────────────────────────────────────────┐\n│  HTML Kodu (örnek)                       │\n│  &lt;h1&gt;Merhaba Dünya!&lt;/h1&gt;                │\n│  &lt;p&gt;Bu bir paragraf.&lt;/p&gt;                │\n└─────────────────────────────────────────┘\n                    ↓\n              Tarayıcı okur & yorumlar\n                    ↓\n┌─────────────────────────────────────────┐\n│  Ekranda Görünen                         │\n│                                          │\n│     Merhaba Dünya!                       │\n│     Bu bir paragraf.                     │\n└─────────────────────────────────────────┘\n      </pre>\n    </div>\n  </div>\n\n  <!-- SECTION 3: HTML Diğer Kaynaklara Link Verir -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">🔗</span> HTML Başka Kaynaklara Link Verir</h2>\n    <p>Bir HTML dosyası, diğer kaynaklara (resimler, videolar, CSS stilleri, JavaScript dosyaları) <strong>link</strong> (bağlantı) verebilir. Tarayıcı bu kaynakları da ayrıca yükler.</p>\n    <div class=\"schema\">\n      <pre>\nHTML dosyası içinde:\n─────────────────────────────────────────────────\n  &lt;img src=\"foto.jpg\"&gt;        → resim yüklenir\n  &lt;link rel=\"stylesheet\" href=\"style.css\"&gt; → CSS yüklenir\n  &lt;script src=\"kod.js\"&gt;&lt;/script&gt; → JavaScript yüklenir\n  &lt;video src=\"film.mp4\"&gt;&lt;/video&gt; → video yüklenir\n─────────────────────────────────────────────────\n      </pre>\n    </div>\n  </div>\n\n  <!-- SECTION 4: Web Sunucusu -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">🗄️</span> Web Server (Web Sunucusu)</h2>\n    <p>Bir <strong>web sunucusu</strong>, bir bilgisayarda çalışan ve isteklere yanıt olarak web sayfalarını teslim eden bir programdır. Sayfaları ya <strong>saklar</strong> (statik) ya da <strong>anında oluşturur</strong> (dinamik).</p>\n    <div class=\"schema\">\n      <pre>\n┌──────────────┐      İstek (Request)      ┌──────────────┐\n│   Tarayıcı   │ ───────────────────────→  │  Web Sunucusu │\n│   (Browser)  │                           │  (Server)     │\n│              │ ←───────────────────────  │              │\n└──────────────┘      Cevap (Response)     └──────────────┘\n                      (HTML dosyası)\n      </pre>\n    </div>\n  </div>\n\n  <!-- SECTION 5: Adım Adım Süreç -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">⚙️</span> Adım Adım Web Sayfası Yüklenmesi</h2>\n    <div class=\"steps\">\n\n      <div class=\"step\">\n        <div class=\"step-number\">1</div>\n        <div class=\"step-content\">\n          <strong>URL girilir</strong>\n          <p>Tarayıcıya bir <strong>URL</strong> (adres) yazarsınız. Bu, internetteki HTML dosyasının adresidir.</p>\n          <div class=\"url-example\">cs193x.stanford.edu</div>\n        </div>\n      </div>\n\n      <div class=\"step\">\n        <div class=\"step-number\">2</div>\n        <div class=\"step-content\">\n          <strong>Tarayıcı, web sunucusuna sorar</strong>\n          <p>Tarayıcı, o belgeyi barındıran web sunucusuna <strong>\"Bu belgeyi gönder\"</strong> diye bir istek yapar.</p>\n          <div class=\"diagram\">\n            <div class=\"diagram-row\">\n              <span class=\"request\">📤 GET /index.html</span>\n              <span class=\"arrow\">→</span>\n              <span>Tarayıcı → Sunucu: \"HTML dosyasını ister\"</span>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"step\">\n        <div class=\"step-number\">3</div>\n        <div class=\"step-content\">\n          <strong>Web sunucusu cevap verir</strong>\n          <p>Sunucu, tarayıcıya <strong>istenen HTML dosyasını</strong> gönderir.</p>\n          <div class=\"diagram\">\n            <div class=\"diagram-row\">\n              <span class=\"response\">📥 OK + HTML içeriği</span>\n              <span class=\"arrow\">←</span>\n              <span>Sunucu → Tarayıcı: \"İşte HTML dosyan\"</span>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"step\">\n        <div class=\"step-number\">4</div>\n        <div class=\"step-content\">\n          <strong>Tarayıcı gömülü kaynakları da ister</strong>\n          <p>Tarayıcı HTML'i okur, gömülü kaynakları (resim, CSS, JS) görür ve sunucudan <strong>onları da ister</strong>.</p>\n          <div class=\"diagram\">\n            <div class=\"diagram-row\">\n              <span class=\"request\">📤 GET /style.css</span>\n              <span class=\"response\">📥 OK + CSS</span>\n            </div>\n            <div class=\"diagram-row\">\n              <span class=\"request\">📤 GET /script.js</span>\n              <span class=\"response\">📥 OK + JavaScript</span>\n            </div>\n            <div class=\"diagram-row\">\n              <span class=\"request\">📤 GET /image.png</span>\n              <span class=\"response\">📥 OK + Resim</span>\n            </div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"step\">\n        <div class=\"step-number\">5</div>\n        <div class=\"step-content\">\n          <strong>Sayfa yüklenir ve görüntülenir</strong>\n          <p><strong>Tüm kaynaklar</strong> (HTML, CSS, JS, resimler, videolar) getirildiğinde ve tarayıcı tarafından yorumlandığında, <strong>web sayfası tamamen görüntülenir</strong>.</p>\n          <div class=\"url-example\" style=\"background:#e8ff47; color:#000;\">✨ Sayfa hazır! ✨</div>\n        </div>\n      </div>\n\n    </div>\n  </div>\n\n  <!-- SECTION 6: Özet Diyagram -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">🔄</span> Tam Süreç Özeti</h2>\n    <div class=\"schema\">\n      <pre>\n┌─────────┐   1. URL girilir    ┌─────────────┐\n│ Kullanıcı│ ─────────────────→ │  Tarayıcı   │\n└─────────┘                     └──────┬──────┘\n                                       │\n                                       │ 2. GET /index.html\n                                       ↓\n                                 ┌─────────────┐\n                                 │Web Sunucusu │\n                                 └──────┬──────┘\n                                       │\n                                       │ 3. OK + HTML\n                                       ↓\n┌─────────┐                     ┌──────┬──────┐\n│Kullanıcı│ ←─────────────────  │Tarayıcı│\n│ Sayfayı  │   5. Sayfa görünür  └──────┬──────┘\n│  görür   │                            │\n└─────────┘                             │ 4. GET /style.css\n                                        │    GET /script.js\n                                        │    GET /image.png\n                                        ↓\n                                  ┌─────────────┐\n                                  │Web Sunucusu │\n                                  └─────────────┘\n      </pre>\n    </div>\n  </div>\n\n  <!-- SECTION 7: Anahtar Kavramlar -->\n  <div class=\"section\">\n    <h2><span class=\"icon\">📚</span> Anahtar Kavramlar</h2>\n    <div class=\"schema\">\n      <pre>\n┌─────────────────────────────────────────────────────────────────┐\n│  TERİM         │  AÇIKLAMA                                       │\n├─────────────────────────────────────────────────────────────────┤\n│  Browser       │  Web sayfasını gösteren uygulama (Chrome vb.)  │\n│  HTML          │  Sayfanın içeriğini ve yapısını belirten dil    │\n│  Web Server    │  İsteklere yanıt olarak HTML dosyası gönderen   │\n│  URL           │  İnternetteki bir kaynağın adresi               │\n│  Request       │  Tarayıcının sunucuya yaptığı \"ver\" isteği      │\n│  Response      │  Sunucunun tarayıcıya gönderdiği cevap          │\n│  GET           │  \"Bu dosyayı bana ver\" anlamına gelen istek türü│\n│  Static Page   │  Sunucuda hazır duran, değişmeyen sayfa         │\n│  Dynamic Page  │  İstek anında oluşturulan (kişiye özel) sayfa   │\n└─────────────────────────────────────────────────────────────────┘\n      </pre>\n    </div>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Web Nasıl Çalışır? | Browsers · Internet · Web Servers · HTML\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* web-how-it-works.css - Web Nasıl Çalışır? Sayfası Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Ana içerik */\n.container {\n  max-width: 1000px;\n  margin: 0 auto;\n  padding: 3rem 2rem;\n}\n\n/* Başlık stilleri */\nh1 {\n  font-size: clamp(2rem, 5vw, 3.5rem);\n  font-weight: 800;\n  line-height: 1.05;\n  margin-bottom: 1rem;\n  letter-spacing: -0.02em;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.9rem;\n  margin-bottom: 3rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\n/* Bölüm stilleri */\n.section {\n  margin-bottom: 4rem;\n  border-left: 1px solid #2a2a32;\n  padding-left: 1.5rem;\n}\n\n.section h2 {\n  font-size: 1.8rem;\n  font-weight: 700;\n  margin-bottom: 1rem;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n\n.section h2 .icon {\n  font-size: 2rem;\n}\n\n.section h3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.5rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n.section p {\n  color: #c0c0d0;\n  margin-bottom: 1rem;\n  font-size: 1rem;\n}\n\n/* Tarayıcı listesi */\n.browser-list {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.8rem;\n  margin: 1.5rem 0;\n}\n\n.browser-tag {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  padding: 0.5rem 1.2rem;\n  border-radius: 40px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  color: #e8e8f0;\n  transition: all 0.15s;\n}\n\n.browser-tag:hover {\n  border-color: #e8ff47;\n  color: #e8ff47;\n}\n\n/* Şema / Diyagram stilleri */\n.schema {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.75rem;\n  overflow-x: auto;\n  border-radius: 8px;\n}\n\n.schema pre {\n  color: #b0c4de;\n  white-space: pre;\n  font-family: 'Space Mono', monospace;\n  line-height: 1.5;\n}\n\n/* Adım adım süreç */\n.steps {\n  margin: 2rem 0;\n}\n\n.step {\n  display: flex;\n  gap: 1.2rem;\n  margin-bottom: 2rem;\n  align-items: flex-start;\n  flex-wrap: wrap;\n}\n\n.step-number {\n  background: #e8ff47;\n  color: #000;\n  width: 36px;\n  height: 36px;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-weight: 800;\n  font-family: 'Space Mono', monospace;\n  flex-shrink: 0;\n}\n\n.step-content {\n  flex: 1;\n}\n\n.step-content strong {\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n}\n\n.step-content p {\n  margin: 0.3rem 0 0 0;\n}\n\n/* URL örneği */\n.url-example {\n  background: #16161a;\n  padding: 0.8rem 1.2rem;\n  border-radius: 8px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.9rem;\n  display: inline-block;\n  border: 1px solid #2a2a32;\n  color: #e8ff47;\n  margin: 0.5rem 0;\n}\n\n/* İletişim diyagramı (GET/OK) */\n.diagram {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.diagram-row {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: 1rem;\n  margin-bottom: 1rem;\n  padding-bottom: 1rem;\n  border-bottom: 1px dashed #2a2a32;\n}\n\n.diagram-row:last-child {\n  border-bottom: none;\n  margin-bottom: 0;\n  padding-bottom: 0;\n}\n\n.request {\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-weight: bold;\n}\n\n.response {\n  color: #6bcb77;\n  font-family: 'Space Mono', monospace;\n  font-weight: bold;\n}\n\n.arrow {\n  color: #7a7a8c;\n  font-size: 1.2rem;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 2rem 1rem;\n  }\n  .section {\n    padding-left: 1rem;\n  }\n  .step {\n    flex-direction: column;\n    gap: 0.5rem;\n  }\n  .diagram-row {\n    flex-direction: column;\n    text-align: center;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
