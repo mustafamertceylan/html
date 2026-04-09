@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inline Elementlerde Box Model - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Inline Elementlerde Box Model</h1>
+    <p class="desc">Inline elementlerde margin (sağ/sol çalışır, üst/alt çalışmaz), padding, line-height ile satır aralığı ayarlama, body'nin varsayılan margin'i ve semantic HTML elementleri.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Inline Elementlerde Box Model - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-box-model-inline.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📦 &lt;span class=&quot;highlight&quot;&gt;Inline Elementlerde Box Model&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Inline elementlerde margin, padding, line-height ve farklılıklar&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: Inline Elementlerde Box Model --&gt;
+  &lt;h2&gt;🔍 Inline Elementlerde Box Model Nasıl Çalışır?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Soru:&lt;/strong&gt; Box model inline elementler için de geçerli mi?&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;Cevap:&lt;/strong&gt; &lt;strong&gt;Evet&lt;/strong&gt;, ancak kutu &lt;strong&gt;farklı şekillenir&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Inline Elementlerde Box Model Farkları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;margin-left&lt;/strong&gt; ve &lt;strong&gt;margin-right&lt;/strong&gt; → ÇALIŞIR (diğer elementleri iter)&lt;/li&gt;
+        &lt;li&gt;❌ &lt;strong&gt;margin-top&lt;/strong&gt; ve &lt;strong&gt;margin-bottom&lt;/strong&gt; → &lt;strong&gt;ÇALIŞMAZ&lt;/strong&gt; (diğer elementleri itmez)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;padding-left&lt;/strong&gt; ve &lt;strong&gt;padding-right&lt;/strong&gt; → ÇALIŞIR&lt;/li&gt;
+        &lt;li&gt;⚠️ &lt;strong&gt;padding-top&lt;/strong&gt; ve &lt;strong&gt;padding-bottom&lt;/strong&gt; → ÇALIŞIR &lt;strong&gt;AMA&lt;/strong&gt; diğer elementleri etkilemez (taşabilir)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;line-height&lt;/strong&gt; → Satırlar arası mesafeyi ayarlamak için KULLANILIR&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;span&amp;gt;Bir inline element&amp;lt;/span&amp;gt;
+&amp;lt;span&amp;gt;Başka bir inline element&amp;lt;/span&amp;gt;
+
+span {
+  margin: 20px;        /* margin-top/bottom ÇALIŞMAZ! */
+  margin-left: 20px;   /* ✅ ÇALIŞIR */
+  margin-right: 20px;  /* ✅ ÇALIŞIR */
+  padding: 10px;       /* padding-top/bottom çalışır ama diğerlerini itmez */
+  line-height: 2;      /* ✅ Satır yüksekliğini ayarlar */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Inline Margin Gösterimi --&gt;
+  &lt;h2&gt;📐 Inline Elementlerde Margin&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Inline Margin Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;span style=&quot;background: #ff6464; padding: 0.2rem 0.5rem; margin-right: 30px;&quot;&gt;Sağ margin 30px&lt;/span&gt;
+        &lt;span style=&quot;background: #64c8ff; padding: 0.2rem 0.5rem;&quot;&gt;Diğer span&lt;/span&gt;
+        &lt;div style=&quot;margin-top: 1rem;&quot;&gt;
+          &lt;span style=&quot;background: #ffaa44; padding: 0.2rem 0.5rem; margin-top: 50px;&quot;&gt;margin-top: 50px (ÇALIŞMAZ!)&lt;/span&gt;
+          &lt;span style=&quot;background: #6bcb77; padding: 0.2rem 0.5rem;&quot;&gt;Bu span yukarı itilmedi&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ margin-top/ÇALIŞMAZ, margin-right/left ÇALIŞIR!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: line-height --&gt;
+  &lt;h2&gt;📏 line-height — Satır Yüksekliği&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;line-height&lt;/strong&gt;, inline elementlerde &lt;strong&gt;satırlar arasındaki dikey boşluğu&lt;/strong&gt; kontrol etmek için kullanılır. Block elementlerde de çalışır, ancak inline elementler için çok daha kritiktir.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* line-height kullanımı */
+line-height: 1.5;     /* Yazı boyutunun 1.5 katı */
+line-height: 24px;    /* Sabit piksel değeri */
+line-height: 150%;    /* Yüzdesel değer */
+line-height: normal;  /* Varsayılan (yaklaşık 1.2) */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 line-height Karşılaştırması&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;&quot;&gt;
+          &lt;strong&gt;line-height: 1 (sıkışık)&lt;/strong&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 1; background: #ff6464;&quot;&gt;Satır 1&lt;/span&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 1; background: #ff6464;&quot;&gt;Satır 2&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;&quot;&gt;
+          &lt;strong&gt;line-height: 2 (geniş)&lt;/strong&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 2; background: #64c8ff;&quot;&gt;Satır 1&lt;/span&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 2; background: #64c8ff;&quot;&gt;Satır 2&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 0.5rem;&quot;&gt;
+          &lt;strong&gt;line-height: 3 (çok geniş)&lt;/strong&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 3; background: #6bcb77;&quot;&gt;Satır 1&lt;/span&gt;&lt;br&gt;
+          &lt;span style=&quot;line-height: 3; background: #6bcb77;&quot;&gt;Satır 2&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 line-height nerede kullanılır?&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Paragraflar arasındaki okunabilirliği artırmak için&lt;/li&gt;
+        &lt;li&gt;Metni dikeyde ortalamak için (inline-block ile birlikte)&lt;/li&gt;
+        &lt;li&gt;Butonlarda metni dikeyde ortalamak için&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: body'nin Varsayılan Margin'i --&gt;
+  &lt;h2&gt;⚠️ body'nin Varsayılan Margin'i&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Tarayıcılar, &lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt; elementine &lt;strong&gt;varsayılan olarak margin&lt;/strong&gt; uygular. Bu nedenle elementler sayfanın &lt;strong&gt;tam kenarına yapışmaz&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Varsayılan body margin'i&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; style=&quot;background: #e8ff47; color: #000; text-align: center;&quot;&gt;
+        Bu içerik body içinde. Beyaz boşluk = body'nin varsayılan margin'i!
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Varsayılan margin'i kaldır */
+body {
+  margin: 0;
+  padding: 0;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Önemli:&lt;/strong&gt; Çoğu tarayıcıda &lt;code&gt;body&lt;/code&gt;'nin varsayılan margin değeri &lt;strong&gt;8px&lt;/strong&gt;'dir. Sayfanı sıfırdan tasarlarken mutlaka &lt;code&gt;margin: 0;&lt;/code&gt; ekleyin!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Content Sectioning Elements (Semantic HTML) --&gt;
+  &lt;h2&gt;🏷️ Content Sectioning Elements (Semantic HTML)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Bu elementler &lt;strong&gt;anlamsal (semantic)&lt;/strong&gt; elementlerdir. Tek başlarına bir şey &quot;yapmazlar&quot;, ancak HTML kodunuzu &lt;strong&gt;daha okunabilir&lt;/strong&gt; ve &lt;strong&gt;erişilebilir&lt;/strong&gt; hale getirirler. &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; kullanmak yerine &lt;strong&gt;mümkün olduğunda bunları tercih edin&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;table class=&quot;property-table&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;Element&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Kullanım Alanı&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;header&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Sayfanın veya bölümün giriş kısmı&lt;/td&gt;&lt;td&gt;Logo, başlık, navigasyon&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;nav&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Navigasyon bölümü&lt;/td&gt;&lt;td&gt;Menü bağlantıları&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;main&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Sayfanın ana içeriği&lt;/td&gt;&lt;td&gt;Sayfanın birincil içeriği&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;section&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Belgenin genel bir bölümü&lt;/td&gt;&lt;td&gt;İçerik grupları, tematik gruplar&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;article&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Bağımsız, kendi kendine yeten içerik&lt;/td&gt;&lt;td&gt;Blog yazısı, haber, ürün kartı&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;aside&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Yan içerik (sidebar)&lt;/td&gt;&lt;td&gt;İlgili bağlantılar, reklamlar&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;footer&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Sayfanın veya bölümün alt kısmı&lt;/td&gt;&lt;td&gt;Telif hakkı, iletişim, linkler&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;header&amp;gt;
+    &amp;lt;h1&amp;gt;Site Başlığı&amp;lt;/h1&amp;gt;
+    &amp;lt;nav&amp;gt;
+      &amp;lt;ul&amp;gt;
+        &amp;lt;li&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;Anasayfa&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;li&amp;gt;&amp;lt;a href=&quot;#&quot;&amp;gt;Hakkımızda&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+      &amp;lt;/ul&amp;gt;
+    &amp;lt;/nav&amp;gt;
+  &amp;lt;/header&amp;gt;
+
+  &amp;lt;main&amp;gt;
+    &amp;lt;section&amp;gt;
+      &amp;lt;h2&amp;gt;Tanıtım&amp;lt;/h2&amp;gt;
+      &amp;lt;p&amp;gt;Bu sitenin amacı...&amp;lt;/p&amp;gt;
+    &amp;lt;/section&amp;gt;
+
+    &amp;lt;article&amp;gt;
+      &amp;lt;h3&amp;gt;Blog Yazısı&amp;lt;/h3&amp;gt;
+      &amp;lt;p&amp;gt;İçerik...&amp;lt;/p&amp;gt;
+    &amp;lt;/article&amp;gt;
+  &amp;lt;/main&amp;gt;
+
+  &amp;lt;aside&amp;gt;
+    &amp;lt;h3&amp;gt;İlgili Bağlantılar&amp;lt;/h3&amp;gt;
+    &amp;lt;ul&amp;gt;&amp;lt;li&amp;gt;...&amp;lt;/li&amp;gt;&amp;lt;/ul&amp;gt;
+  &amp;lt;/aside&amp;gt;
+
+  &amp;lt;footer&amp;gt;
+    &amp;lt;p&amp;gt;&amp;amp;copy; 2024 - Tüm hakları saklıdır&amp;lt;/p&amp;gt;
+  &amp;lt;/footer&amp;gt;
+&amp;lt;/body&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Neden Semantic HTML Kullanmalısınız?&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;📖 &lt;strong&gt;Okunabilirlik&lt;/strong&gt; — Kodunuzu okuyan herkes yapıyı anlar&lt;/li&gt;
+        &lt;li&gt;♿ &lt;strong&gt;Erişilebilirlik (Accessibility)&lt;/strong&gt; — Ekran okuyucular sayfayı daha iyi yorumlar&lt;/li&gt;
+        &lt;li&gt;🔍 &lt;strong&gt;SEO&lt;/strong&gt; — Arama motorları sayfanızı daha iyi anlar&lt;/li&gt;
+        &lt;li&gt;🛠️ &lt;strong&gt;Bakım kolaylığı&lt;/strong&gt; — Düzenlemek ve değiştirmek daha kolaydır&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: Semantic Element Örneği --&gt;
+  &lt;h2&gt;📝 Semantic HTML Örneği&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;semantic-example&quot;&gt;
+      &lt;header style=&quot;background: #3a3a4a;&quot;&gt;
+        &lt;h4 style=&quot;margin: 0;&quot;&gt;📰 Site Başlığı&lt;/h4&gt;
+        &lt;nav style=&quot;margin-top: 0.5rem;&quot;&gt;
+          &lt;span style=&quot;margin-right: 1rem;&quot;&gt;🏠 Anasayfa&lt;/span&gt;
+          &lt;span style=&quot;margin-right: 1rem;&quot;&gt;📝 Blog&lt;/span&gt;
+          &lt;span&gt;📞 İletişim&lt;/span&gt;
+        &lt;/nav&gt;
+      &lt;/header&gt;
+      &lt;main style=&quot;background: #2a2a32;&quot;&gt;
+        &lt;section style=&quot;background: #3a3a4a;&quot;&gt;
+          &lt;h4&gt;📌 Tanıtım Bölümü&lt;/h4&gt;
+          &lt;p&gt;Bu bir section elementi. Tematik içerik grupları için kullanılır.&lt;/p&gt;
+        &lt;/section&gt;
+        &lt;article style=&quot;background: #3a3a4a;&quot;&gt;
+          &lt;h4&gt;✍️ Blog Yazısı&lt;/h4&gt;
+          &lt;p&gt;Bu bir article elementi. Bağımsız, kendi kendine yeten içerikler için kullanılır.&lt;/p&gt;
+        &lt;/article&gt;
+      &lt;/main&gt;
+      &lt;aside style=&quot;background: #1a1a20;&quot;&gt;
+        &lt;h4&gt;🔗 İlgili Bağlantılar&lt;/h4&gt;
+        &lt;p&gt;Bu bir aside elementi. Yan içerikler (sidebar) için kullanılır.&lt;/p&gt;
+      &lt;/aside&gt;
+      &lt;footer style=&quot;background: #3a3a4a;&quot;&gt;
+        &lt;p style=&quot;margin: 0;&quot;&gt;© 2024 - Tüm hakları saklıdır&lt;/p&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Layout Çalışmasına Hazırlık --&gt;
+  &lt;h2&gt;🎯 Layout Çalışması — &quot;Burada Takıldık&quot;&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Şimdiye kadar öğrendiklerimizle bir &lt;strong&gt;Squarespace benzeri template&lt;/strong&gt; yapmaya çalışıyoruz:&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+Navbar:     height: 75px;     background: royalblue;    &amp;lt;nav&amp;gt;
+Header:     height: 400px;    background: lightskyblue; &amp;lt;header&amp;gt;
+Section:    height: 500px;    background: gray;         &amp;lt;section&amp;gt;
+Footer:     height: 100px;    background: black;        &amp;lt;footer&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;🤔 Peki Nerede Takılıyoruz?&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;İçerikte &lt;strong&gt;iki kutuyu yan yana&lt;/strong&gt; nasıl koyacağız? (%48 genişlik, aralarında boşluk)&lt;/li&gt;
+        &lt;li&gt;Kutuları &lt;strong&gt;yatayda ortalama&lt;/strong&gt; nasıl yapacağız?&lt;/li&gt;
+        &lt;li&gt;Elementler arasındaki &lt;strong&gt;boşlukları&lt;/strong&gt; nasıl kontrol edeceğiz?&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;💡 Çözüm:&lt;/strong&gt; Bu sorunları çözmek için &lt;strong&gt;CSS Flexbox&lt;/strong&gt; veya &lt;strong&gt;CSS Grid&lt;/strong&gt; kullanacağız! Bunlar bir sonraki konularımız olacak.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Özet --&gt;
+  &lt;h2&gt;📋 Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📦 &lt;strong&gt;Inline elementlerde margin&lt;/strong&gt; — sadece sağ/sol çalışır, üst/alt ÇALIŞMAZ&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;line-height&lt;/strong&gt; — satırlar arası mesafeyi ayarlar, inline elementler için kritiktir&lt;/li&gt;
+      &lt;li&gt;⚠️ &lt;strong&gt;body'nin varsayılan margin'i&lt;/strong&gt; — sayfa kenarında boşluk bırakır, &lt;code&gt;margin: 0;&lt;/code&gt; ile kaldırılır&lt;/li&gt;
+      &lt;li&gt;🏷️ &lt;strong&gt;Semantic HTML&lt;/strong&gt; — &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; yerine anlamlı elementler kullanın (header, nav, main, section, article, footer)&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;Layout sorunları&lt;/strong&gt; — Yan yana kutu yerleştirmek için Flexbox veya Grid kullanacağız&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Inline Elementlerde Box Model | line-height · Semantic HTML · Layout'a Giriş
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-box-model-inline.css - Inline Elementlerde Box Model */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  white-space: pre-wrap;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.inline-demo span {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  margin: 0 0.2rem;
+}
+
+.semantic-example {
+  background: #1a1a20;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.semantic-example header,
+.semantic-example nav,
+.semantic-example main,
+.semantic-example section,
+.semantic-example article,
+.semantic-example footer {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+}
+
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inline Elementlerde Box Model - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-box-model-inline.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📦 <span class="highlight">Inline Elementlerde Box Model</span></h1>
+  <div class="subtitle">Inline elementlerde margin, padding, line-height ve farklılıklar</div>
+
+  <!-- BÖLÜM 1: Inline Elementlerde Box Model -->
+  <h2>🔍 Inline Elementlerde Box Model Nasıl Çalışır?</h2>
+  <div class="card">
+    <p><strong>Soru:</strong> Box model inline elementler için de geçerli mi?</p>
+    <p><strong>Cevap:</strong> <strong>Evet</strong>, ancak kutu <strong>farklı şekillenir</strong>!</p>
+
+    <div class="info-note">
+      <strong>📌 Inline Elementlerde Box Model Farkları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>margin-left</strong> ve <strong>margin-right</strong> → ÇALIŞIR (diğer elementleri iter)</li>
+        <li>❌ <strong>margin-top</strong> ve <strong>margin-bottom</strong> → <strong>ÇALIŞMAZ</strong> (diğer elementleri itmez)</li>
+        <li>✅ <strong>padding-left</strong> ve <strong>padding-right</strong> → ÇALIŞIR</li>
+        <li>⚠️ <strong>padding-top</strong> ve <strong>padding-bottom</strong> → ÇALIŞIR <strong>AMA</strong> diğer elementleri etkilemez (taşabilir)</li>
+        <li>✅ <strong>line-height</strong> → Satırlar arası mesafeyi ayarlamak için KULLANILIR</li>
+      </ul>
+    </div>
+
+    <div class="code-block">
+      <pre>
+&lt;span&gt;Bir inline element&lt;/span&gt;
+&lt;span&gt;Başka bir inline element&lt;/span&gt;
+
+span {
+  margin: 20px;        /* margin-top/bottom ÇALIŞMAZ! */
+  margin-left: 20px;   /* ✅ ÇALIŞIR */
+  margin-right: 20px;  /* ✅ ÇALIŞIR */
+  padding: 10px;       /* padding-top/bottom çalışır ama diğerlerini itmez */
+  line-height: 2;      /* ✅ Satır yüksekliğini ayarlar */
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Inline Margin Gösterimi -->
+  <h2>📐 Inline Elementlerde Margin</h2>
+  <div class="card">
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Inline Margin Örneği</h4>
+      <div class="demo-container">
+        <span style="background: #ff6464; padding: 0.2rem 0.5rem; margin-right: 30px;">Sağ margin 30px</span>
+        <span style="background: #64c8ff; padding: 0.2rem 0.5rem;">Diğer span</span>
+        <div style="margin-top: 1rem;">
+          <span style="background: #ffaa44; padding: 0.2rem 0.5rem; margin-top: 50px;">margin-top: 50px (ÇALIŞMAZ!)</span>
+          <span style="background: #6bcb77; padding: 0.2rem 0.5rem;">Bu span yukarı itilmedi</span>
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ margin-top/ÇALIŞMAZ, margin-right/left ÇALIŞIR!</p>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: line-height -->
+  <h2>📏 line-height — Satır Yüksekliği</h2>
+  <div class="card">
+    <p><strong>line-height</strong>, inline elementlerde <strong>satırlar arasındaki dikey boşluğu</strong> kontrol etmek için kullanılır. Block elementlerde de çalışır, ancak inline elementler için çok daha kritiktir.</p>
+
+    <div class="code-block">
+      <pre>
+/* line-height kullanımı */
+line-height: 1.5;     /* Yazı boyutunun 1.5 katı */
+line-height: 24px;    /* Sabit piksel değeri */
+line-height: 150%;    /* Yüzdesel değer */
+line-height: normal;  /* Varsayılan (yaklaşık 1.2) */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 line-height Karşılaştırması</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;">
+          <strong>line-height: 1 (sıkışık)</strong><br>
+          <span style="line-height: 1; background: #ff6464;">Satır 1</span><br>
+          <span style="line-height: 1; background: #ff6464;">Satır 2</span>
+        </div>
+        <div style="background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;">
+          <strong>line-height: 2 (geniş)</strong><br>
+          <span style="line-height: 2; background: #64c8ff;">Satır 1</span><br>
+          <span style="line-height: 2; background: #64c8ff;">Satır 2</span>
+        </div>
+        <div style="background: #3a3a4a; padding: 0.5rem;">
+          <strong>line-height: 3 (çok geniş)</strong><br>
+          <span style="line-height: 3; background: #6bcb77;">Satır 1</span><br>
+          <span style="line-height: 3; background: #6bcb77;">Satır 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 line-height nerede kullanılır?</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Paragraflar arasındaki okunabilirliği artırmak için</li>
+        <li>Metni dikeyde ortalamak için (inline-block ile birlikte)</li>
+        <li>Butonlarda metni dikeyde ortalamak için</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: body'nin Varsayılan Margin'i -->
+  <h2>⚠️ body'nin Varsayılan Margin'i</h2>
+  <div class="card">
+    <p>Tarayıcılar, <code>&lt;body&gt;</code> elementine <strong>varsayılan olarak margin</strong> uygular. Bu nedenle elementler sayfanın <strong>tam kenarına yapışmaz</strong>!</p>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Varsayılan body margin'i</h4>
+      <div class="demo-container" style="background: #e8ff47; color: #000; text-align: center;">
+        Bu içerik body içinde. Beyaz boşluk = body'nin varsayılan margin'i!
+      </div>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* Varsayılan margin'i kaldır */
+body {
+  margin: 0;
+  padding: 0;
+}
+      </pre>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Önemli:</strong> Çoğu tarayıcıda <code>body</code>'nin varsayılan margin değeri <strong>8px</strong>'dir. Sayfanı sıfırdan tasarlarken mutlaka <code>margin: 0;</code> ekleyin!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Content Sectioning Elements (Semantic HTML) -->
+  <h2>🏷️ Content Sectioning Elements (Semantic HTML)</h2>
+  <div class="card">
+    <p>Bu elementler <strong>anlamsal (semantic)</strong> elementlerdir. Tek başlarına bir şey "yapmazlar", ancak HTML kodunuzu <strong>daha okunabilir</strong> ve <strong>erişilebilir</strong> hale getirirler. <code>&lt;div&gt;</code> kullanmak yerine <strong>mümkün olduğunda bunları tercih edin</strong>!</p>
+
+    <table class="property-table">
+      <thead>
+        <tr><th>Element</th><th>Açıklama</th><th>Kullanım Alanı</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>&lt;header&gt;</code></td><td>Sayfanın veya bölümün giriş kısmı</td><td>Logo, başlık, navigasyon</td></tr>
+        <tr><td><code>&lt;nav&gt;</code></td><td>Navigasyon bölümü</td><td>Menü bağlantıları</td></tr>
+        <tr><td><code>&lt;main&gt;</code></td><td>Sayfanın ana içeriği</td><td>Sayfanın birincil içeriği</td></tr>
+        <tr><td><code>&lt;section&gt;</code></td><td>Belgenin genel bir bölümü</td><td>İçerik grupları, tematik gruplar</td></tr>
+        <tr><td><code>&lt;article&gt;</code></td><td>Bağımsız, kendi kendine yeten içerik</td><td>Blog yazısı, haber, ürün kartı</td></tr>
+        <tr><td><code>&lt;aside&gt;</code></td><td>Yan içerik (sidebar)</td><td>İlgili bağlantılar, reklamlar</td></tr>
+        <tr><td><code>&lt;footer&gt;</code></td><td>Sayfanın veya bölümün alt kısmı</td><td>Telif hakkı, iletişim, linkler</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <pre>
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Site Başlığı&lt;/h1&gt;
+    &lt;nav&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Anasayfa&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Hakkımızda&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;section&gt;
+      &lt;h2&gt;Tanıtım&lt;/h2&gt;
+      &lt;p&gt;Bu sitenin amacı...&lt;/p&gt;
+    &lt;/section&gt;
+
+    &lt;article&gt;
+      &lt;h3&gt;Blog Yazısı&lt;/h3&gt;
+      &lt;p&gt;İçerik...&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/main&gt;
+
+  &lt;aside&gt;
+    &lt;h3&gt;İlgili Bağlantılar&lt;/h3&gt;
+    &lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;
+  &lt;/aside&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2024 - Tüm hakları saklıdır&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+      </pre>
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Neden Semantic HTML Kullanmalısınız?</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>📖 <strong>Okunabilirlik</strong> — Kodunuzu okuyan herkes yapıyı anlar</li>
+        <li>♿ <strong>Erişilebilirlik (Accessibility)</strong> — Ekran okuyucular sayfayı daha iyi yorumlar</li>
+        <li>🔍 <strong>SEO</strong> — Arama motorları sayfanızı daha iyi anlar</li>
+        <li>🛠️ <strong>Bakım kolaylığı</strong> — Düzenlemek ve değiştirmek daha kolaydır</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: Semantic Element Örneği -->
+  <h2>📝 Semantic HTML Örneği</h2>
+  <div class="card">
+    <div class="semantic-example">
+      <header style="background: #3a3a4a;">
+        <h4 style="margin: 0;">📰 Site Başlığı</h4>
+        <nav style="margin-top: 0.5rem;">
+          <span style="margin-right: 1rem;">🏠 Anasayfa</span>
+          <span style="margin-right: 1rem;">📝 Blog</span>
+          <span>📞 İletişim</span>
+        </nav>
+      </header>
+      <main style="background: #2a2a32;">
+        <section style="background: #3a3a4a;">
+          <h4>📌 Tanıtım Bölümü</h4>
+          <p>Bu bir section elementi. Tematik içerik grupları için kullanılır.</p>
+        </section>
+        <article style="background: #3a3a4a;">
+          <h4>✍️ Blog Yazısı</h4>
+          <p>Bu bir article elementi. Bağımsız, kendi kendine yeten içerikler için kullanılır.</p>
+        </article>
+      </main>
+      <aside style="background: #1a1a20;">
+        <h4>🔗 İlgili Bağlantılar</h4>
+        <p>Bu bir aside elementi. Yan içerikler (sidebar) için kullanılır.</p>
+      </aside>
+      <footer style="background: #3a3a4a;">
+        <p style="margin: 0;">© 2024 - Tüm hakları saklıdır</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: Layout Çalışmasına Hazırlık -->
+  <h2>🎯 Layout Çalışması — "Burada Takıldık"</h2>
+  <div class="card">
+    <p>Şimdiye kadar öğrendiklerimizle bir <strong>Squarespace benzeri template</strong> yapmaya çalışıyoruz:</p>
+
+    <div class="code-block">
+      <pre>
+Navbar:     height: 75px;     background: royalblue;    &lt;nav&gt;
+Header:     height: 400px;    background: lightskyblue; &lt;header&gt;
+Section:    height: 500px;    background: gray;         &lt;section&gt;
+Footer:     height: 100px;    background: black;        &lt;footer&gt;
+      </pre>
+    </div>
+
+    <div class="warning-note">
+      <strong>🤔 Peki Nerede Takılıyoruz?</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>İçerikte <strong>iki kutuyu yan yana</strong> nasıl koyacağız? (%48 genişlik, aralarında boşluk)</li>
+        <li>Kutuları <strong>yatayda ortalama</strong> nasıl yapacağız?</li>
+        <li>Elementler arasındaki <strong>boşlukları</strong> nasıl kontrol edeceğiz?</li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>💡 Çözüm:</strong> Bu sorunları çözmek için <strong>CSS Flexbox</strong> veya <strong>CSS Grid</strong> kullanacağız! Bunlar bir sonraki konularımız olacak.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Özet -->
+  <h2>📋 Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📦 <strong>Inline elementlerde margin</strong> — sadece sağ/sol çalışır, üst/alt ÇALIŞMAZ</li>
+      <li>📏 <strong>line-height</strong> — satırlar arası mesafeyi ayarlar, inline elementler için kritiktir</li>
+      <li>⚠️ <strong>body'nin varsayılan margin'i</strong> — sayfa kenarında boşluk bırakır, <code>margin: 0;</code> ile kaldırılır</li>
+      <li>🏷️ <strong>Semantic HTML</strong> — <code>&lt;div&gt;</code> yerine anlamlı elementler kullanın (header, nav, main, section, article, footer)</li>
+      <li>🎯 <strong>Layout sorunları</strong> — Yan yana kutu yerleştirmek için Flexbox veya Grid kullanacağız</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Inline Elementlerde Box Model | line-height · Semantic HTML · Layout'a Giriş
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-box-model-inline.css - Inline Elementlerde Box Model */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  white-space: pre-wrap;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+.inline-demo span {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.2rem 0.4rem;
+  margin: 0 0.2rem;
+}
+
+.semantic-example {
+  background: #1a1a20;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.semantic-example header,
+.semantic-example nav,
+.semantic-example main,
+.semantic-example section,
+.semantic-example article,
+.semantic-example footer {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+}
+
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=inline-elementlerde-box-model" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Inline Elementlerde Box Model — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Inline Elementlerde Box Model - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-box-model-inline.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📦 <span class=\"highlight\">Inline Elementlerde Box Model</span></h1>\n  <div class=\"subtitle\">Inline elementlerde margin, padding, line-height ve farklılıklar</div>\n\n  <!-- BÖLÜM 1: Inline Elementlerde Box Model -->\n  <h2>🔍 Inline Elementlerde Box Model Nasıl Çalışır?</h2>\n  <div class=\"card\">\n    <p><strong>Soru:</strong> Box model inline elementler için de geçerli mi?</p>\n    <p><strong>Cevap:</strong> <strong>Evet</strong>, ancak kutu <strong>farklı şekillenir</strong>!</p>\n\n    <div class=\"info-note\">\n      <strong>📌 Inline Elementlerde Box Model Farkları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>margin-left</strong> ve <strong>margin-right</strong> → ÇALIŞIR (diğer elementleri iter)</li>\n        <li>❌ <strong>margin-top</strong> ve <strong>margin-bottom</strong> → <strong>ÇALIŞMAZ</strong> (diğer elementleri itmez)</li>\n        <li>✅ <strong>padding-left</strong> ve <strong>padding-right</strong> → ÇALIŞIR</li>\n        <li>⚠️ <strong>padding-top</strong> ve <strong>padding-bottom</strong> → ÇALIŞIR <strong>AMA</strong> diğer elementleri etkilemez (taşabilir)</li>\n        <li>✅ <strong>line-height</strong> → Satırlar arası mesafeyi ayarlamak için KULLANILIR</li>\n      </ul>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;span&gt;Bir inline element&lt;/span&gt;\n&lt;span&gt;Başka bir inline element&lt;/span&gt;\n\nspan {\n  margin: 20px;        /* margin-top/bottom ÇALIŞMAZ! */\n  margin-left: 20px;   /* ✅ ÇALIŞIR */\n  margin-right: 20px;  /* ✅ ÇALIŞIR */\n  padding: 10px;       /* padding-top/bottom çalışır ama diğerlerini itmez */\n  line-height: 2;      /* ✅ Satır yüksekliğini ayarlar */\n}\n      </pre>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Inline Margin Gösterimi -->\n  <h2>📐 Inline Elementlerde Margin</h2>\n  <div class=\"card\">\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Inline Margin Örneği</h4>\n      <div class=\"demo-container\">\n        <span style=\"background: #ff6464; padding: 0.2rem 0.5rem; margin-right: 30px;\">Sağ margin 30px</span>\n        <span style=\"background: #64c8ff; padding: 0.2rem 0.5rem;\">Diğer span</span>\n        <div style=\"margin-top: 1rem;\">\n          <span style=\"background: #ffaa44; padding: 0.2rem 0.5rem; margin-top: 50px;\">margin-top: 50px (ÇALIŞMAZ!)</span>\n          <span style=\"background: #6bcb77; padding: 0.2rem 0.5rem;\">Bu span yukarı itilmedi</span>\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ margin-top/ÇALIŞMAZ, margin-right/left ÇALIŞIR!</p>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: line-height -->\n  <h2>📏 line-height — Satır Yüksekliği</h2>\n  <div class=\"card\">\n    <p><strong>line-height</strong>, inline elementlerde <strong>satırlar arasındaki dikey boşluğu</strong> kontrol etmek için kullanılır. Block elementlerde de çalışır, ancak inline elementler için çok daha kritiktir.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* line-height kullanımı */\nline-height: 1.5;     /* Yazı boyutunun 1.5 katı */\nline-height: 24px;    /* Sabit piksel değeri */\nline-height: 150%;    /* Yüzdesel değer */\nline-height: normal;  /* Varsayılan (yaklaşık 1.2) */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 line-height Karşılaştırması</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;\">\n          <strong>line-height: 1 (sıkışık)</strong><br>\n          <span style=\"line-height: 1; background: #ff6464;\">Satır 1</span><br>\n          <span style=\"line-height: 1; background: #ff6464;\">Satır 2</span>\n        </div>\n        <div style=\"background: #3a3a4a; padding: 0.5rem; margin-bottom: 0.5rem;\">\n          <strong>line-height: 2 (geniş)</strong><br>\n          <span style=\"line-height: 2; background: #64c8ff;\">Satır 1</span><br>\n          <span style=\"line-height: 2; background: #64c8ff;\">Satır 2</span>\n        </div>\n        <div style=\"background: #3a3a4a; padding: 0.5rem;\">\n          <strong>line-height: 3 (çok geniş)</strong><br>\n          <span style=\"line-height: 3; background: #6bcb77;\">Satır 1</span><br>\n          <span style=\"line-height: 3; background: #6bcb77;\">Satır 2</span>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 line-height nerede kullanılır?</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Paragraflar arasındaki okunabilirliği artırmak için</li>\n        <li>Metni dikeyde ortalamak için (inline-block ile birlikte)</li>\n        <li>Butonlarda metni dikeyde ortalamak için</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: body'nin Varsayılan Margin'i -->\n  <h2>⚠️ body'nin Varsayılan Margin'i</h2>\n  <div class=\"card\">\n    <p>Tarayıcılar, <code>&lt;body&gt;</code> elementine <strong>varsayılan olarak margin</strong> uygular. Bu nedenle elementler sayfanın <strong>tam kenarına yapışmaz</strong>!</p>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Varsayılan body margin'i</h4>\n      <div class=\"demo-container\" style=\"background: #e8ff47; color: #000; text-align: center;\">\n        Bu içerik body içinde. Beyaz boşluk = body'nin varsayılan margin'i!\n      </div>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* Varsayılan margin'i kaldır */\nbody {\n  margin: 0;\n  padding: 0;\n}\n      </pre>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Önemli:</strong> Çoğu tarayıcıda <code>body</code>'nin varsayılan margin değeri <strong>8px</strong>'dir. Sayfanı sıfırdan tasarlarken mutlaka <code>margin: 0;</code> ekleyin!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Content Sectioning Elements (Semantic HTML) -->\n  <h2>🏷️ Content Sectioning Elements (Semantic HTML)</h2>\n  <div class=\"card\">\n    <p>Bu elementler <strong>anlamsal (semantic)</strong> elementlerdir. Tek başlarına bir şey \"yapmazlar\", ancak HTML kodunuzu <strong>daha okunabilir</strong> ve <strong>erişilebilir</strong> hale getirirler. <code>&lt;div&gt;</code> kullanmak yerine <strong>mümkün olduğunda bunları tercih edin</strong>!</p>\n\n    <table class=\"property-table\">\n      <thead>\n        <tr><th>Element</th><th>Açıklama</th><th>Kullanım Alanı</th></tr>\n      </thead>\n      <tbody>\n        <tr><td><code>&lt;header&gt;</code></td><td>Sayfanın veya bölümün giriş kısmı</td><td>Logo, başlık, navigasyon</td></tr>\n        <tr><td><code>&lt;nav&gt;</code></td><td>Navigasyon bölümü</td><td>Menü bağlantıları</td></tr>\n        <tr><td><code>&lt;main&gt;</code></td><td>Sayfanın ana içeriği</td><td>Sayfanın birincil içeriği</td></tr>\n        <tr><td><code>&lt;section&gt;</code></td><td>Belgenin genel bir bölümü</td><td>İçerik grupları, tematik gruplar</td></tr>\n        <tr><td><code>&lt;article&gt;</code></td><td>Bağımsız, kendi kendine yeten içerik</td><td>Blog yazısı, haber, ürün kartı</td></tr>\n        <tr><td><code>&lt;aside&gt;</code></td><td>Yan içerik (sidebar)</td><td>İlgili bağlantılar, reklamlar</td></tr>\n        <tr><td><code>&lt;footer&gt;</code></td><td>Sayfanın veya bölümün alt kısmı</td><td>Telif hakkı, iletişim, linkler</td></tr>\n      </tbody>\n    </table>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;body&gt;\n  &lt;header&gt;\n    &lt;h1&gt;Site Başlığı&lt;/h1&gt;\n    &lt;nav&gt;\n      &lt;ul&gt;\n        &lt;li&gt;&lt;a href=\"#\"&gt;Anasayfa&lt;/a&gt;&lt;/li&gt;\n        &lt;li&gt;&lt;a href=\"#\"&gt;Hakkımızda&lt;/a&gt;&lt;/li&gt;\n      &lt;/ul&gt;\n    &lt;/nav&gt;\n  &lt;/header&gt;\n\n  &lt;main&gt;\n    &lt;section&gt;\n      &lt;h2&gt;Tanıtım&lt;/h2&gt;\n      &lt;p&gt;Bu sitenin amacı...&lt;/p&gt;\n    &lt;/section&gt;\n\n    &lt;article&gt;\n      &lt;h3&gt;Blog Yazısı&lt;/h3&gt;\n      &lt;p&gt;İçerik...&lt;/p&gt;\n    &lt;/article&gt;\n  &lt;/main&gt;\n\n  &lt;aside&gt;\n    &lt;h3&gt;İlgili Bağlantılar&lt;/h3&gt;\n    &lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;\n  &lt;/aside&gt;\n\n  &lt;footer&gt;\n    &lt;p&gt;&amp;copy; 2024 - Tüm hakları saklıdır&lt;/p&gt;\n  &lt;/footer&gt;\n&lt;/body&gt;\n      </pre>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Neden Semantic HTML Kullanmalısınız?</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>📖 <strong>Okunabilirlik</strong> — Kodunuzu okuyan herkes yapıyı anlar</li>\n        <li>♿ <strong>Erişilebilirlik (Accessibility)</strong> — Ekran okuyucular sayfayı daha iyi yorumlar</li>\n        <li>🔍 <strong>SEO</strong> — Arama motorları sayfanızı daha iyi anlar</li>\n        <li>🛠️ <strong>Bakım kolaylığı</strong> — Düzenlemek ve değiştirmek daha kolaydır</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: Semantic Element Örneği -->\n  <h2>📝 Semantic HTML Örneği</h2>\n  <div class=\"card\">\n    <div class=\"semantic-example\">\n      <header style=\"background: #3a3a4a;\">\n        <h4 style=\"margin: 0;\">📰 Site Başlığı</h4>\n        <nav style=\"margin-top: 0.5rem;\">\n          <span style=\"margin-right: 1rem;\">🏠 Anasayfa</span>\n          <span style=\"margin-right: 1rem;\">📝 Blog</span>\n          <span>📞 İletişim</span>\n        </nav>\n      </header>\n      <main style=\"background: #2a2a32;\">\n        <section style=\"background: #3a3a4a;\">\n          <h4>📌 Tanıtım Bölümü</h4>\n          <p>Bu bir section elementi. Tematik içerik grupları için kullanılır.</p>\n        </section>\n        <article style=\"background: #3a3a4a;\">\n          <h4>✍️ Blog Yazısı</h4>\n          <p>Bu bir article elementi. Bağımsız, kendi kendine yeten içerikler için kullanılır.</p>\n        </article>\n      </main>\n      <aside style=\"background: #1a1a20;\">\n        <h4>🔗 İlgili Bağlantılar</h4>\n        <p>Bu bir aside elementi. Yan içerikler (sidebar) için kullanılır.</p>\n      </aside>\n      <footer style=\"background: #3a3a4a;\">\n        <p style=\"margin: 0;\">© 2024 - Tüm hakları saklıdır</p>\n      </footer>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: Layout Çalışmasına Hazırlık -->\n  <h2>🎯 Layout Çalışması — \"Burada Takıldık\"</h2>\n  <div class=\"card\">\n    <p>Şimdiye kadar öğrendiklerimizle bir <strong>Squarespace benzeri template</strong> yapmaya çalışıyoruz:</p>\n\n    <div class=\"code-block\">\n      <pre>\nNavbar:     height: 75px;     background: royalblue;    &lt;nav&gt;\nHeader:     height: 400px;    background: lightskyblue; &lt;header&gt;\nSection:    height: 500px;    background: gray;         &lt;section&gt;\nFooter:     height: 100px;    background: black;        &lt;footer&gt;\n      </pre>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>🤔 Peki Nerede Takılıyoruz?</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>İçerikte <strong>iki kutuyu yan yana</strong> nasıl koyacağız? (%48 genişlik, aralarında boşluk)</li>\n        <li>Kutuları <strong>yatayda ortalama</strong> nasıl yapacağız?</li>\n        <li>Elementler arasındaki <strong>boşlukları</strong> nasıl kontrol edeceğiz?</li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>💡 Çözüm:</strong> Bu sorunları çözmek için <strong>CSS Flexbox</strong> veya <strong>CSS Grid</strong> kullanacağız! Bunlar bir sonraki konularımız olacak.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Özet -->\n  <h2>📋 Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📦 <strong>Inline elementlerde margin</strong> — sadece sağ/sol çalışır, üst/alt ÇALIŞMAZ</li>\n      <li>📏 <strong>line-height</strong> — satırlar arası mesafeyi ayarlar, inline elementler için kritiktir</li>\n      <li>⚠️ <strong>body'nin varsayılan margin'i</strong> — sayfa kenarında boşluk bırakır, <code>margin: 0;</code> ile kaldırılır</li>\n      <li>🏷️ <strong>Semantic HTML</strong> — <code>&lt;div&gt;</code> yerine anlamlı elementler kullanın (header, nav, main, section, article, footer)</li>\n      <li>🎯 <strong>Layout sorunları</strong> — Yan yana kutu yerleştirmek için Flexbox veya Grid kullanacağız</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Inline Elementlerde Box Model | line-height · Semantic HTML · Layout'a Giriş\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-box-model-inline.css - Inline Elementlerde Box Model */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  white-space: pre-wrap;\n}\n\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n.inline-demo span {\n  background: #e8ff47;\n  color: #000;\n  padding: 0.2rem 0.4rem;\n  margin: 0 0.2rem;\n}\n\n.semantic-example {\n  background: #1a1a20;\n  border-radius: 8px;\n  overflow: hidden;\n}\n\n.semantic-example header,\n.semantic-example nav,\n.semantic-example main,\n.semantic-example section,\n.semantic-example article,\n.semantic-example footer {\n  padding: 1rem;\n  margin: 0.5rem;\n  border-radius: 8px;\n}\n\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
