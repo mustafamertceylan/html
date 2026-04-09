@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML temel elementler - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>HTML temel elementler</h1>
+    <p class="desc"></p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;HTML Elementleri ve Hizalama Giriş - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;html-elements-basics.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📦 &lt;span class=&quot;highlight&quot;&gt;HTML Elementleri&lt;/span&gt; + Hizalama Giriş&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Başlıklar · Paragraflar · Linkler · Resimler · Metin Biçimlendirme · CSS ile Hizalama (Giriş)&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: HTML Elementi Nedir? --&gt;
+  &lt;h2&gt;🔷 HTML Elementi Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📖 Temel Yapı&lt;/div&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;etiket&amp;gt; içerik &amp;lt;/etiket&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;Bir element genellikle:&lt;/strong&gt;&lt;/p&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color: #c0c0d0;&quot;&gt;
+      &lt;li&gt;✅ Açılış etiketi: &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ Kapanış etiketi: &lt;code&gt;&amp;lt;/p&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ İçerik: Açılış ve kapanış arasındaki şey&lt;/li&gt;
+      &lt;li&gt;✅ Kendi kendini kapatabilir: &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; (kapanış etiketi yok)&lt;/li&gt;
+      &lt;li&gt;✅ Öznitelik (attribute) alabilir: &lt;code&gt;src=&quot;resim.jpg&quot;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ İç içe elementler barındırabilir: &lt;code&gt;&amp;lt;p&amp;gt; &amp;lt;em&amp;gt;vurgu&amp;lt;/em&amp;gt; &amp;lt;/p&amp;gt;&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Örnek İç İçe Element --&gt;
+  &lt;h2&gt;🔷 Elementler İç İçe Olabilir&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;p&amp;gt;
+  HTML is &amp;lt;em&amp;gt;awesome!!!&amp;lt;/em&amp;gt;
+  &amp;lt;img src=&quot;puppy.png&quot; /&amp;gt;
+&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;live-preview&quot;&gt;
+      &lt;h4&gt;✨ Canlı Önizleme&lt;/h4&gt;
+      &lt;p&gt;HTML is &lt;em&gt;awesome!!!&lt;/em&gt; &lt;img src=&quot;#&quot; style=&quot;display:none;&quot;&gt; (resim placeholder)&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📝 Not:&lt;/strong&gt; &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt; elementi &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;'nin içinde. &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; ise kendi kendini kapatan bir element.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: Temel HTML Elementleri Tablosu --&gt;
+  &lt;h2&gt;🔷 Sık Kullanılan HTML Elementleri&lt;/h2&gt;
+  &lt;table class=&quot;element-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Element&lt;/th&gt;&lt;th&gt;Anlamı&lt;/th&gt;&lt;th&gt;Örnek Kullanım&lt;/th&gt;&lt;th&gt;Çıktı&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;h1&amp;gt;...&amp;lt;h6&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Başlık (Heading)&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;h1&amp;gt;Moby Dick&amp;lt;/h1&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;font-size:1.4rem; font-weight:bold;&quot;&gt;Moby Dick&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Paragraf&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;p&amp;gt;Call me Ishmael.&amp;lt;/p&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Call me Ishmael.&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Satır sonu (line break)&lt;/td&gt;&lt;td&gt;&lt;code&gt;since feeling is first&amp;lt;br&amp;gt;who pays any attention&lt;/code&gt;&lt;/td&gt;&lt;td&gt;since feeling is first&lt;br&gt;who pays any attention&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Resim&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;img src=&quot;cover.png&quot;&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;[Resim]&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Link (anchor)&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;a href=&quot;google.com&quot;&amp;gt;click here!&amp;lt;/a&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;a href=&quot;#&quot; style=&quot;color:#e8ff47;&quot;&gt;click here!&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kalın (bold)&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;strong&amp;gt;Be BOLD&amp;lt;/strong&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;strong&gt;Be BOLD&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Vurgu (italic)&lt;/td&gt;&lt;td&gt;&lt;code&gt;He's my &amp;lt;em&amp;gt;brother&amp;lt;/em&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;He's my &lt;em&gt;brother&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 4: Hizalama Giriş --&gt;
+  &lt;h2&gt;🎯 CSS ile Hizalama (Giriş Seviyesi)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📍 Metin Hizalama&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;En temel hizalama:&lt;/strong&gt; &lt;code&gt;text-align&lt;/code&gt; özelliği ile metinleri hizalayabilirsin.&lt;/p&gt;
+
+    &lt;div class=&quot;align-demo&quot;&gt;
+      &lt;div class=&quot;text-left align-box&quot;&gt;&lt;strong&gt;text-align: left;&lt;/strong&gt;&lt;br&gt;Bu metin solda hizalanır.&lt;/div&gt;
+      &lt;div class=&quot;text-center align-box&quot;&gt;&lt;strong&gt;text-align: center;&lt;/strong&gt;&lt;br&gt;Bu metin ortada hizalanır.&lt;/div&gt;
+      &lt;div class=&quot;text-right align-box&quot;&gt;&lt;strong&gt;text-align: right;&lt;/strong&gt;&lt;br&gt;Bu metin sağda hizalanır.&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* CSS kodu */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Flexbox ile Hizalama (Çok Temel) --&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📐 Flexbox ile Elementleri Hizalama (Giriş)&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;Flexbox&lt;/strong&gt;, elementleri yan yana veya ortalamak için kullanılır. İlerleyen slaytlarda çok daha detaylı göreceğiz!&lt;/p&gt;
+
+    &lt;h3&gt;✨ Yan yana hizalama (justify-content: center)&lt;/h3&gt;
+    &lt;div class=&quot;flex-center align-box&quot; style=&quot;background:#2a2a32;&quot;&gt;
+      &lt;span&gt;🔹 Kutu 1&lt;/span&gt;
+      &lt;span&gt;🔹 Kutu 2&lt;/span&gt;
+      &lt;span&gt;🔹 Kutu 3&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;✨ İki yana yaslama (justify-content: space-between)&lt;/h3&gt;
+    &lt;div class=&quot;flex-between align-box&quot; style=&quot;background:#2a2a32;&quot;&gt;
+      &lt;span&gt;⬅️ Sol&lt;/span&gt;
+      &lt;span&gt;➡️ Sağ&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Flexbox temel kullanımı */
+.flex-center {
+  display: flex;
+  justify-content: center;  /* yatayda ortalar */
+  gap: 1rem;                /* kutular arası boşluk */
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between; /* iki uca yaslar */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;🔮 İlerleyen slaytlarda:&lt;/strong&gt; Flexbox, Grid, margin:auto, position, float gibi daha fazla hizalama yöntemi göreceğiz!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: Öznitelikler (Attributes) --&gt;
+  &lt;h2&gt;🔷 Element Öznitelikleri (Attributes)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;img src=&quot;puppy.jpg&quot; alt=&quot;Bir köpek yavrusu&quot; width=&quot;200&quot;&amp;gt;
+&amp;lt;a href=&quot;https://www.google.com&quot; target=&quot;_blank&quot;&amp;gt;Google'a Git&amp;lt;/a&amp;gt;
+&amp;lt;p class=&quot;highlight&quot; id=&quot;first-paragraph&quot;&amp;gt;Öznitelikler ek bilgi verir&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0;&quot;&gt;
+      &lt;li&gt;&lt;code&gt;src&lt;/code&gt; → Resmin kaynak dosyasını belirtir&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;alt&lt;/code&gt; → Resim yüklenmezse gösterilen alternatif metin&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;href&lt;/code&gt; → Linkin gideceği adres&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;class&lt;/code&gt; / &lt;code&gt;id&lt;/code&gt; → CSS veya JavaScript için tanımlayıcılar&lt;/li&gt;
+      &lt;li&gt;&lt;code&gt;target=&quot;_blank&quot;&lt;/code&gt; → Linki yeni sekmede açar&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Pratik Örnek --&gt;
+  &lt;h2&gt;🔷 Pratik Örnek: Küçük Bir Kart&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div style=&quot;border: 1px solid #e8ff47; padding: 1rem; text-align: center;&quot;&amp;gt;
+  &amp;lt;h3&amp;gt;Merhaba HTML!&amp;lt;/h3&amp;gt;
+  &amp;lt;p&amp;gt;Bu bir &amp;lt;strong&amp;gt;deneme&amp;lt;/strong&amp;gt; kartıdır.&amp;lt;/p&amp;gt;
+  &amp;lt;a href=&quot;#&quot;&amp;gt;Detaylar →&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;live-preview&quot;&gt;
+      &lt;h4&gt;✨ Canlı Önizleme&lt;/h4&gt;
+      &lt;div style=&quot;border: 1px solid #e8ff47; padding: 1rem; text-align: center;&quot;&gt;
+        &lt;h3 style=&quot;margin:0 0 0.5rem 0;&quot;&gt;Merhaba HTML!&lt;/h3&gt;
+        &lt;p&gt;Bu bir &lt;strong&gt;deneme&lt;/strong&gt; kartıdır.&lt;/p&gt;
+        &lt;a href=&quot;#&quot; style=&quot;color:#e8ff47; text-decoration:none;&quot;&gt;Detaylar →&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Özet --&gt;
+  &lt;h2&gt;📋 Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height:1.8;&quot;&gt;
+      &lt;li&gt;✅ HTML elementleri = &lt;code&gt;&amp;lt;açılış&amp;gt;içerik&amp;lt;/kapanış&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ Bazı elementler kendi kendini kapatır: &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ Elementler &lt;strong&gt;öznitelik (attribute)&lt;/strong&gt; alabilir&lt;/li&gt;
+      &lt;li&gt;✅ Elementler &lt;strong&gt;iç içe&lt;/strong&gt; yazılabilir&lt;/li&gt;
+      &lt;li&gt;✅ &lt;code&gt;text-align&lt;/code&gt; ile metin hizalama yapılır (left, center, right)&lt;/li&gt;
+      &lt;li&gt;✅ &lt;code&gt;display: flex&lt;/code&gt; ile elementleri yan yana veya ortalamak mümkün&lt;/li&gt;
+      &lt;li&gt;📚 İlerleyen konularda hizalama detaylandırılacak!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — HTML Elementleri + Hizalama Giriş | İlerleyen slaytlarda devam edecek...
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* html-elements-basics.css - HTML Elementleri ve Hizalama Giriş */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Ana container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlık */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+/* Bölüm başlıkları */
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme kutuları */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Tablo stili */
+.element-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.element-table th,
+.element-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.element-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.element-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.element-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Hizalama örnekleri için flex kutuları */
+.align-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.align-box {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+/* Hizalama stilleri (giriş seviyesi) */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Info notları */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong {
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .element-table th,
+  .element-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Elementleri ve Hizalama Giriş - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="html-elements-basics.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📦 <span class="highlight">HTML Elementleri</span> + Hizalama Giriş</h1>
+  <div class="subtitle">Başlıklar · Paragraflar · Linkler · Resimler · Metin Biçimlendirme · CSS ile Hizalama (Giriş)</div>
+
+  <!-- BÖLÜM 1: HTML Elementi Nedir? -->
+  <h2>🔷 HTML Elementi Nedir?</h2>
+  <div class="card">
+    <div class="card-header">📖 Temel Yapı</div>
+    <div class="code-block">
+      <pre>
+&lt;etiket&gt; içerik &lt;/etiket&gt;
+      </pre>
+    </div>
+    <p><strong>Bir element genellikle:</strong></p>
+    <ul style="margin-left: 1.5rem; color: #c0c0d0;">
+      <li>✅ Açılış etiketi: <code>&lt;p&gt;</code></li>
+      <li>✅ Kapanış etiketi: <code>&lt;/p&gt;</code></li>
+      <li>✅ İçerik: Açılış ve kapanış arasındaki şey</li>
+      <li>✅ Kendi kendini kapatabilir: <code>&lt;img&gt;</code> (kapanış etiketi yok)</li>
+      <li>✅ Öznitelik (attribute) alabilir: <code>src="resim.jpg"</code></li>
+      <li>✅ İç içe elementler barındırabilir: <code>&lt;p&gt; &lt;em&gt;vurgu&lt;/em&gt; &lt;/p&gt;</code></li>
+    </ul>
+  </div>
+
+  <!-- BÖLÜM 2: Örnek İç İçe Element -->
+  <h2>🔷 Elementler İç İçe Olabilir</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;p&gt;
+  HTML is &lt;em&gt;awesome!!!&lt;/em&gt;
+  &lt;img src="puppy.png" /&gt;
+&lt;/p&gt;
+      </pre>
+    </div>
+    <div class="live-preview">
+      <h4>✨ Canlı Önizleme</h4>
+      <p>HTML is <em>awesome!!!</em> <img src="#" style="display:none;"> (resim placeholder)</p>
+    </div>
+    <div class="info-note">
+      <strong>📝 Not:</strong> <code>&lt;em&gt;</code> elementi <code>&lt;p&gt;</code>'nin içinde. <code>&lt;img&gt;</code> ise kendi kendini kapatan bir element.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: Temel HTML Elementleri Tablosu -->
+  <h2>🔷 Sık Kullanılan HTML Elementleri</h2>
+  <table class="element-table">
+    <thead>
+      <tr><th>Element</th><th>Anlamı</th><th>Örnek Kullanım</th><th>Çıktı</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>&lt;h1&gt;...&lt;h6&gt;</code></td><td>Başlık (Heading)</td><td><code>&lt;h1&gt;Moby Dick&lt;/h1&gt;</code></td><td style="font-size:1.4rem; font-weight:bold;">Moby Dick</td></tr>
+      <tr><td><code>&lt;p&gt;</code></td><td>Paragraf</td><td><code>&lt;p&gt;Call me Ishmael.&lt;/p&gt;</code></td><td>Call me Ishmael.</td></tr>
+      <tr><td><code>&lt;br&gt;</code></td><td>Satır sonu (line break)</td><td><code>since feeling is first&lt;br&gt;who pays any attention</code></td><td>since feeling is first<br>who pays any attention</td></tr>
+      <tr><td><code>&lt;img&gt;</code></td><td>Resim</td><td><code>&lt;img src="cover.png"&gt;</code></td><td>[Resim]</td></tr>
+      <tr><td><code>&lt;a&gt;</code></td><td>Link (anchor)</td><td><code>&lt;a href="google.com"&gt;click here!&lt;/a&gt;</code></td><td><a href="#" style="color:#e8ff47;">click here!</a></td></tr>
+      <tr><td><code>&lt;strong&gt;</code></td><td>Kalın (bold)</td><td><code>&lt;strong&gt;Be BOLD&lt;/strong&gt;</code></td><td><strong>Be BOLD</strong></td></tr>
+      <tr><td><code>&lt;em&gt;</code></td><td>Vurgu (italic)</td><td><code>He's my &lt;em&gt;brother&lt;/em&gt;</code></td><td>He's my <em>brother</em></td></tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 4: Hizalama Giriş -->
+  <h2>🎯 CSS ile Hizalama (Giriş Seviyesi)</h2>
+  <div class="card">
+    <div class="card-header">📍 Metin Hizalama</div>
+    <p><strong>En temel hizalama:</strong> <code>text-align</code> özelliği ile metinleri hizalayabilirsin.</p>
+
+    <div class="align-demo">
+      <div class="text-left align-box"><strong>text-align: left;</strong><br>Bu metin solda hizalanır.</div>
+      <div class="text-center align-box"><strong>text-align: center;</strong><br>Bu metin ortada hizalanır.</div>
+      <div class="text-right align-box"><strong>text-align: right;</strong><br>Bu metin sağda hizalanır.</div>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* CSS kodu */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+      </pre>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Flexbox ile Hizalama (Çok Temel) -->
+  <div class="card">
+    <div class="card-header">📐 Flexbox ile Elementleri Hizalama (Giriş)</div>
+    <p><strong>Flexbox</strong>, elementleri yan yana veya ortalamak için kullanılır. İlerleyen slaytlarda çok daha detaylı göreceğiz!</p>
+
+    <h3>✨ Yan yana hizalama (justify-content: center)</h3>
+    <div class="flex-center align-box" style="background:#2a2a32;">
+      <span>🔹 Kutu 1</span>
+      <span>🔹 Kutu 2</span>
+      <span>🔹 Kutu 3</span>
+    </div>
+
+    <h3>✨ İki yana yaslama (justify-content: space-between)</h3>
+    <div class="flex-between align-box" style="background:#2a2a32;">
+      <span>⬅️ Sol</span>
+      <span>➡️ Sağ</span>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* Flexbox temel kullanımı */
+.flex-center {
+  display: flex;
+  justify-content: center;  /* yatayda ortalar */
+  gap: 1rem;                /* kutular arası boşluk */
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between; /* iki uca yaslar */
+}
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>🔮 İlerleyen slaytlarda:</strong> Flexbox, Grid, margin:auto, position, float gibi daha fazla hizalama yöntemi göreceğiz!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: Öznitelikler (Attributes) -->
+  <h2>🔷 Element Öznitelikleri (Attributes)</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;img src="puppy.jpg" alt="Bir köpek yavrusu" width="200"&gt;
+&lt;a href="https://www.google.com" target="_blank"&gt;Google'a Git&lt;/a&gt;
+&lt;p class="highlight" id="first-paragraph"&gt;Öznitelikler ek bilgi verir&lt;/p&gt;
+      </pre>
+    </div>
+    <ul style="margin-left: 1.5rem; color:#c0c0d0;">
+      <li><code>src</code> → Resmin kaynak dosyasını belirtir</li>
+      <li><code>alt</code> → Resim yüklenmezse gösterilen alternatif metin</li>
+      <li><code>href</code> → Linkin gideceği adres</li>
+      <li><code>class</code> / <code>id</code> → CSS veya JavaScript için tanımlayıcılar</li>
+      <li><code>target="_blank"</code> → Linki yeni sekmede açar</li>
+    </ul>
+  </div>
+
+  <!-- BÖLÜM 7: Pratik Örnek -->
+  <h2>🔷 Pratik Örnek: Küçük Bir Kart</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div style="border: 1px solid #e8ff47; padding: 1rem; text-align: center;"&gt;
+  &lt;h3&gt;Merhaba HTML!&lt;/h3&gt;
+  &lt;p&gt;Bu bir &lt;strong&gt;deneme&lt;/strong&gt; kartıdır.&lt;/p&gt;
+  &lt;a href="#"&gt;Detaylar →&lt;/a&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+    <div class="live-preview">
+      <h4>✨ Canlı Önizleme</h4>
+      <div style="border: 1px solid #e8ff47; padding: 1rem; text-align: center;">
+        <h3 style="margin:0 0 0.5rem 0;">Merhaba HTML!</h3>
+        <p>Bu bir <strong>deneme</strong> kartıdır.</p>
+        <a href="#" style="color:#e8ff47; text-decoration:none;">Detaylar →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Özet -->
+  <h2>📋 Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height:1.8;">
+      <li>✅ HTML elementleri = <code>&lt;açılış&gt;içerik&lt;/kapanış&gt;</code></li>
+      <li>✅ Bazı elementler kendi kendini kapatır: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code></li>
+      <li>✅ Elementler <strong>öznitelik (attribute)</strong> alabilir</li>
+      <li>✅ Elementler <strong>iç içe</strong> yazılabilir</li>
+      <li>✅ <code>text-align</code> ile metin hizalama yapılır (left, center, right)</li>
+      <li>✅ <code>display: flex</code> ile elementleri yan yana veya ortalamak mümkün</li>
+      <li>📚 İlerleyen konularda hizalama detaylandırılacak!</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — HTML Elementleri + Hizalama Giriş | İlerleyen slaytlarda devam edecek...
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* html-elements-basics.css - HTML Elementleri ve Hizalama Giriş */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Ana container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlık */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+/* Bölüm başlıkları */
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme kutuları */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Tablo stili */
+.element-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.element-table th,
+.element-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.element-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.element-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.element-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Hizalama örnekleri için flex kutuları */
+.align-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.align-box {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+/* Hizalama stilleri (giriş seviyesi) */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Info notları */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong {
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .element-table th,
+  .element-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=html-temel-elementler" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>HTML temel elementler — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>HTML Elementleri ve Hizalama Giriş - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"html-elements-basics.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📦 <span class=\"highlight\">HTML Elementleri</span> + Hizalama Giriş</h1>\n  <div class=\"subtitle\">Başlıklar · Paragraflar · Linkler · Resimler · Metin Biçimlendirme · CSS ile Hizalama (Giriş)</div>\n\n  <!-- BÖLÜM 1: HTML Elementi Nedir? -->\n  <h2>🔷 HTML Elementi Nedir?</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📖 Temel Yapı</div>\n    <div class=\"code-block\">\n      <pre>\n&lt;etiket&gt; içerik &lt;/etiket&gt;\n      </pre>\n    </div>\n    <p><strong>Bir element genellikle:</strong></p>\n    <ul style=\"margin-left: 1.5rem; color: #c0c0d0;\">\n      <li>✅ Açılış etiketi: <code>&lt;p&gt;</code></li>\n      <li>✅ Kapanış etiketi: <code>&lt;/p&gt;</code></li>\n      <li>✅ İçerik: Açılış ve kapanış arasındaki şey</li>\n      <li>✅ Kendi kendini kapatabilir: <code>&lt;img&gt;</code> (kapanış etiketi yok)</li>\n      <li>✅ Öznitelik (attribute) alabilir: <code>src=\"resim.jpg\"</code></li>\n      <li>✅ İç içe elementler barındırabilir: <code>&lt;p&gt; &lt;em&gt;vurgu&lt;/em&gt; &lt;/p&gt;</code></li>\n    </ul>\n  </div>\n\n  <!-- BÖLÜM 2: Örnek İç İçe Element -->\n  <h2>🔷 Elementler İç İçe Olabilir</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;p&gt;\n  HTML is &lt;em&gt;awesome!!!&lt;/em&gt;\n  &lt;img src=\"puppy.png\" /&gt;\n&lt;/p&gt;\n      </pre>\n    </div>\n    <div class=\"live-preview\">\n      <h4>✨ Canlı Önizleme</h4>\n      <p>HTML is <em>awesome!!!</em> <img src=\"#\" style=\"display:none;\"> (resim placeholder)</p>\n    </div>\n    <div class=\"info-note\">\n      <strong>📝 Not:</strong> <code>&lt;em&gt;</code> elementi <code>&lt;p&gt;</code>'nin içinde. <code>&lt;img&gt;</code> ise kendi kendini kapatan bir element.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: Temel HTML Elementleri Tablosu -->\n  <h2>🔷 Sık Kullanılan HTML Elementleri</h2>\n  <table class=\"element-table\">\n    <thead>\n      <tr><th>Element</th><th>Anlamı</th><th>Örnek Kullanım</th><th>Çıktı</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>&lt;h1&gt;...&lt;h6&gt;</code></td><td>Başlık (Heading)</td><td><code>&lt;h1&gt;Moby Dick&lt;/h1&gt;</code></td><td style=\"font-size:1.4rem; font-weight:bold;\">Moby Dick</td></tr>\n      <tr><td><code>&lt;p&gt;</code></td><td>Paragraf</td><td><code>&lt;p&gt;Call me Ishmael.&lt;/p&gt;</code></td><td>Call me Ishmael.</td></tr>\n      <tr><td><code>&lt;br&gt;</code></td><td>Satır sonu (line break)</td><td><code>since feeling is first&lt;br&gt;who pays any attention</code></td><td>since feeling is first<br>who pays any attention</td></tr>\n      <tr><td><code>&lt;img&gt;</code></td><td>Resim</td><td><code>&lt;img src=\"cover.png\"&gt;</code></td><td>[Resim]</td></tr>\n      <tr><td><code>&lt;a&gt;</code></td><td>Link (anchor)</td><td><code>&lt;a href=\"google.com\"&gt;click here!&lt;/a&gt;</code></td><td><a href=\"#\" style=\"color:#e8ff47;\">click here!</a></td></tr>\n      <tr><td><code>&lt;strong&gt;</code></td><td>Kalın (bold)</td><td><code>&lt;strong&gt;Be BOLD&lt;/strong&gt;</code></td><td><strong>Be BOLD</strong></td></tr>\n      <tr><td><code>&lt;em&gt;</code></td><td>Vurgu (italic)</td><td><code>He's my &lt;em&gt;brother&lt;/em&gt;</code></td><td>He's my <em>brother</em></td></tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 4: Hizalama Giriş -->\n  <h2>🎯 CSS ile Hizalama (Giriş Seviyesi)</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📍 Metin Hizalama</div>\n    <p><strong>En temel hizalama:</strong> <code>text-align</code> özelliği ile metinleri hizalayabilirsin.</p>\n\n    <div class=\"align-demo\">\n      <div class=\"text-left align-box\"><strong>text-align: left;</strong><br>Bu metin solda hizalanır.</div>\n      <div class=\"text-center align-box\"><strong>text-align: center;</strong><br>Bu metin ortada hizalanır.</div>\n      <div class=\"text-right align-box\"><strong>text-align: right;</strong><br>Bu metin sağda hizalanır.</div>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* CSS kodu */\n.text-left   { text-align: left; }\n.text-center { text-align: center; }\n.text-right  { text-align: right; }\n      </pre>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Flexbox ile Hizalama (Çok Temel) -->\n  <div class=\"card\">\n    <div class=\"card-header\">📐 Flexbox ile Elementleri Hizalama (Giriş)</div>\n    <p><strong>Flexbox</strong>, elementleri yan yana veya ortalamak için kullanılır. İlerleyen slaytlarda çok daha detaylı göreceğiz!</p>\n\n    <h3>✨ Yan yana hizalama (justify-content: center)</h3>\n    <div class=\"flex-center align-box\" style=\"background:#2a2a32;\">\n      <span>🔹 Kutu 1</span>\n      <span>🔹 Kutu 2</span>\n      <span>🔹 Kutu 3</span>\n    </div>\n\n    <h3>✨ İki yana yaslama (justify-content: space-between)</h3>\n    <div class=\"flex-between align-box\" style=\"background:#2a2a32;\">\n      <span>⬅️ Sol</span>\n      <span>➡️ Sağ</span>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* Flexbox temel kullanımı */\n.flex-center {\n  display: flex;\n  justify-content: center;  /* yatayda ortalar */\n  gap: 1rem;                /* kutular arası boşluk */\n}\n\n.flex-between {\n  display: flex;\n  justify-content: space-between; /* iki uca yaslar */\n}\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>🔮 İlerleyen slaytlarda:</strong> Flexbox, Grid, margin:auto, position, float gibi daha fazla hizalama yöntemi göreceğiz!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: Öznitelikler (Attributes) -->\n  <h2>🔷 Element Öznitelikleri (Attributes)</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;img src=\"puppy.jpg\" alt=\"Bir köpek yavrusu\" width=\"200\"&gt;\n&lt;a href=\"https://www.google.com\" target=\"_blank\"&gt;Google'a Git&lt;/a&gt;\n&lt;p class=\"highlight\" id=\"first-paragraph\"&gt;Öznitelikler ek bilgi verir&lt;/p&gt;\n      </pre>\n    </div>\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0;\">\n      <li><code>src</code> → Resmin kaynak dosyasını belirtir</li>\n      <li><code>alt</code> → Resim yüklenmezse gösterilen alternatif metin</li>\n      <li><code>href</code> → Linkin gideceği adres</li>\n      <li><code>class</code> / <code>id</code> → CSS veya JavaScript için tanımlayıcılar</li>\n      <li><code>target=\"_blank\"</code> → Linki yeni sekmede açar</li>\n    </ul>\n  </div>\n\n  <!-- BÖLÜM 7: Pratik Örnek -->\n  <h2>🔷 Pratik Örnek: Küçük Bir Kart</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div style=\"border: 1px solid #e8ff47; padding: 1rem; text-align: center;\"&gt;\n  &lt;h3&gt;Merhaba HTML!&lt;/h3&gt;\n  &lt;p&gt;Bu bir &lt;strong&gt;deneme&lt;/strong&gt; kartıdır.&lt;/p&gt;\n  &lt;a href=\"#\"&gt;Detaylar →&lt;/a&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n    <div class=\"live-preview\">\n      <h4>✨ Canlı Önizleme</h4>\n      <div style=\"border: 1px solid #e8ff47; padding: 1rem; text-align: center;\">\n        <h3 style=\"margin:0 0 0.5rem 0;\">Merhaba HTML!</h3>\n        <p>Bu bir <strong>deneme</strong> kartıdır.</p>\n        <a href=\"#\" style=\"color:#e8ff47; text-decoration:none;\">Detaylar →</a>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Özet -->\n  <h2>📋 Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height:1.8;\">\n      <li>✅ HTML elementleri = <code>&lt;açılış&gt;içerik&lt;/kapanış&gt;</code></li>\n      <li>✅ Bazı elementler kendi kendini kapatır: <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code></li>\n      <li>✅ Elementler <strong>öznitelik (attribute)</strong> alabilir</li>\n      <li>✅ Elementler <strong>iç içe</strong> yazılabilir</li>\n      <li>✅ <code>text-align</code> ile metin hizalama yapılır (left, center, right)</li>\n      <li>✅ <code>display: flex</code> ile elementleri yan yana veya ortalamak mümkün</li>\n      <li>📚 İlerleyen konularda hizalama detaylandırılacak!</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — HTML Elementleri + Hizalama Giriş | İlerleyen slaytlarda devam edecek...\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* html-elements-basics.css - HTML Elementleri ve Hizalama Giriş */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Ana container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlık */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\n/* Bölüm başlıkları */\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme kutuları */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Tablo stili */\n.element-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.element-table th,\n.element-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.element-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.element-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.element-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Hizalama örnekleri için flex kutuları */\n.align-demo {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.align-box {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n  text-align: center;\n}\n\n/* Hizalama stilleri (giriş seviyesi) */\n.text-left {\n  text-align: left;\n}\n\n.text-center {\n  text-align: center;\n}\n\n.text-right {\n  text-align: right;\n}\n\n.flex-center {\n  display: flex;\n  justify-content: center;\n  gap: 1rem;\n  flex-wrap: wrap;\n}\n\n.flex-between {\n  display: flex;\n  justify-content: space-between;\n  gap: 1rem;\n  flex-wrap: wrap;\n}\n\n/* Info notları */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.info-note strong {\n  color: #e8ff47;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .element-table th,\n  .element-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
