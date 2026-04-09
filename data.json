@@ -23,7 +23,7 @@
     "description": "",
     "slug": "hafta-2-ornek",
     "hasCss": true,
-    "updatedAt": "2026-04-09T10:48:12.723Z"
+    "updatedAt": "2026-04-09T13:46:04.108Z"
   },
   {
     "title": "HTML temel elementler",
@@ -59,5 +59,47 @@
     "slug": "div-ve-span-htmlin-kapsayici-elementleri",
     "hasCss": true,
     "updatedAt": "2026-04-09T12:27:50.031Z"
+  },
+  {
+    "title": "li Etiketi — Liste Öğesi",
+    "description": "HTML'de listelerin yapı taşı olan li etiketi. Sıralı (ol) ve sırasız (ul) listelerde kullanımı, iç içe listeler, öznitelikler, CSS ile stillendirme ve pratik örnekler.",
+    "slug": "li-etiketi-liste-ogesi",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T13:10:07.128Z"
+  },
+  {
+    "title": "Class ve ID Seçiciler — CSS'in Gücü",
+    "description": "CSS seçicilerin üç temel tipi: Element, Class ve ID. Detaylı açıklamalar, descendent seçici, gruplama, specificity (özgüllük), inheritance (kalıtım) ve pratik örnekler.",
+    "slug": "class-ve-id-seciciler-cssin-gucu",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T13:16:59.032Z"
+  },
+  {
+    "title": "CSS Box Model — Kutu Modeli (Detaylı)",
+    "description": "CSS Box Model: Her HTML elementi bir kutudur. Content (içerik), Padding (iç boşluk), Border (kenarlık), Margin (dış boşluk) katmanlarının detaylı açıklaması. Toplam boyut hesaplama, box-sizing: border-box, margin collapse, pratik örnekler ve sık yapılan hatalar.",
+    "slug": "css-box-model-kutu-modeli-detayli",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T13:39:30.435Z"
+  },
+  {
+    "title": "alıstırma block-box",
+    "description": "",
+    "slug": "alistirma-block-box",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T14:00:46.665Z"
+  },
+  {
+    "title": "Inline Elementlerde Box Model",
+    "description": "Inline elementlerde margin (sağ/sol çalışır, üst/alt çalışmaz), padding, line-height ile satır aralığı ayarlama, body'nin varsayılan margin'i ve semantic HTML elementleri.",
+    "slug": "inline-elementlerde-box-model",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T14:03:14.244Z"
+  },
+  {
+    "title": "Layout Exercise — Squarespace Ben",
+    "description": "",
+    "slug": "layout-exercise-squarespace-ben",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T15:56:18.148Z"
   }
 ]
