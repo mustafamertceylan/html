@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class ve ID Seçiciler — CSS'in Gücü - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Class ve ID Seçiciler — CSS'in Gücü</h1>
+    <p class="desc">CSS seçicilerin üç temel tipi: Element, Class ve ID. Detaylı açıklamalar, descendent seçici, gruplama, specificity (özgüllük), inheritance (kalıtım) ve pratik örnekler.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Class ve ID Seçiciler - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-classes-ids.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;🏷️ &lt;span class=&quot;highlight&quot;&gt;Class&lt;/span&gt; ve &lt;span class=&quot;highlight&quot;&gt;ID&lt;/span&gt; Seçiciler&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;CSS seçicilerin gücü — Element, Class ve ID ile stillendirme&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: 3 Temel CSS Seçici --&gt;
+  &lt;h2&gt;📖 3 Temel CSS Seçici Tipi&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;table class=&quot;selector-table&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;Seçici&lt;/th&gt;&lt;th&gt;Sözdizimi&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Element Seçici&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;p&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Tüm &amp;lt;p&amp;gt; elementlerini seçer&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;ID Seçici&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;#abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;id=&quot;abc&quot;&lt;/code&gt; olan elementi seçer (benzersiz)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Class Seçici&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;.abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;class=&quot;abc&quot;&lt;/code&gt; olan elementleri seçer&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;h1 id=&quot;title&quot;&amp;gt;Homework&amp;lt;/h1&amp;gt;
+&amp;lt;em class=&quot;hw&quot;&amp;gt;HW0&amp;lt;/em&amp;gt; is due Friday.&amp;lt;br/&amp;gt;
+&amp;lt;em class=&quot;hw&quot;&amp;gt;HW1&amp;lt;/em&amp;gt; goes out Monday.&amp;lt;br/&amp;gt;
+&amp;lt;em&amp;gt;All homework due at 11:59pm.&amp;lt;/em&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Class seçici - tüm .hw class'ına sahip elementleri seçer */
+.hw {
+  color: hotpink;
+}
+
+/* ID seçici - #title id'sine sahip elementi seçer */
+#title {
+  color: purple;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Canlı Önizleme&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;h1 id=&quot;title&quot; style=&quot;color: purple;&quot;&gt;Homework&lt;/h1&gt;
+        &lt;em style=&quot;color: hotpink;&quot;&gt;HW0&lt;/em&gt; is due Friday.&lt;br/&gt;
+        &lt;em style=&quot;color: hotpink;&quot;&gt;HW1&lt;/em&gt; goes out Monday.&lt;br/&gt;
+        &lt;em&gt;All homework due at 11:59pm.&lt;/em&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Class ve ID Arasındaki Fark --&gt;
+  &lt;h2&gt;🔍 Class vs ID — Temel Farklar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;table class=&quot;selector-table&quot;&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Class (&lt;code&gt;.&lt;/code&gt;)&lt;/th&gt;&lt;th&gt;ID (&lt;code&gt;#&lt;/code&gt;)&lt;/th&gt;&lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Kullanım sıklığı&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Birden fazla elementte kullanılabilir&lt;/td&gt;&lt;td&gt;Sayfada &lt;strong&gt;sadece 1 elementte&lt;/strong&gt; kullanılabilir&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Benzersizlik&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;❌ Benzersiz olmak zorunda değil&lt;/td&gt;&lt;td&gt;✅ Benzersiz olmalı&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Öncelik (Specificity)&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Orta (10 puan)&lt;/td&gt;&lt;td&gt;&lt;strong&gt;Yüksek (100 puan)&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Birden fazla class&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;✅ Evet (boşlukla ayrılır)&lt;/td&gt;&lt;td&gt;❌ Hayır (tek ID)&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* class: birden fazla elementte kullanılabilir */
+.highlight {
+  background-color: yellow;
+}
+
+/* id: sadece bir elementte kullanılmalı! */
+#main-title {
+  font-size: 2rem;
+}
+
+/* Birden fazla class - boşlukla ayrılır */
+&amp;lt;span class=&quot;hw new&quot;&amp;gt;HW1&amp;lt;/span&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Altın Kural:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Class (.)&lt;/strong&gt; → Birden fazla elemente aynı stili vermek için&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;ID (#)&lt;/strong&gt; → Sayfadaki benzersiz bir elementi seçmek için&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: Element + Class Birlikte --&gt;
+  &lt;h2&gt;🔷 element.className Sözdizimi&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Belirli bir &lt;strong&gt;element tipindeki&lt;/strong&gt; belirli bir &lt;strong&gt;class'a sahip&lt;/strong&gt; elementleri seçmek için kullanılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Sadece &amp;lt;p&amp;gt; elementleri içindeki .highlight class'ına sahip olanlar */
+p.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Örnek&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;p class=&quot;highlight&quot; style=&quot;background-color: yellow; font-weight: bold; color: #000;&quot;&gt;Bu paragraf p.highlight ile seçildi&lt;/p&gt;
+        &lt;div class=&quot;highlight&quot; style=&quot;background-color: yellow; color: #000;&quot;&gt;Bu div aynı class'a sahip ama seçilmedi (p değil)&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Özet:&lt;/strong&gt; &lt;code&gt;p.abc&lt;/code&gt; → &quot;abc class'ına sahip &amp;lt;p&amp;gt; elementleri&quot;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: Descendent Seçici (Alt eleman seçici) --&gt;
+  &lt;h2&gt;🔽 Descendent Seçici (Alt Eleman)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Descendent seçici&lt;/strong&gt;, bir elementin &lt;strong&gt;içindeki&lt;/strong&gt; (herhangi bir seviyede) başka bir elementi seçer.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* div içindeki tüm strong elementleri seçer */
+div strong {
+  color: red;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Örnek&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;border: 1px solid #666; padding: 0.5rem;&quot;&gt;
+          &lt;p&gt;Bu bir &lt;strong&gt;strong elementi&lt;/strong&gt; (div içinde → seçilir)&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;strong&gt;Bu strong div dışında → seçilmez&lt;/strong&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Önemli:&lt;/strong&gt; Elementin &lt;strong&gt;doğrudan çocuk (direct child)&lt;/strong&gt; olması gerekmez! Çok derinlerde de olsa seçilir.
+    &lt;/div&gt;
+
+    &lt;h3&gt;🎯 Pratik Kullanım: Grup Kapsayıcı&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;announcement&quot;&amp;gt;
+  &amp;lt;h2&amp;gt;Duyuru&amp;lt;/h2&amp;gt;
+  &amp;lt;p&amp;gt;Yarın ders yok!&amp;lt;/p&amp;gt;
+  &amp;lt;strong&amp;gt;Önemli:&amp;lt;/strong&amp;gt; Sınav ertelendi.
+&amp;lt;/div&amp;gt;
+
+.announcement {
+  border: 1px solid blue;
+  padding: 1rem;
+}
+
+.announcement strong {
+  color: red;  /* Sadece announcement içindeki strong'lar */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Virgül ile Gruplama --&gt;
+  &lt;h2&gt;📋 Virgül ile Gruplama (Selector, Selector)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Birden fazla seçiciye &lt;strong&gt;aynı stil kurallarını&lt;/strong&gt; uygulamak için virgül kullanılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* &amp;lt;h2&amp;gt; elementleri VE &amp;lt;div&amp;gt; elementleri */
+h2, div {
+  font-family: Arial;
+  margin-bottom: 10px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Örnek&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;h2 style=&quot;font-family: Arial; margin-bottom: 10px;&quot;&gt;Bu bir H2 başlığı&lt;/h2&gt;
+        &lt;div style=&quot;font-family: Arial; margin-bottom: 10px;&quot;&gt;Bu bir div elementi&lt;/div&gt;
+        &lt;p style=&quot;margin-bottom: 10px;&quot;&gt;Bu bir p elementi (seçilmedi)&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: Seçici Özet Tablosu --&gt;
+  &lt;h2&gt;📊 Seçici Özet Tablosu&lt;/h2&gt;
+  &lt;table class=&quot;selector-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Örnek&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;p&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Tüm &amp;lt;p&amp;gt; elementleri&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;.abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;class=&quot;abc&quot;&lt;/code&gt; olan tüm elementler&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;#abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;id=&quot;abc&quot;&lt;/code&gt; olan element&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;p.abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;class=&quot;abc&quot;&lt;/code&gt; olan &amp;lt;p&amp;gt; elementleri&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;p#abc&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;id=&quot;abc&quot;&lt;/code&gt; olan &amp;lt;p&amp;gt; (p gereksiz)&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;div strong&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&amp;lt;div&amp;gt; içindeki &amp;lt;strong&amp;gt; elementleri (descendent)&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;h2, div&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&amp;lt;h2&amp;gt; elementleri VE &amp;lt;div&amp;gt; elementleri&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 7: Sık Yapılan Hatalar --&gt;
+  &lt;h2&gt;⚠️ Sık Yapılan Hatalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; &lt;code&gt;p.abc&lt;/code&gt; vs &lt;code&gt;p .abc&lt;/code&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+p.abc   → &quot;abc class'lı &amp;lt;p&amp;gt; elementi&quot;
+p .abc  → &quot;&amp;lt;p&amp;gt; içindeki abc class'lı element&quot;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; &lt;code&gt;p .abc&lt;/code&gt; vs &lt;code&gt;p, .abc&lt;/code&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+p .abc  → &quot;&amp;lt;p&amp;gt; içindeki abc class'lı element&quot;
+p, .abc → &quot;Tüm &amp;lt;p&amp;gt; elementleri VE tüm abc class'lı elementler&quot;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Görsel Fark&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;p class=&quot;abc&quot; style=&quot;background: #3a3a4a; padding: 0.3rem;&quot;&gt;p.abc → bu element seçilir&lt;/p&gt;
+        &lt;div&gt;
+          &lt;p&gt;&lt;span class=&quot;abc&quot; style=&quot;background: #3a3a4a; padding: 0.2rem;&quot;&gt;p .abc → bu span seçilir (p içinde)&lt;/span&gt;&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Birleştirilmiş Seçiciler (Combined Selectors) --&gt;
+  &lt;h2&gt;🔗 Birleştirilmiş Seçiciler&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+#main li.important strong {
+  color: red;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;Bu seçiciyi sağdan sola oku:&lt;/strong&gt;&lt;/p&gt;
+    &lt;ol style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+      &lt;li&gt;&lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt; etiketlerini seç&lt;/li&gt;
+      &lt;li&gt;... &lt;strong&gt;&quot;important&quot; class'ına sahip&lt;/strong&gt; &lt;code&gt;&amp;lt;li&amp;gt;&lt;/code&gt; etiketlerinin içindeki&lt;/li&gt;
+      &lt;li&gt;... &lt;strong&gt;&quot;main&quot; id'sine sahip&lt;/strong&gt; elementin içindeki&lt;/li&gt;
+    &lt;/ol&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Örnek&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; id=&quot;main&quot;&gt;
+        &lt;ul&gt;
+          &lt;li class=&quot;important&quot;&gt;Bu li &lt;strong&gt;seçilir&lt;/strong&gt; (önemli strong)&lt;/li&gt;
+          &lt;li&gt;Bu li &lt;strong&gt;seçilmez&lt;/strong&gt; (class yok)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&quot;important&quot;&gt;
+          &lt;strong&gt;Bu strong seçilmez (li içinde değil)&lt;/strong&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 9: Specificity (Özgüllük / Çakışan Stiller) --&gt;
+  &lt;h2&gt;⚖️ Specificity — Stiller Çakıştığında&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Aynı element için birden fazla CSS kuralı varsa, &lt;strong&gt;en spesifik (özel) olan kural&lt;/strong&gt; kazanır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+div strong { color: red; }   /* Daha spesifik */
+strong { color: blue; }      /* Daha az spesifik */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box specificity-demo&quot;&gt;
+      &lt;div&gt;
+        &lt;strong&gt;Bu strong elementi kırmızı mı mavi mi?&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;code&gt;div strong&lt;/code&gt; daha spesifik olduğu için &lt;strong style=&quot;color: red;&quot;&gt;KIRMIZI&lt;/strong&gt; olur!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📊 Specificity Sıralaması (Öncelik)&lt;/h3&gt;
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;ID (#)&lt;/strong&gt; — En yüksek öncelik (100 puan)&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Class (.)&lt;/strong&gt; — Orta öncelik (10 puan)&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Element (div, p, etc.)&lt;/strong&gt; — Düşük öncelik (1 puan)&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+#title { color: red; }      /* 100 puan - KAZANIR */
+.title { color: blue; }     /* 10 puan */
+h1 { color: green; }        /* 1 puan */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Aynı specificity'de son yazılan kazanır:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+strong { color: red; }
+strong { color: blue; }  /* Son yazılan → MAVİ kazanır */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📖 Cascade Nedir?&lt;/strong&gt; &quot;Cascading Style Sheets&quot; kelimesindeki &lt;strong&gt;C&lt;/strong&gt;, stillerin çakıştığında hangi kuralın uygulanacağını belirleme sürecini tanımlar.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 10: Inheritance (Kalıtım) --&gt;
+  &lt;h2&gt;🧬 Inheritance — Stillerin Kalıtımı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Birçok CSS özelliği &lt;strong&gt;ebeveynden (parent) çocuğa (child) kalıtım yoluyla geçer&lt;/strong&gt;.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+/* body içindeki tüm elementler Helvetica font'u alır */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box inherit-demo&quot; style=&quot;font-family: Helvetica, sans-serif;&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Kalıtım Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;p&gt;Bu paragraf Helvetica font'u &lt;strong&gt;kalıtım yoluyla&lt;/strong&gt; aldı.&lt;/p&gt;
+        &lt;div&gt;Div de Helvetica aldı.&lt;/div&gt;
+        &lt;span&gt;Span da Helvetica aldı.&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;⚠️ Tüm özellikler kalıtım yoluyla geçmez!&lt;/h3&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+a {
+  display: block;
+  font-family: Arial;
+}
+
+&amp;lt;a href=&quot;#&quot;&amp;gt;
+  Back to &amp;lt;em&amp;gt;Home&amp;lt;/em&amp;gt;
+&amp;lt;/a&amp;gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;code&gt;font-family&lt;/code&gt; → kalıtım yoluyla geçer (&lt;em&gt;Home&lt;/em&gt; da Arial olur)&lt;/li&gt;
+        &lt;li&gt;❌ &lt;code&gt;display&lt;/code&gt; → kalıtım yoluyla geçmez (em inline kalır)&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Genel kural:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Metin ile ilgili&lt;/strong&gt; özellikler (&lt;code&gt;font-family&lt;/code&gt;, &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;text-align&lt;/code&gt;) → kalıtım geçer&lt;/li&gt;
+        &lt;li&gt;❌ &lt;strong&gt;Düzen (layout) ile ilgili&lt;/strong&gt; özellikler (&lt;code&gt;display&lt;/code&gt;, &lt;code&gt;margin&lt;/code&gt;, &lt;code&gt;padding&lt;/code&gt;, &lt;code&gt;border&lt;/code&gt;) → kalıtım geçmez&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;💡 İpucu:&lt;/strong&gt; Bir özelliğin kalıtım alıp almadığını &lt;strong&gt;MDN (Mozilla Developer Network)&lt;/strong&gt;'den öğrenebilirsiniz!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 11: Pratik Örnekler --&gt;
+  &lt;h2&gt;💡 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;h3&gt;📌 Örnek 1: Bildirim Mesajları (Class ile)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;alert success&quot;&amp;gt;Başarılı!&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;alert error&quot;&amp;gt;Hata oluştu!&amp;lt;/div&amp;gt;
+&amp;lt;div class=&quot;alert warning&quot;&amp;gt;Dikkat!&amp;lt;/div&amp;gt;
+
+.alert { padding: 1rem; border-radius: 8px; }
+.success { background: #d4edda; color: #155724; }
+.error { background: #f8d7da; color: #721c24; }
+.warning { background: #fff3cd; color: #856404; }
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #d4edda; color: #155724; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;&quot;&gt;✅ Başarılı! İşlem tamamlandı.&lt;/div&gt;
+      &lt;div style=&quot;background: #f8d7da; color: #721c24; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;&quot;&gt;❌ Hata oluştu! Lütfen tekrar deneyin.&lt;/div&gt;
+      &lt;div style=&quot;background: #fff3cd; color: #856404; padding: 0.8rem; border-radius: 8px;&quot;&gt;⚠️ Dikkat! Bu işlem geri alınamaz.&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 2: Buton Stilleri (Class ile)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;button class=&quot;btn btn-primary&quot;&amp;gt;Kaydet&amp;lt;/button&amp;gt;
+&amp;lt;button class=&quot;btn btn-secondary&quot;&amp;gt;İptal&amp;lt;/button&amp;gt;
+
+.btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; }
+.btn-primary { background: #007bff; color: white; }
+.btn-secondary { background: #6c757d; color: white; }
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;button style=&quot;background: #007bff; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-right: 0.5rem;&quot;&gt;🔵 Kaydet&lt;/button&gt;
+      &lt;button style=&quot;background: #6c757d; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px;&quot;&gt;⚪ İptal&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 3: ID ile Sayfa İçi Bağlantı&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;a href=&quot;#section1&quot;&amp;gt;Bölüm 1'e Git&amp;lt;/a&amp;gt;
+...
+&amp;lt;h2 id=&quot;section1&quot;&amp;gt;Bölüm 1&amp;lt;/h2&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;a href=&quot;#&quot; style=&quot;color: #e8ff47;&quot;&gt;📍 Bölüm 1'e Git&lt;/a&gt;
+      &lt;div style=&quot;margin-top: 0.5rem; padding: 0.5rem; background: #2a2a32; border-radius: 4px;&quot;&gt;
+        &lt;h3 id=&quot;section1&quot; style=&quot;color: #e8ff47;&quot;&gt;Bölüm 1&lt;/h3&gt;
+        &lt;p&gt;Bu bölümün içeriği...&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 12: Özet --&gt;
+  &lt;h2&gt;📋 Genel Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;🏷️ &lt;strong&gt;Class (.)&lt;/strong&gt; → Birden fazla elementte kullanılır, stilleri gruplamak için&lt;/li&gt;
+      &lt;li&gt;🆔 &lt;strong&gt;ID (#)&lt;/strong&gt; → Benzersizdir, sayfada sadece bir kez kullanılır&lt;/li&gt;
+      &lt;li&gt;📦 &lt;strong&gt;Element seçici&lt;/strong&gt; → Tüm elementleri seçer (p, div, h1 vb.)&lt;/li&gt;
+      &lt;li&gt;🔽 &lt;strong&gt;Descendent seçici&lt;/strong&gt; → Bir elementin içindeki elementleri seçer (div strong)&lt;/li&gt;
+      &lt;li&gt;📋 &lt;strong&gt;Virgül ile gruplama&lt;/strong&gt; → Birden fazla seçiciye aynı stili uygular (h2, div)&lt;/li&gt;
+      &lt;li&gt;⚖️ &lt;strong&gt;Specificity&lt;/strong&gt; → ID &gt; Class &gt; Element (en spesifik kazanır)&lt;/li&gt;
+      &lt;li&gt;🧬 &lt;strong&gt;Inheritance&lt;/strong&gt; → Metin özellikleri kalıtım yoluyla geçer, düzen özellikleri geçmez&lt;/li&gt;
+      &lt;li&gt;📚 &lt;strong&gt;MDN&lt;/strong&gt; → En iyi referans kaynağı!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Class ve ID Seçiciler | CSS Specificity · Inheritance · Selectors
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-classes-ids.css - Class ve ID Seçiciler Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Class demo */
+.hw {
+  color: hotpink;
+}
+
+#title {
+  color: purple;
+}
+
+/* Specificity demo */
+.specificity-demo div strong {
+  color: red;
+}
+
+.specificity-demo strong {
+  color: blue;
+}
+
+/* Inheritance demo */
+.inherit-demo {
+  font-family: Helvetica, sans-serif;
+}
+
+/* Tablo */
+.selector-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.selector-table th,
+.selector-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.selector-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.selector-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.selector-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Specificity box */
+.specificity-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .selector-table th,
+  .selector-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class ve ID Seçiciler - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-classes-ids.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>🏷️ <span class="highlight">Class</span> ve <span class="highlight">ID</span> Seçiciler</h1>
+  <div class="subtitle">CSS seçicilerin gücü — Element, Class ve ID ile stillendirme</div>
+
+  <!-- BÖLÜM 1: 3 Temel CSS Seçici -->
+  <h2>📖 3 Temel CSS Seçici Tipi</h2>
+  <div class="card">
+    <table class="selector-table">
+      <thead>
+        <tr><th>Seçici</th><th>Sözdizimi</th><th>Açıklama</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Element Seçici</strong></td><td><code>p</code></td><td>Tüm &lt;p&gt; elementlerini seçer</td></tr>
+        <tr><td><strong>ID Seçici</strong></td><td><code>#abc</code></td><td><code>id="abc"</code> olan elementi seçer (benzersiz)</td></tr>
+        <tr><td><strong>Class Seçici</strong></td><td><code>.abc</code></td><td><code>class="abc"</code> olan elementleri seçer</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <pre>
+&lt;h1 id="title"&gt;Homework&lt;/h1&gt;
+&lt;em class="hw"&gt;HW0&lt;/em&gt; is due Friday.&lt;br/&gt;
+&lt;em class="hw"&gt;HW1&lt;/em&gt; goes out Monday.&lt;br/&gt;
+&lt;em&gt;All homework due at 11:59pm.&lt;/em&gt;
+      </pre>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* Class seçici - tüm .hw class'ına sahip elementleri seçer */
+.hw {
+  color: hotpink;
+}
+
+/* ID seçici - #title id'sine sahip elementi seçer */
+#title {
+  color: purple;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Canlı Önizleme</h4>
+      <div class="demo-container">
+        <h1 id="title" style="color: purple;">Homework</h1>
+        <em style="color: hotpink;">HW0</em> is due Friday.<br/>
+        <em style="color: hotpink;">HW1</em> goes out Monday.<br/>
+        <em>All homework due at 11:59pm.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Class ve ID Arasındaki Fark -->
+  <h2>🔍 Class vs ID — Temel Farklar</h2>
+  <div class="card">
+    <table class="selector-table">
+      <thead>
+        <tr><th>Özellik</th><th>Class (<code>.</code>)</th><th>ID (<code>#</code>)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Kullanım sıklığı</strong></td><td>Birden fazla elementte kullanılabilir</td><td>Sayfada <strong>sadece 1 elementte</strong> kullanılabilir</td></tr>
+        <tr><td><strong>Benzersizlik</strong></td><td>❌ Benzersiz olmak zorunda değil</td><td>✅ Benzersiz olmalı</td></tr>
+        <tr><td><strong>Öncelik (Specificity)</strong></td><td>Orta (10 puan)</td><td><strong>Yüksek (100 puan)</strong></td></tr>
+        <tr><td><strong>Birden fazla class</strong></td><td>✅ Evet (boşlukla ayrılır)</td><td>❌ Hayır (tek ID)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <pre>
+/* class: birden fazla elementte kullanılabilir */
+.highlight {
+  background-color: yellow;
+}
+
+/* id: sadece bir elementte kullanılmalı! */
+#main-title {
+  font-size: 2rem;
+}
+
+/* Birden fazla class - boşlukla ayrılır */
+&lt;span class="hw new"&gt;HW1&lt;/span&gt;
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Altın Kural:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Class (.)</strong> → Birden fazla elemente aynı stili vermek için</li>
+        <li><strong>ID (#)</strong> → Sayfadaki benzersiz bir elementi seçmek için</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: Element + Class Birlikte -->
+  <h2>🔷 element.className Sözdizimi</h2>
+  <div class="card">
+    <p>Belirli bir <strong>element tipindeki</strong> belirli bir <strong>class'a sahip</strong> elementleri seçmek için kullanılır.</p>
+
+    <div class="code-block">
+      <pre>
+/* Sadece &lt;p&gt; elementleri içindeki .highlight class'ına sahip olanlar */
+p.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Örnek</h4>
+      <div class="demo-container">
+        <p class="highlight" style="background-color: yellow; font-weight: bold; color: #000;">Bu paragraf p.highlight ile seçildi</p>
+        <div class="highlight" style="background-color: yellow; color: #000;">Bu div aynı class'a sahip ama seçilmedi (p değil)</div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Özet:</strong> <code>p.abc</code> → "abc class'ına sahip &lt;p&gt; elementleri"
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: Descendent Seçici (Alt eleman seçici) -->
+  <h2>🔽 Descendent Seçici (Alt Eleman)</h2>
+  <div class="card">
+    <p><strong>Descendent seçici</strong>, bir elementin <strong>içindeki</strong> (herhangi bir seviyede) başka bir elementi seçer.</p>
+
+    <div class="code-block">
+      <pre>
+/* div içindeki tüm strong elementleri seçer */
+div strong {
+  color: red;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Örnek</h4>
+      <div class="demo-container">
+        <div style="border: 1px solid #666; padding: 0.5rem;">
+          <p>Bu bir <strong>strong elementi</strong> (div içinde → seçilir)</p>
+        </div>
+        <strong>Bu strong div dışında → seçilmez</strong>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Önemli:</strong> Elementin <strong>doğrudan çocuk (direct child)</strong> olması gerekmez! Çok derinlerde de olsa seçilir.
+    </div>
+
+    <h3>🎯 Pratik Kullanım: Grup Kapsayıcı</h3>
+    <div class="code-block">
+      <pre>
+&lt;div class="announcement"&gt;
+  &lt;h2&gt;Duyuru&lt;/h2&gt;
+  &lt;p&gt;Yarın ders yok!&lt;/p&gt;
+  &lt;strong&gt;Önemli:&lt;/strong&gt; Sınav ertelendi.
+&lt;/div&gt;
+
+.announcement {
+  border: 1px solid blue;
+  padding: 1rem;
+}
+
+.announcement strong {
+  color: red;  /* Sadece announcement içindeki strong'lar */
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Virgül ile Gruplama -->
+  <h2>📋 Virgül ile Gruplama (Selector, Selector)</h2>
+  <div class="card">
+    <p>Birden fazla seçiciye <strong>aynı stil kurallarını</strong> uygulamak için virgül kullanılır.</p>
+
+    <div class="code-block">
+      <pre>
+/* &lt;h2&gt; elementleri VE &lt;div&gt; elementleri */
+h2, div {
+  font-family: Arial;
+  margin-bottom: 10px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Örnek</h4>
+      <div class="demo-container">
+        <h2 style="font-family: Arial; margin-bottom: 10px;">Bu bir H2 başlığı</h2>
+        <div style="font-family: Arial; margin-bottom: 10px;">Bu bir div elementi</div>
+        <p style="margin-bottom: 10px;">Bu bir p elementi (seçilmedi)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: Seçici Özet Tablosu -->
+  <h2>📊 Seçici Özet Tablosu</h2>
+  <table class="selector-table">
+    <thead>
+      <tr><th>Örnek</th><th>Açıklama</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>p</code></td><td>Tüm &lt;p&gt; elementleri</td></tr>
+      <tr><td><code>.abc</code></td><td><code>class="abc"</code> olan tüm elementler</td></tr>
+      <tr><td><code>#abc</code></td><td><code>id="abc"</code> olan element</td></tr>
+      <tr><td><code>p.abc</code></td><td><code>class="abc"</code> olan &lt;p&gt; elementleri</td></tr>
+      <tr><td><code>p#abc</code></td><td><code>id="abc"</code> olan &lt;p&gt; (p gereksiz)</td></tr>
+      <tr><td><code>div strong</code></td><td>&lt;div&gt; içindeki &lt;strong&gt; elementleri (descendent)</td></tr>
+      <tr><td><code>h2, div</code></td><td>&lt;h2&gt; elementleri VE &lt;div&gt; elementleri</td></tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 7: Sık Yapılan Hatalar -->
+  <h2>⚠️ Sık Yapılan Hatalar</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> <code>p.abc</code> vs <code>p .abc</code>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+p.abc   → "abc class'lı &lt;p&gt; elementi"
+p .abc  → "&lt;p&gt; içindeki abc class'lı element"
+        </pre>
+      </div>
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> <code>p .abc</code> vs <code>p, .abc</code>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+p .abc  → "&lt;p&gt; içindeki abc class'lı element"
+p, .abc → "Tüm &lt;p&gt; elementleri VE tüm abc class'lı elementler"
+        </pre>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Görsel Fark</h4>
+      <div class="demo-container">
+        <p class="abc" style="background: #3a3a4a; padding: 0.3rem;">p.abc → bu element seçilir</p>
+        <div>
+          <p><span class="abc" style="background: #3a3a4a; padding: 0.2rem;">p .abc → bu span seçilir (p içinde)</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Birleştirilmiş Seçiciler (Combined Selectors) -->
+  <h2>🔗 Birleştirilmiş Seçiciler</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+#main li.important strong {
+  color: red;
+}
+      </pre>
+    </div>
+
+    <p><strong>Bu seçiciyi sağdan sola oku:</strong></p>
+    <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+      <li><code>&lt;strong&gt;</code> etiketlerini seç</li>
+      <li>... <strong>"important" class'ına sahip</strong> <code>&lt;li&gt;</code> etiketlerinin içindeki</li>
+      <li>... <strong>"main" id'sine sahip</strong> elementin içindeki</li>
+    </ol>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Örnek</h4>
+      <div class="demo-container" id="main">
+        <ul>
+          <li class="important">Bu li <strong>seçilir</strong> (önemli strong)</li>
+          <li>Bu li <strong>seçilmez</strong> (class yok)</li>
+        </ul>
+        <div class="important">
+          <strong>Bu strong seçilmez (li içinde değil)</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 9: Specificity (Özgüllük / Çakışan Stiller) -->
+  <h2>⚖️ Specificity — Stiller Çakıştığında</h2>
+  <div class="card">
+    <p>Aynı element için birden fazla CSS kuralı varsa, <strong>en spesifik (özel) olan kural</strong> kazanır.</p>
+
+    <div class="code-block">
+      <pre>
+div strong { color: red; }   /* Daha spesifik */
+strong { color: blue; }      /* Daha az spesifik */
+      </pre>
+    </div>
+
+    <div class="demo-box specificity-demo">
+      <div>
+        <strong>Bu strong elementi kırmızı mı mavi mi?</strong>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <code>div strong</code> daha spesifik olduğu için <strong style="color: red;">KIRMIZI</strong> olur!</p>
+    </div>
+
+    <h3>📊 Specificity Sıralaması (Öncelik)</h3>
+    <div class="success-note">
+      <ol style="margin-left: 1.5rem;">
+        <li><strong>ID (#)</strong> — En yüksek öncelik (100 puan)</li>
+        <li><strong>Class (.)</strong> — Orta öncelik (10 puan)</li>
+        <li><strong>Element (div, p, etc.)</strong> — Düşük öncelik (1 puan)</li>
+      </ol>
+    </div>
+
+    <div class="code-block">
+      <pre>
+#title { color: red; }      /* 100 puan - KAZANIR */
+.title { color: blue; }     /* 10 puan */
+h1 { color: green; }        /* 1 puan */
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Aynı specificity'de son yazılan kazanır:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+strong { color: red; }
+strong { color: blue; }  /* Son yazılan → MAVİ kazanır */
+        </pre>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>📖 Cascade Nedir?</strong> "Cascading Style Sheets" kelimesindeki <strong>C</strong>, stillerin çakıştığında hangi kuralın uygulanacağını belirleme sürecini tanımlar.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 10: Inheritance (Kalıtım) -->
+  <h2>🧬 Inheritance — Stillerin Kalıtımı</h2>
+  <div class="card">
+    <p>Birçok CSS özelliği <strong>ebeveynden (parent) çocuğa (child) kalıtım yoluyla geçer</strong>.</p>
+
+    <div class="code-block">
+      <pre>
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+/* body içindeki tüm elementler Helvetica font'u alır */
+      </pre>
+    </div>
+
+    <div class="demo-box inherit-demo" style="font-family: Helvetica, sans-serif;">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Kalıtım Örneği</h4>
+      <div class="demo-container">
+        <p>Bu paragraf Helvetica font'u <strong>kalıtım yoluyla</strong> aldı.</p>
+        <div>Div de Helvetica aldı.</div>
+        <span>Span da Helvetica aldı.</span>
+      </div>
+    </div>
+
+    <h3>⚠️ Tüm özellikler kalıtım yoluyla geçmez!</h3>
+    <div class="warning-note">
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+a {
+  display: block;
+  font-family: Arial;
+}
+
+&lt;a href="#"&gt;
+  Back to &lt;em&gt;Home&lt;/em&gt;
+&lt;/a&gt;
+        </pre>
+      </div>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <code>font-family</code> → kalıtım yoluyla geçer (<em>Home</em> da Arial olur)</li>
+        <li>❌ <code>display</code> → kalıtım yoluyla geçmez (em inline kalır)</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Genel kural:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>Metin ile ilgili</strong> özellikler (<code>font-family</code>, <code>color</code>, <code>text-align</code>) → kalıtım geçer</li>
+        <li>❌ <strong>Düzen (layout) ile ilgili</strong> özellikler (<code>display</code>, <code>margin</code>, <code>padding</code>, <code>border</code>) → kalıtım geçmez</li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>💡 İpucu:</strong> Bir özelliğin kalıtım alıp almadığını <strong>MDN (Mozilla Developer Network)</strong>'den öğrenebilirsiniz!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 11: Pratik Örnekler -->
+  <h2>💡 Pratik Örnekler</h2>
+
+  <h3>📌 Örnek 1: Bildirim Mesajları (Class ile)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;div class="alert success"&gt;Başarılı!&lt;/div&gt;
+&lt;div class="alert error"&gt;Hata oluştu!&lt;/div&gt;
+&lt;div class="alert warning"&gt;Dikkat!&lt;/div&gt;
+
+.alert { padding: 1rem; border-radius: 8px; }
+.success { background: #d4edda; color: #155724; }
+.error { background: #f8d7da; color: #721c24; }
+.warning { background: #fff3cd; color: #856404; }
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="background: #d4edda; color: #155724; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;">✅ Başarılı! İşlem tamamlandı.</div>
+      <div style="background: #f8d7da; color: #721c24; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;">❌ Hata oluştu! Lütfen tekrar deneyin.</div>
+      <div style="background: #fff3cd; color: #856404; padding: 0.8rem; border-radius: 8px;">⚠️ Dikkat! Bu işlem geri alınamaz.</div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 2: Buton Stilleri (Class ile)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;button class="btn btn-primary"&gt;Kaydet&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;İptal&lt;/button&gt;
+
+.btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; }
+.btn-primary { background: #007bff; color: white; }
+.btn-secondary { background: #6c757d; color: white; }
+      </pre>
+    </div>
+    <div class="demo-box">
+      <button style="background: #007bff; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-right: 0.5rem;">🔵 Kaydet</button>
+      <button style="background: #6c757d; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px;">⚪ İptal</button>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 3: ID ile Sayfa İçi Bağlantı</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;a href="#section1"&gt;Bölüm 1'e Git&lt;/a&gt;
+...
+&lt;h2 id="section1"&gt;Bölüm 1&lt;/h2&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <a href="#" style="color: #e8ff47;">📍 Bölüm 1'e Git</a>
+      <div style="margin-top: 0.5rem; padding: 0.5rem; background: #2a2a32; border-radius: 4px;">
+        <h3 id="section1" style="color: #e8ff47;">Bölüm 1</h3>
+        <p>Bu bölümün içeriği...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 12: Özet -->
+  <h2>📋 Genel Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>🏷️ <strong>Class (.)</strong> → Birden fazla elementte kullanılır, stilleri gruplamak için</li>
+      <li>🆔 <strong>ID (#)</strong> → Benzersizdir, sayfada sadece bir kez kullanılır</li>
+      <li>📦 <strong>Element seçici</strong> → Tüm elementleri seçer (p, div, h1 vb.)</li>
+      <li>🔽 <strong>Descendent seçici</strong> → Bir elementin içindeki elementleri seçer (div strong)</li>
+      <li>📋 <strong>Virgül ile gruplama</strong> → Birden fazla seçiciye aynı stili uygular (h2, div)</li>
+      <li>⚖️ <strong>Specificity</strong> → ID > Class > Element (en spesifik kazanır)</li>
+      <li>🧬 <strong>Inheritance</strong> → Metin özellikleri kalıtım yoluyla geçer, düzen özellikleri geçmez</li>
+      <li>📚 <strong>MDN</strong> → En iyi referans kaynağı!</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Class ve ID Seçiciler | CSS Specificity · Inheritance · Selectors
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-classes-ids.css - Class ve ID Seçiciler Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Class demo */
+.hw {
+  color: hotpink;
+}
+
+#title {
+  color: purple;
+}
+
+/* Specificity demo */
+.specificity-demo div strong {
+  color: red;
+}
+
+.specificity-demo strong {
+  color: blue;
+}
+
+/* Inheritance demo */
+.inherit-demo {
+  font-family: Helvetica, sans-serif;
+}
+
+/* Tablo */
+.selector-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.selector-table th,
+.selector-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.selector-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.selector-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.selector-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Specificity box */
+.specificity-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .selector-table th,
+  .selector-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=class-ve-id-seciciler-cssin-gucu" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Class ve ID Seçiciler — CSS'in Gücü — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Class ve ID Seçiciler - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-classes-ids.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>🏷️ <span class=\"highlight\">Class</span> ve <span class=\"highlight\">ID</span> Seçiciler</h1>\n  <div class=\"subtitle\">CSS seçicilerin gücü — Element, Class ve ID ile stillendirme</div>\n\n  <!-- BÖLÜM 1: 3 Temel CSS Seçici -->\n  <h2>📖 3 Temel CSS Seçici Tipi</h2>\n  <div class=\"card\">\n    <table class=\"selector-table\">\n      <thead>\n        <tr><th>Seçici</th><th>Sözdizimi</th><th>Açıklama</th></tr>\n      </thead>\n      <tbody>\n        <tr><td><strong>Element Seçici</strong></td><td><code>p</code></td><td>Tüm &lt;p&gt; elementlerini seçer</td></tr>\n        <tr><td><strong>ID Seçici</strong></td><td><code>#abc</code></td><td><code>id=\"abc\"</code> olan elementi seçer (benzersiz)</td></tr>\n        <tr><td><strong>Class Seçici</strong></td><td><code>.abc</code></td><td><code>class=\"abc\"</code> olan elementleri seçer</td></tr>\n      </tbody>\n    </table>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;h1 id=\"title\"&gt;Homework&lt;/h1&gt;\n&lt;em class=\"hw\"&gt;HW0&lt;/em&gt; is due Friday.&lt;br/&gt;\n&lt;em class=\"hw\"&gt;HW1&lt;/em&gt; goes out Monday.&lt;br/&gt;\n&lt;em&gt;All homework due at 11:59pm.&lt;/em&gt;\n      </pre>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* Class seçici - tüm .hw class'ına sahip elementleri seçer */\n.hw {\n  color: hotpink;\n}\n\n/* ID seçici - #title id'sine sahip elementi seçer */\n#title {\n  color: purple;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Canlı Önizleme</h4>\n      <div class=\"demo-container\">\n        <h1 id=\"title\" style=\"color: purple;\">Homework</h1>\n        <em style=\"color: hotpink;\">HW0</em> is due Friday.<br/>\n        <em style=\"color: hotpink;\">HW1</em> goes out Monday.<br/>\n        <em>All homework due at 11:59pm.</em>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Class ve ID Arasındaki Fark -->\n  <h2>🔍 Class vs ID — Temel Farklar</h2>\n  <div class=\"card\">\n    <table class=\"selector-table\">\n      <thead>\n        <tr><th>Özellik</th><th>Class (<code>.</code>)</th><th>ID (<code>#</code>)</th></tr>\n      </thead>\n      <tbody>\n        <tr><td><strong>Kullanım sıklığı</strong></td><td>Birden fazla elementte kullanılabilir</td><td>Sayfada <strong>sadece 1 elementte</strong> kullanılabilir</td></tr>\n        <tr><td><strong>Benzersizlik</strong></td><td>❌ Benzersiz olmak zorunda değil</td><td>✅ Benzersiz olmalı</td></tr>\n        <tr><td><strong>Öncelik (Specificity)</strong></td><td>Orta (10 puan)</td><td><strong>Yüksek (100 puan)</strong></td></tr>\n        <tr><td><strong>Birden fazla class</strong></td><td>✅ Evet (boşlukla ayrılır)</td><td>❌ Hayır (tek ID)</td></tr>\n      </tbody>\n    </table>\n\n    <div class=\"code-block\">\n      <pre>\n/* class: birden fazla elementte kullanılabilir */\n.highlight {\n  background-color: yellow;\n}\n\n/* id: sadece bir elementte kullanılmalı! */\n#main-title {\n  font-size: 2rem;\n}\n\n/* Birden fazla class - boşlukla ayrılır */\n&lt;span class=\"hw new\"&gt;HW1&lt;/span&gt;\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Altın Kural:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>Class (.)</strong> → Birden fazla elemente aynı stili vermek için</li>\n        <li><strong>ID (#)</strong> → Sayfadaki benzersiz bir elementi seçmek için</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: Element + Class Birlikte -->\n  <h2>🔷 element.className Sözdizimi</h2>\n  <div class=\"card\">\n    <p>Belirli bir <strong>element tipindeki</strong> belirli bir <strong>class'a sahip</strong> elementleri seçmek için kullanılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Sadece &lt;p&gt; elementleri içindeki .highlight class'ına sahip olanlar */\np.highlight {\n  background-color: yellow;\n  font-weight: bold;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Örnek</h4>\n      <div class=\"demo-container\">\n        <p class=\"highlight\" style=\"background-color: yellow; font-weight: bold; color: #000;\">Bu paragraf p.highlight ile seçildi</p>\n        <div class=\"highlight\" style=\"background-color: yellow; color: #000;\">Bu div aynı class'a sahip ama seçilmedi (p değil)</div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Özet:</strong> <code>p.abc</code> → \"abc class'ına sahip &lt;p&gt; elementleri\"\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: Descendent Seçici (Alt eleman seçici) -->\n  <h2>🔽 Descendent Seçici (Alt Eleman)</h2>\n  <div class=\"card\">\n    <p><strong>Descendent seçici</strong>, bir elementin <strong>içindeki</strong> (herhangi bir seviyede) başka bir elementi seçer.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* div içindeki tüm strong elementleri seçer */\ndiv strong {\n  color: red;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Örnek</h4>\n      <div class=\"demo-container\">\n        <div style=\"border: 1px solid #666; padding: 0.5rem;\">\n          <p>Bu bir <strong>strong elementi</strong> (div içinde → seçilir)</p>\n        </div>\n        <strong>Bu strong div dışında → seçilmez</strong>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Önemli:</strong> Elementin <strong>doğrudan çocuk (direct child)</strong> olması gerekmez! Çok derinlerde de olsa seçilir.\n    </div>\n\n    <h3>🎯 Pratik Kullanım: Grup Kapsayıcı</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"announcement\"&gt;\n  &lt;h2&gt;Duyuru&lt;/h2&gt;\n  &lt;p&gt;Yarın ders yok!&lt;/p&gt;\n  &lt;strong&gt;Önemli:&lt;/strong&gt; Sınav ertelendi.\n&lt;/div&gt;\n\n.announcement {\n  border: 1px solid blue;\n  padding: 1rem;\n}\n\n.announcement strong {\n  color: red;  /* Sadece announcement içindeki strong'lar */\n}\n      </pre>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Virgül ile Gruplama -->\n  <h2>📋 Virgül ile Gruplama (Selector, Selector)</h2>\n  <div class=\"card\">\n    <p>Birden fazla seçiciye <strong>aynı stil kurallarını</strong> uygulamak için virgül kullanılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* &lt;h2&gt; elementleri VE &lt;div&gt; elementleri */\nh2, div {\n  font-family: Arial;\n  margin-bottom: 10px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Örnek</h4>\n      <div class=\"demo-container\">\n        <h2 style=\"font-family: Arial; margin-bottom: 10px;\">Bu bir H2 başlığı</h2>\n        <div style=\"font-family: Arial; margin-bottom: 10px;\">Bu bir div elementi</div>\n        <p style=\"margin-bottom: 10px;\">Bu bir p elementi (seçilmedi)</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: Seçici Özet Tablosu -->\n  <h2>📊 Seçici Özet Tablosu</h2>\n  <table class=\"selector-table\">\n    <thead>\n      <tr><th>Örnek</th><th>Açıklama</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>p</code></td><td>Tüm &lt;p&gt; elementleri</td></tr>\n      <tr><td><code>.abc</code></td><td><code>class=\"abc\"</code> olan tüm elementler</td></tr>\n      <tr><td><code>#abc</code></td><td><code>id=\"abc\"</code> olan element</td></tr>\n      <tr><td><code>p.abc</code></td><td><code>class=\"abc\"</code> olan &lt;p&gt; elementleri</td></tr>\n      <tr><td><code>p#abc</code></td><td><code>id=\"abc\"</code> olan &lt;p&gt; (p gereksiz)</td></tr>\n      <tr><td><code>div strong</code></td><td>&lt;div&gt; içindeki &lt;strong&gt; elementleri (descendent)</td></tr>\n      <tr><td><code>h2, div</code></td><td>&lt;h2&gt; elementleri VE &lt;div&gt; elementleri</td></tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 7: Sık Yapılan Hatalar -->\n  <h2>⚠️ Sık Yapılan Hatalar</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> <code>p.abc</code> vs <code>p .abc</code>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\np.abc   → \"abc class'lı &lt;p&gt; elementi\"\np .abc  → \"&lt;p&gt; içindeki abc class'lı element\"\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> <code>p .abc</code> vs <code>p, .abc</code>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\np .abc  → \"&lt;p&gt; içindeki abc class'lı element\"\np, .abc → \"Tüm &lt;p&gt; elementleri VE tüm abc class'lı elementler\"\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Görsel Fark</h4>\n      <div class=\"demo-container\">\n        <p class=\"abc\" style=\"background: #3a3a4a; padding: 0.3rem;\">p.abc → bu element seçilir</p>\n        <div>\n          <p><span class=\"abc\" style=\"background: #3a3a4a; padding: 0.2rem;\">p .abc → bu span seçilir (p içinde)</span></p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Birleştirilmiş Seçiciler (Combined Selectors) -->\n  <h2>🔗 Birleştirilmiş Seçiciler</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n#main li.important strong {\n  color: red;\n}\n      </pre>\n    </div>\n\n    <p><strong>Bu seçiciyi sağdan sola oku:</strong></p>\n    <ol style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n      <li><code>&lt;strong&gt;</code> etiketlerini seç</li>\n      <li>... <strong>\"important\" class'ına sahip</strong> <code>&lt;li&gt;</code> etiketlerinin içindeki</li>\n      <li>... <strong>\"main\" id'sine sahip</strong> elementin içindeki</li>\n    </ol>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Örnek</h4>\n      <div class=\"demo-container\" id=\"main\">\n        <ul>\n          <li class=\"important\">Bu li <strong>seçilir</strong> (önemli strong)</li>\n          <li>Bu li <strong>seçilmez</strong> (class yok)</li>\n        </ul>\n        <div class=\"important\">\n          <strong>Bu strong seçilmez (li içinde değil)</strong>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 9: Specificity (Özgüllük / Çakışan Stiller) -->\n  <h2>⚖️ Specificity — Stiller Çakıştığında</h2>\n  <div class=\"card\">\n    <p>Aynı element için birden fazla CSS kuralı varsa, <strong>en spesifik (özel) olan kural</strong> kazanır.</p>\n\n    <div class=\"code-block\">\n      <pre>\ndiv strong { color: red; }   /* Daha spesifik */\nstrong { color: blue; }      /* Daha az spesifik */\n      </pre>\n    </div>\n\n    <div class=\"demo-box specificity-demo\">\n      <div>\n        <strong>Bu strong elementi kırmızı mı mavi mi?</strong>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <code>div strong</code> daha spesifik olduğu için <strong style=\"color: red;\">KIRMIZI</strong> olur!</p>\n    </div>\n\n    <h3>📊 Specificity Sıralaması (Öncelik)</h3>\n    <div class=\"success-note\">\n      <ol style=\"margin-left: 1.5rem;\">\n        <li><strong>ID (#)</strong> — En yüksek öncelik (100 puan)</li>\n        <li><strong>Class (.)</strong> — Orta öncelik (10 puan)</li>\n        <li><strong>Element (div, p, etc.)</strong> — Düşük öncelik (1 puan)</li>\n      </ol>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n#title { color: red; }      /* 100 puan - KAZANIR */\n.title { color: blue; }     /* 10 puan */\nh1 { color: green; }        /* 1 puan */\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Aynı specificity'de son yazılan kazanır:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nstrong { color: red; }\nstrong { color: blue; }  /* Son yazılan → MAVİ kazanır */\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📖 Cascade Nedir?</strong> \"Cascading Style Sheets\" kelimesindeki <strong>C</strong>, stillerin çakıştığında hangi kuralın uygulanacağını belirleme sürecini tanımlar.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 10: Inheritance (Kalıtım) -->\n  <h2>🧬 Inheritance — Stillerin Kalıtımı</h2>\n  <div class=\"card\">\n    <p>Birçok CSS özelliği <strong>ebeveynden (parent) çocuğa (child) kalıtım yoluyla geçer</strong>.</p>\n\n    <div class=\"code-block\">\n      <pre>\nbody {\n  font-family: Helvetica, sans-serif;\n}\n\n/* body içindeki tüm elementler Helvetica font'u alır */\n      </pre>\n    </div>\n\n    <div class=\"demo-box inherit-demo\" style=\"font-family: Helvetica, sans-serif;\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Kalıtım Örneği</h4>\n      <div class=\"demo-container\">\n        <p>Bu paragraf Helvetica font'u <strong>kalıtım yoluyla</strong> aldı.</p>\n        <div>Div de Helvetica aldı.</div>\n        <span>Span da Helvetica aldı.</span>\n      </div>\n    </div>\n\n    <h3>⚠️ Tüm özellikler kalıtım yoluyla geçmez!</h3>\n    <div class=\"warning-note\">\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\na {\n  display: block;\n  font-family: Arial;\n}\n\n&lt;a href=\"#\"&gt;\n  Back to &lt;em&gt;Home&lt;/em&gt;\n&lt;/a&gt;\n        </pre>\n      </div>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <code>font-family</code> → kalıtım yoluyla geçer (<em>Home</em> da Arial olur)</li>\n        <li>❌ <code>display</code> → kalıtım yoluyla geçmez (em inline kalır)</li>\n      </ul>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Genel kural:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>Metin ile ilgili</strong> özellikler (<code>font-family</code>, <code>color</code>, <code>text-align</code>) → kalıtım geçer</li>\n        <li>❌ <strong>Düzen (layout) ile ilgili</strong> özellikler (<code>display</code>, <code>margin</code>, <code>padding</code>, <code>border</code>) → kalıtım geçmez</li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>💡 İpucu:</strong> Bir özelliğin kalıtım alıp almadığını <strong>MDN (Mozilla Developer Network)</strong>'den öğrenebilirsiniz!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 11: Pratik Örnekler -->\n  <h2>💡 Pratik Örnekler</h2>\n\n  <h3>📌 Örnek 1: Bildirim Mesajları (Class ile)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"alert success\"&gt;Başarılı!&lt;/div&gt;\n&lt;div class=\"alert error\"&gt;Hata oluştu!&lt;/div&gt;\n&lt;div class=\"alert warning\"&gt;Dikkat!&lt;/div&gt;\n\n.alert { padding: 1rem; border-radius: 8px; }\n.success { background: #d4edda; color: #155724; }\n.error { background: #f8d7da; color: #721c24; }\n.warning { background: #fff3cd; color: #856404; }\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"background: #d4edda; color: #155724; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;\">✅ Başarılı! İşlem tamamlandı.</div>\n      <div style=\"background: #f8d7da; color: #721c24; padding: 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;\">❌ Hata oluştu! Lütfen tekrar deneyin.</div>\n      <div style=\"background: #fff3cd; color: #856404; padding: 0.8rem; border-radius: 8px;\">⚠️ Dikkat! Bu işlem geri alınamaz.</div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 2: Buton Stilleri (Class ile)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;button class=\"btn btn-primary\"&gt;Kaydet&lt;/button&gt;\n&lt;button class=\"btn btn-secondary\"&gt;İptal&lt;/button&gt;\n\n.btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; }\n.btn-primary { background: #007bff; color: white; }\n.btn-secondary { background: #6c757d; color: white; }\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <button style=\"background: #007bff; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; margin-right: 0.5rem;\">🔵 Kaydet</button>\n      <button style=\"background: #6c757d; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px;\">⚪ İptal</button>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 3: ID ile Sayfa İçi Bağlantı</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;a href=\"#section1\"&gt;Bölüm 1'e Git&lt;/a&gt;\n...\n&lt;h2 id=\"section1\"&gt;Bölüm 1&lt;/h2&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <a href=\"#\" style=\"color: #e8ff47;\">📍 Bölüm 1'e Git</a>\n      <div style=\"margin-top: 0.5rem; padding: 0.5rem; background: #2a2a32; border-radius: 4px;\">\n        <h3 id=\"section1\" style=\"color: #e8ff47;\">Bölüm 1</h3>\n        <p>Bu bölümün içeriği...</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 12: Özet -->\n  <h2>📋 Genel Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>🏷️ <strong>Class (.)</strong> → Birden fazla elementte kullanılır, stilleri gruplamak için</li>\n      <li>🆔 <strong>ID (#)</strong> → Benzersizdir, sayfada sadece bir kez kullanılır</li>\n      <li>📦 <strong>Element seçici</strong> → Tüm elementleri seçer (p, div, h1 vb.)</li>\n      <li>🔽 <strong>Descendent seçici</strong> → Bir elementin içindeki elementleri seçer (div strong)</li>\n      <li>📋 <strong>Virgül ile gruplama</strong> → Birden fazla seçiciye aynı stili uygular (h2, div)</li>\n      <li>⚖️ <strong>Specificity</strong> → ID > Class > Element (en spesifik kazanır)</li>\n      <li>🧬 <strong>Inheritance</strong> → Metin özellikleri kalıtım yoluyla geçer, düzen özellikleri geçmez</li>\n      <li>📚 <strong>MDN</strong> → En iyi referans kaynağı!</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Class ve ID Seçiciler | CSS Specificity · Inheritance · Selectors\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-classes-ids.css - Class ve ID Seçiciler Ders Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\nh4 {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #aaa;\n  margin: 1rem 0 0.5rem 0;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Demo kutuları */\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n/* Class demo */\n.hw {\n  color: hotpink;\n}\n\n#title {\n  color: purple;\n}\n\n/* Specificity demo */\n.specificity-demo div strong {\n  color: red;\n}\n\n.specificity-demo strong {\n  color: blue;\n}\n\n/* Inheritance demo */\n.inherit-demo {\n  font-family: Helvetica, sans-serif;\n}\n\n/* Tablo */\n.selector-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.selector-table th,\n.selector-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.selector-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.selector-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.selector-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n/* Specificity box */\n.specificity-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  text-align: center;\n  font-size: 1.2rem;\n  font-weight: bold;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .selector-table th,\n  .selector-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
