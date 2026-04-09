@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Başlık ve Paragraf Etiketleri - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    main{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+    h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.05;margin-bottom:.8rem}
+    .desc{color:var(--muted);font-size:1rem;margin-bottom:3rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    @media(max-width:768px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.7rem 1.2rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block}
+    .code-area{background:var(--code-bg);padding:1.5rem;font-family:'Space Mono',monospace;font-size:.8rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.5rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:2rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.6rem 1.5rem;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.05em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+  </header>
+  <main>
+    <h1>HTML Başlık ve Paragraf Etiketleri</h1>
+    <p class="desc">h1-h6 başlık etiketleri ve p paragraf etiketi ile metinleri düzenleme</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot"></span> HTML Kodu</div>
+        <div class="code-area">&lt;h1&gt;Bu bir H1 Ana Başlık&lt;/h1&gt;
+&lt;p&gt;H1 etiketi sayfanın en önemli başlığıdır. Genelde sayfada sadece bir kez kullanılır.&lt;/p&gt;
+
+&lt;h2&gt;Bu bir H2 Alt Başlık&lt;/h2&gt;
+&lt;p&gt;H2, ana konuyu bölen bölüm başlıkları için kullanılır.&lt;/p&gt;
+
+&lt;h3&gt;Bu bir H3 Başlık&lt;/h3&gt;
+&lt;p&gt;H3, H2'nin altındaki alt konular içindir.&lt;/p&gt;
+
+&lt;h4&gt;Daha küçük başlık (H4)&lt;/h4&gt;
+&lt;p&gt;Paragraf etiketi içine yazılan metinler otomatik olarak satır atlar.&lt;/p&gt;
+
+&lt;h5&gt;H5 Başlık&lt;/h5&gt;
+&lt;p&gt;CSS ile stillendirilmedikçe giderek küçülürler.&lt;/p&gt;
+
+&lt;h6&gt;En küçük başlık (H6)&lt;/h6&gt;
+&lt;p&gt;Paragraf etiketi her zaman yeni satırdan başlar.&lt;/p&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area"><!-- USER_CODE_START -->
+<h1>Bu bir H1 Ana Başlık</h1>
+<p>H1 etiketi sayfanın en önemli başlığıdır. Genelde sayfada sadece bir kez kullanılır.</p>
+
+<h2>Bu bir H2 Alt Başlık</h2>
+<p>H2, ana konuyu bölen bölüm başlıkları için kullanılır.</p>
+
+<h3>Bu bir H3 Başlık</h3>
+<p>H3, H2'nin altındaki alt konular içindir.</p>
+
+<h4>Daha küçük başlık (H4)</h4>
+<p>Paragraf etiketi içine yazılan metinler otomatik olarak satır atlar.</p>
+
+<h5>H5 Başlık</h5>
+<p>CSS ile stillendirilmedikçe giderek küçülürler.</p>
+
+<h6>En küçük başlık (H6)</h6>
+<p>Paragraf etiketi her zaman yeni satırdan başlar.</p>
+<!-- USER_CODE_END --></div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=html-baslik-ve-paragraf-etiketleri" class="btn btn-ghost">Duzenle</a>
+      <a href="/" class="btn">Listeye Don</a>
+    </div>
+  </main>
+</body>
+</html>
