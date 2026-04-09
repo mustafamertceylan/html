@@ -1,0 +1,63 @@
+[
+  {
+    "title": "HTML Başlık ve Paragraf Etiketleri",
+    "description": "h1-h6 başlık etiketleri ve p paragraf etiketi ile metinleri düzenleme",
+    "slug": "html-baslik-ve-paragraf-etiketleri",
+    "updatedAt": "2026-04-09T08:14:37.613Z"
+  },
+  {
+    "title": "HTML Belgesi ve Temel Kavramlar",
+    "description": "DOCTYPE, html, head, body, meta, title, br, em, &hearts; — ilk HTML belgendeki tüm kavramların detaylı açıklaması",
+    "slug": "html-belgesi-ve-temel-kavramlar",
+    "updatedAt": "2026-04-09T08:18:19.565Z"
+  },
+  {
+    "title": "web nasıl çalışır",
+    "description": "",
+    "slug": "web-nasil-calisir",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T10:24:38.779Z"
+  },
+  {
+    "title": "Hafta 2 örnek",
+    "description": "",
+    "slug": "hafta-2-ornek",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T10:48:12.723Z"
+  },
+  {
+    "title": "HTML temel elementler",
+    "description": "",
+    "slug": "html-temel-elementler",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T10:39:14.770Z"
+  },
+  {
+    "title": "css giris",
+    "description": "",
+    "slug": "css-giris",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T10:54:54.449Z"
+  },
+  {
+    "title": "Block · Inline · Inline-Block",
+    "description": "CSS display özelliği ile elementlerin davranışını kontrol etme — Block, Inline ve Inline-Block kavramlarının karşılaştırmalı anlatımı",
+    "slug": "block-inline-inline-block",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T11:13:13.744Z"
+  },
+  {
+    "title": "Block · Inline · Inline-Block — Detaylı",
+    "description": "HTML elementlerinin 3 temel tipi: Block (tam genişlik), Inline (içerik kadar), Inline-Block (yan yana + width/height). İnline-Block'a nasıl genişlik ve yükseklik verilir",
+    "slug": "block-inline-inline-block-detayli",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T11:33:13.230Z"
+  },
+  {
+    "title": "Div ve Span — HTML'in Kapsayıcı Elementleri",
+    "description": "Div (block-level) ve span (inline-level) elementlerinin detaylı anlatımı. Gruplama, sayfa düzeni, metin içi stilleme, pratik örnekler ve sık yapılan hatalar.",
+    "slug": "div-ve-span-htmlin-kapsayici-elementleri",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T12:27:50.031Z"
+  }
+]
