@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>li Etiketi — Liste Öğesi - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>li Etiketi — Liste Öğesi</h1>
+    <p class="desc">HTML'de listelerin yapı taşı olan li etiketi. Sıralı (ol) ve sırasız (ul) listelerde kullanımı, iç içe listeler, öznitelikler, CSS ile stillendirme ve pratik örnekler.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;&amp;lt;li&amp;gt; Etiketi - Liste Öğesi - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;html-li-tag.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📋 &lt;span class=&quot;highlight&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt; Etiketi&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;List Item — Liste Öğesi | HTML listelerinin yapı taşı&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: li Nedir? --&gt;
+  &lt;h2&gt;📖 &amp;lt;li&amp;gt; Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📌 List Item (Liste Öğesi)&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;&amp;lt;li&amp;gt;&lt;/strong&gt; etiketi, HTML'de &lt;strong&gt;listelerin her bir elemanını&lt;/strong&gt; tanımlamak için kullanılır. Tek başına kullanılmaz, mutlaka bir &lt;strong&gt;liste kabı&lt;/strong&gt; içinde olmalıdır.&lt;/p&gt;
+    
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;Elma&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Armut&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Muz&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Canlı Önizleme&lt;/h4&gt;
+      &lt;div class=&quot;demo-container list-demo&quot;&gt;
+        &lt;ul&gt;
+          &lt;li&gt;Elma&lt;/li&gt;
+          &lt;li&gt;Armut&lt;/li&gt;
+          &lt;li&gt;Muz&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Liste Türleri --&gt;
+  &lt;h2&gt;🔷 Liste Türleri ve &amp;lt;li&amp;gt;&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;&amp;lt;li&amp;gt;&lt;/strong&gt; etiketi iki farklı liste kapsayıcısı ile kullanılır:&lt;/p&gt;
+
+    &lt;h3&gt;📌 Sırasız Liste (&amp;lt;ul&amp;gt; + &amp;lt;li&amp;gt;)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;Kahve&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Çay&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Süt&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;Kahve&lt;/li&gt;
+        &lt;li&gt;Çay&lt;/li&gt;
+        &lt;li&gt;Süt&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;🔢 Sıralı Liste (&amp;lt;ol&amp;gt; + &amp;lt;li&amp;gt;)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ol&amp;gt;
+  &amp;lt;li&amp;gt;İlk adım&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;İkinci adım&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Üçüncü adım&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;İlk adım&lt;/li&gt;
+        &lt;li&gt;İkinci adım&lt;/li&gt;
+        &lt;li&gt;Üçüncü adım&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Fark:&lt;/strong&gt; &lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; madde işaretli (•) liste oluştururken, &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; numaralı (1,2,3) liste oluşturur.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: İç İçe Listeler --&gt;
+  &lt;h2&gt;🔷 İç İçe Listeler (Nested Lists)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;&amp;lt;li&amp;gt;&lt;/strong&gt; etiketinin içine &lt;strong&gt;başka bir liste&lt;/strong&gt; koyarak alt listeler oluşturabilirsiniz.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;Meyveler
+    &amp;lt;ul&amp;gt;
+      &amp;lt;li&amp;gt;Elma&amp;lt;/li&amp;gt;
+      &amp;lt;li&amp;gt;Armut&amp;lt;/li&amp;gt;
+      &amp;lt;li&amp;gt;Muz&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+  &amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Sebzeler
+    &amp;lt;ul&amp;gt;
+      &amp;lt;li&amp;gt;Domates&amp;lt;/li&amp;gt;
+      &amp;lt;li&amp;gt;Salatalık&amp;lt;/li&amp;gt;
+      &amp;lt;li&amp;gt;Biber&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+  &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box nested-list&quot;&gt;
+      &lt;ul&gt;
+        &lt;li&gt;Meyveler
+          &lt;ul&gt;
+            &lt;li&gt;Elma&lt;/li&gt;
+            &lt;li&gt;Armut&lt;/li&gt;
+            &lt;li&gt;Muz&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+        &lt;li&gt;Sebzeler
+          &lt;ul&gt;
+            &lt;li&gt;Domates&lt;/li&gt;
+            &lt;li&gt;Salatalık&lt;/li&gt;
+            &lt;li&gt;Biber&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: li Öznitelikleri (Attributes) --&gt;
+  &lt;h2&gt;🔷 &amp;lt;li&amp;gt; Öznitelikleri&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;📌 value (Sadece &amp;lt;ol&amp;gt; içinde)&lt;/h3&gt;
+    &lt;p&gt;Liste numaralarını &lt;strong&gt;belirli bir değerden başlatmak&lt;/strong&gt; veya &lt;strong&gt;atlamak&lt;/strong&gt; için kullanılır.&lt;/p&gt;
+    
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ol&amp;gt;
+  &amp;lt;li&amp;gt;Birinci&amp;lt;/li&amp;gt;
+  &amp;lt;li value=&quot;5&quot;&amp;gt;Beşinci (atlamalı)&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Altıncı&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;Birinci&lt;/li&gt;
+        &lt;li value=&quot;5&quot;&gt;Beşinci (atlamalı)&lt;/li&gt;
+        &lt;li&gt;Altıncı&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 type (Eski yöntem, CSS tercih edilir)&lt;/h3&gt;
+    &lt;p&gt;Madde işareti veya numara tipini belirler.&lt;/p&gt;
+    
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ol type=&quot;A&quot;&amp;gt;
+  &amp;lt;li&amp;gt;A harfi ile&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Devam eder&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+
+&amp;lt;ul type=&quot;square&quot;&amp;gt;
+  &amp;lt;li&amp;gt;Kare madde işareti&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ol type=&quot;A&quot; style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;A harfi ile&lt;/li&gt;
+        &lt;li&gt;Devam eder&lt;/li&gt;
+      &lt;/ol&gt;
+      &lt;ul type=&quot;square&quot; style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Kare madde işareti&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Öneri:&lt;/strong&gt; &lt;code&gt;type&lt;/code&gt; özniteliği yerine &lt;strong&gt;CSS&lt;/strong&gt; kullanmak daha modern ve esnektir:&lt;br&gt;
+      &lt;code&gt;list-style-type: upper-alpha; /* A, B, C */&lt;/code&gt;&lt;br&gt;
+      &lt;code&gt;list-style-type: square; /* Kare madde işareti */&lt;/code&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: li İçinde Neler Olabilir? --&gt;
+  &lt;h2&gt;🔷 &amp;lt;li&amp;gt; İçinde Neler Olabilir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;&amp;lt;li&amp;gt;&lt;/strong&gt; etiketinin içine &lt;strong&gt;hemen hemen her şey&lt;/strong&gt; koyabilirsiniz: metin, resim, link, başlık, hatta başka listeler!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;
+    &amp;lt;h3&amp;gt;Ürün Adı&amp;lt;/h3&amp;gt;
+    &amp;lt;p&amp;gt;Ürün açıklaması burada...&amp;lt;/p&amp;gt;
+    &amp;lt;img src=&quot;urun.jpg&quot; alt=&quot;Ürün&quot;&amp;gt;
+    &amp;lt;a href=&quot;#&quot;&amp;gt;Detaylar&amp;lt;/a&amp;gt;
+  &amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;
+    &amp;lt;strong&amp;gt;Önemli Not:&amp;lt;/strong&amp;gt; İçerik çok zengin olabilir!
+  &amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul style=&quot;list-style: none; padding-left: 0;&quot;&gt;
+        &lt;li style=&quot;background: #3a3a4a; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;&quot;&gt;
+          &lt;h4 style=&quot;margin: 0 0 0.3rem 0; color: #e8ff47;&quot;&gt;📱 Akıllı Telefon&lt;/h4&gt;
+          &lt;p style=&quot;margin: 0; font-size: 0.85rem;&quot;&gt;En yeni model, yüksek performanslı telefon.&lt;/p&gt;
+          &lt;a href=&quot;#&quot; style=&quot;color: #e8ff47; font-size: 0.8rem;&quot;&gt;Detaylar →&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li style=&quot;background: #3a3a4a; padding: 1rem; border-radius: 8px;&quot;&gt;
+          &lt;strong&gt;💡 İpucu:&lt;/strong&gt; li içinde çok farklı elementler kullanabilirsiniz!
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: CSS ile li Stillendirme --&gt;
+  &lt;h2&gt;🎨 CSS ile &amp;lt;li&amp;gt; Stillendirme&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;📌 Madde İşareti Tipini Değiştirme&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Madde işareti tipi */
+ul {
+  list-style-type: square;  /* kare, circle, disc, none */
+}
+
+/* Sıralı liste numara tipi */
+ol {
+  list-style-type: upper-roman;  /* I, II, III */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul style=&quot;list-style-type: square; margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;Kare madde işareti&lt;/li&gt;
+        &lt;li&gt;İkinci öğe&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;ol style=&quot;list-style-type: upper-roman; margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Roma rakamı (I)&lt;/li&gt;
+        &lt;li&gt;Roma rakamı (II)&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 Özel Stil: Madde İşaretlerini Kaldırma&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.custom-list li {
+  background: #f0f0f0;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul class=&quot;custom-list&quot; style=&quot;list-style: none; padding-left: 0;&quot;&gt;
+        &lt;li style=&quot;background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;&quot;&gt;✨ Özel stilli liste öğesi 1&lt;/li&gt;
+        &lt;li style=&quot;background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;&quot;&gt;✨ Özel stilli liste öğesi 2&lt;/li&gt;
+        &lt;li style=&quot;background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;&quot;&gt;✨ Özel stilli liste öğesi 3&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 Yatay Menü (li ile)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.menu li {
+  padding: 0.5rem 1rem;
+  background: #333;
+  border-radius: 5px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul class=&quot;menu&quot; style=&quot;list-style: none; display: flex; gap: 1rem; padding: 0; background: #2a2a32; border-radius: 8px;&quot;&gt;
+        &lt;li style=&quot;padding: 0.8rem 1.5rem; cursor: pointer;&quot;&gt;🏠 Anasayfa&lt;/li&gt;
+        &lt;li style=&quot;padding: 0.8rem 1.5rem; cursor: pointer;&quot;&gt;📦 Ürünler&lt;/li&gt;
+        &lt;li style=&quot;padding: 0.8rem 1.5rem; cursor: pointer;&quot;&gt;📞 İletişim&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Pratik Örnekler --&gt;
+  &lt;h2&gt;💡 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;h3&gt;📌 Örnek 1: Yapılacaklar Listesi&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;✔️ HTML öğren&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;✔️ CSS öğren&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;⏳ JavaScript öğren&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;⏳ React öğren&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;✅ HTML öğren (tamamlandı)&lt;/li&gt;
+        &lt;li&gt;✅ CSS öğren (tamamlandı)&lt;/li&gt;
+        &lt;li&gt;⏳ JavaScript öğren (devam ediyor)&lt;/li&gt;
+        &lt;li&gt;⏳ React öğren (planlandı)&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 2: İçindekiler Tablosu&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ol&amp;gt;
+  &amp;lt;li&amp;gt;Giriş&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;HTML Temelleri
+    &amp;lt;ol&amp;gt;
+      &amp;lt;li&amp;gt;Etiketler&amp;lt;/li&amp;gt;
+      &amp;lt;li&amp;gt;Öznitelikler&amp;lt;/li&amp;gt;
+    &amp;lt;/ol&amp;gt;
+  &amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;CSS Temelleri&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Sonuç&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;Giriş&lt;/li&gt;
+        &lt;li&gt;HTML Temelleri
+          &lt;ol&gt;
+            &lt;li&gt;Etiketler&lt;/li&gt;
+            &lt;li&gt;Öznitelikler&lt;/li&gt;
+          &lt;/ol&gt;
+        &lt;/li&gt;
+        &lt;li&gt;CSS Temelleri&lt;/li&gt;
+        &lt;li&gt;Sonuç&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 3: Ürün Özellikleri Listesi&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Marka:&amp;lt;/strong&amp;gt; Apple&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Model:&amp;lt;/strong&amp;gt; iPhone 14&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Renk:&amp;lt;/strong&amp;gt; Gece Yarısı&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Depolama:&amp;lt;/strong&amp;gt; 128GB&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Marka:&lt;/strong&gt; Apple&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Model:&lt;/strong&gt; iPhone 14&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Renk:&lt;/strong&gt; Gece Yarısı&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Depolama:&lt;/strong&gt; 128GB&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Özet Tablo --&gt;
+  &lt;h2&gt;📊 Özet: &amp;lt;li&amp;gt; Etiketi&lt;/h2&gt;
+  &lt;table class=&quot;comparison-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Etiket&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;li&amp;gt;...&amp;lt;/li&amp;gt;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Display tipi&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;block&lt;/code&gt; (list-item)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Kapsayıcı&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt; (sırasız) veya &lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt; (sıralı)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Kullanım&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Liste elemanı (öğesi) tanımlamak&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;İç içe kullanım&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;✅ Evet, &lt;code&gt;&amp;lt;li&amp;gt;&lt;/code&gt; içinde başka liste olabilir&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Varsayılan stil&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;ul&lt;/code&gt; → madde işareti (•), &lt;code&gt;ol&lt;/code&gt; → numara (1,2,3)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Öznitelikler&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;value&lt;/code&gt; (sadece ol içinde), &lt;code&gt;type&lt;/code&gt; (eski)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Zorunlu mu?&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Evet, liste elemanları mutlaka &lt;code&gt;&amp;lt;li&amp;gt;&lt;/code&gt; içinde olmalı&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 9: Sık Yapılan Hatalar --&gt;
+  &lt;h2&gt;⚠️ Sık Yapılan Hatalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; &amp;lt;li&amp;gt;'yi tek başına kullanmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;li&amp;gt;Bu yanlış!&amp;lt;/li&amp;gt;  ❌
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Doğrusu:&lt;/strong&gt; &amp;lt;li&amp;gt; mutlaka &amp;lt;ul&amp;gt; veya &amp;lt;ol&amp;gt; içinde olmalı!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; Liste kapsayıcısını kapatmayı unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  &amp;lt;li&amp;gt;Elma&amp;lt;/li&amp;gt;
+  &amp;lt;li&amp;gt;Armut&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;  ← Kapatmayı unutma!
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 3:&lt;/strong&gt; &amp;lt;li&amp;gt; dışında içerik bırakmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;ul&amp;gt;
+  Elma  ❌ (li dışında)
+  &amp;lt;li&amp;gt;Armut&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Doğrusu:&lt;/strong&gt; Tüm liste elemanları &amp;lt;li&amp;gt; içinde olmalı!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 10: Özet --&gt;
+  &lt;h2&gt;📋 Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📌 &lt;strong&gt;&amp;lt;li&amp;gt;&lt;/strong&gt; = Liste öğesi (List Item)&lt;/li&gt;
+      &lt;li&gt;📦 Her zaman &lt;strong&gt;&amp;lt;ul&amp;gt;&lt;/strong&gt; (sırasız) veya &lt;strong&gt;&amp;lt;ol&amp;gt;&lt;/strong&gt; (sıralı) içinde kullanılır&lt;/li&gt;
+      &lt;li&gt;🔢 &lt;strong&gt;&amp;lt;ol&amp;gt;&lt;/strong&gt; → Numaralı liste (1, 2, 3...)&lt;/li&gt;
+      &lt;li&gt;• &lt;strong&gt;&amp;lt;ul&amp;gt;&lt;/strong&gt; → Madde işaretli liste (•, -, *)&lt;/li&gt;
+      &lt;li&gt;📁 &lt;strong&gt;İç içe&lt;/strong&gt; listeler oluşturulabilir&lt;/li&gt;
+      &lt;li&gt;🎨 CSS ile &lt;strong&gt;tamamen özelleştirilebilir&lt;/strong&gt; (renk, arka plan, hizalama)&lt;/li&gt;
+      &lt;li&gt;⚠️ Tek başına &lt;strong&gt;kullanılamaz&lt;/strong&gt;, mutlaka bir liste kabına ihtiyaç duyar&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — &amp;lt;li&amp;gt; List Item | HTML listelerinin yapı taşı
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* html-li-tag.css - li etiketi ders stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Liste stilleri için demo */
+.list-demo ul, .list-demo ol {
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+.list-demo li {
+  margin: 0.3rem 0;
+}
+
+/* Özel stilli liste */
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.custom-list li {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background: #3a3a4a;
+  border-radius: 8px;
+  border-left: 4px solid #e8ff47;
+}
+
+/* Menü örneği */
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  background: #2a2a32;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.menu li {
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu li:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+/* İç içe liste */
+.nested-list ul {
+  margin-left: 1.5rem;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .menu {
+    flex-direction: column;
+    text-align: center;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&lt;li&gt; Etiketi - Liste Öğesi - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="html-li-tag.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📋 <span class="highlight">&lt;li&gt;</span> Etiketi</h1>
+  <div class="subtitle">List Item — Liste Öğesi | HTML listelerinin yapı taşı</div>
+
+  <!-- BÖLÜM 1: li Nedir? -->
+  <h2>📖 &lt;li&gt; Nedir?</h2>
+  <div class="card">
+    <div class="card-header">📌 List Item (Liste Öğesi)</div>
+    <p><strong>&lt;li&gt;</strong> etiketi, HTML'de <strong>listelerin her bir elemanını</strong> tanımlamak için kullanılır. Tek başına kullanılmaz, mutlaka bir <strong>liste kabı</strong> içinde olmalıdır.</p>
+    
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;Elma&lt;/li&gt;
+  &lt;li&gt;Armut&lt;/li&gt;
+  &lt;li&gt;Muz&lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Canlı Önizleme</h4>
+      <div class="demo-container list-demo">
+        <ul>
+          <li>Elma</li>
+          <li>Armut</li>
+          <li>Muz</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Liste Türleri -->
+  <h2>🔷 Liste Türleri ve &lt;li&gt;</h2>
+  <div class="card">
+    <p><strong>&lt;li&gt;</strong> etiketi iki farklı liste kapsayıcısı ile kullanılır:</p>
+
+    <h3>📌 Sırasız Liste (&lt;ul&gt; + &lt;li&gt;)</h3>
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;Kahve&lt;/li&gt;
+  &lt;li&gt;Çay&lt;/li&gt;
+  &lt;li&gt;Süt&lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <ul style="margin-left: 1.5rem;">
+        <li>Kahve</li>
+        <li>Çay</li>
+        <li>Süt</li>
+      </ul>
+    </div>
+
+    <h3>🔢 Sıralı Liste (&lt;ol&gt; + &lt;li&gt;)</h3>
+    <div class="code-block">
+      <pre>
+&lt;ol&gt;
+  &lt;li&gt;İlk adım&lt;/li&gt;
+  &lt;li&gt;İkinci adım&lt;/li&gt;
+  &lt;li&gt;Üçüncü adım&lt;/li&gt;
+&lt;/ol&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <ol style="margin-left: 1.5rem;">
+        <li>İlk adım</li>
+        <li>İkinci adım</li>
+        <li>Üçüncü adım</li>
+      </ol>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Fark:</strong> <code>&lt;ul&gt;</code> madde işaretli (•) liste oluştururken, <code>&lt;ol&gt;</code> numaralı (1,2,3) liste oluşturur.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: İç İçe Listeler -->
+  <h2>🔷 İç İçe Listeler (Nested Lists)</h2>
+  <div class="card">
+    <p><strong>&lt;li&gt;</strong> etiketinin içine <strong>başka bir liste</strong> koyarak alt listeler oluşturabilirsiniz.</p>
+
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;Meyveler
+    &lt;ul&gt;
+      &lt;li&gt;Elma&lt;/li&gt;
+      &lt;li&gt;Armut&lt;/li&gt;
+      &lt;li&gt;Muz&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Sebzeler
+    &lt;ul&gt;
+      &lt;li&gt;Domates&lt;/li&gt;
+      &lt;li&gt;Salatalık&lt;/li&gt;
+      &lt;li&gt;Biber&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box nested-list">
+      <ul>
+        <li>Meyveler
+          <ul>
+            <li>Elma</li>
+            <li>Armut</li>
+            <li>Muz</li>
+          </ul>
+        </li>
+        <li>Sebzeler
+          <ul>
+            <li>Domates</li>
+            <li>Salatalık</li>
+            <li>Biber</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: li Öznitelikleri (Attributes) -->
+  <h2>🔷 &lt;li&gt; Öznitelikleri</h2>
+  <div class="card">
+    <h3>📌 value (Sadece &lt;ol&gt; içinde)</h3>
+    <p>Liste numaralarını <strong>belirli bir değerden başlatmak</strong> veya <strong>atlamak</strong> için kullanılır.</p>
+    
+    <div class="code-block">
+      <pre>
+&lt;ol&gt;
+  &lt;li&gt;Birinci&lt;/li&gt;
+  &lt;li value="5"&gt;Beşinci (atlamalı)&lt;/li&gt;
+  &lt;li&gt;Altıncı&lt;/li&gt;
+&lt;/ol&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ol style="margin-left: 1.5rem;">
+        <li>Birinci</li>
+        <li value="5">Beşinci (atlamalı)</li>
+        <li>Altıncı</li>
+      </ol>
+    </div>
+
+    <h3>📌 type (Eski yöntem, CSS tercih edilir)</h3>
+    <p>Madde işareti veya numara tipini belirler.</p>
+    
+    <div class="code-block">
+      <pre>
+&lt;ol type="A"&gt;
+  &lt;li&gt;A harfi ile&lt;/li&gt;
+  &lt;li&gt;Devam eder&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul type="square"&gt;
+  &lt;li&gt;Kare madde işareti&lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ol type="A" style="margin-left: 1.5rem;">
+        <li>A harfi ile</li>
+        <li>Devam eder</li>
+      </ol>
+      <ul type="square" style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Kare madde işareti</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Öneri:</strong> <code>type</code> özniteliği yerine <strong>CSS</strong> kullanmak daha modern ve esnektir:<br>
+      <code>list-style-type: upper-alpha; /* A, B, C */</code><br>
+      <code>list-style-type: square; /* Kare madde işareti */</code>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: li İçinde Neler Olabilir? -->
+  <h2>🔷 &lt;li&gt; İçinde Neler Olabilir?</h2>
+  <div class="card">
+    <p><strong>&lt;li&gt;</strong> etiketinin içine <strong>hemen hemen her şey</strong> koyabilirsiniz: metin, resim, link, başlık, hatta başka listeler!</p>
+
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;h3&gt;Ürün Adı&lt;/h3&gt;
+    &lt;p&gt;Ürün açıklaması burada...&lt;/p&gt;
+    &lt;img src="urun.jpg" alt="Ürün"&gt;
+    &lt;a href="#"&gt;Detaylar&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;strong&gt;Önemli Not:&lt;/strong&gt; İçerik çok zengin olabilir!
+  &lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ul style="list-style: none; padding-left: 0;">
+        <li style="background: #3a3a4a; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+          <h4 style="margin: 0 0 0.3rem 0; color: #e8ff47;">📱 Akıllı Telefon</h4>
+          <p style="margin: 0; font-size: 0.85rem;">En yeni model, yüksek performanslı telefon.</p>
+          <a href="#" style="color: #e8ff47; font-size: 0.8rem;">Detaylar →</a>
+        </li>
+        <li style="background: #3a3a4a; padding: 1rem; border-radius: 8px;">
+          <strong>💡 İpucu:</strong> li içinde çok farklı elementler kullanabilirsiniz!
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: CSS ile li Stillendirme -->
+  <h2>🎨 CSS ile &lt;li&gt; Stillendirme</h2>
+  <div class="card">
+    <h3>📌 Madde İşareti Tipini Değiştirme</h3>
+    <div class="code-block">
+      <pre>
+/* Madde işareti tipi */
+ul {
+  list-style-type: square;  /* kare, circle, disc, none */
+}
+
+/* Sıralı liste numara tipi */
+ol {
+  list-style-type: upper-roman;  /* I, II, III */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ul style="list-style-type: square; margin-left: 1.5rem;">
+        <li>Kare madde işareti</li>
+        <li>İkinci öğe</li>
+      </ul>
+      <ol style="list-style-type: upper-roman; margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Roma rakamı (I)</li>
+        <li>Roma rakamı (II)</li>
+      </ol>
+    </div>
+
+    <h3>📌 Özel Stil: Madde İşaretlerini Kaldırma</h3>
+    <div class="code-block">
+      <pre>
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.custom-list li {
+  background: #f0f0f0;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ul class="custom-list" style="list-style: none; padding-left: 0;">
+        <li style="background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;">✨ Özel stilli liste öğesi 1</li>
+        <li style="background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;">✨ Özel stilli liste öğesi 2</li>
+        <li style="background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;">✨ Özel stilli liste öğesi 3</li>
+      </ul>
+    </div>
+
+    <h3>📌 Yatay Menü (li ile)</h3>
+    <div class="code-block">
+      <pre>
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.menu li {
+  padding: 0.5rem 1rem;
+  background: #333;
+  border-radius: 5px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <ul class="menu" style="list-style: none; display: flex; gap: 1rem; padding: 0; background: #2a2a32; border-radius: 8px;">
+        <li style="padding: 0.8rem 1.5rem; cursor: pointer;">🏠 Anasayfa</li>
+        <li style="padding: 0.8rem 1.5rem; cursor: pointer;">📦 Ürünler</li>
+        <li style="padding: 0.8rem 1.5rem; cursor: pointer;">📞 İletişim</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: Pratik Örnekler -->
+  <h2>💡 Pratik Örnekler</h2>
+
+  <h3>📌 Örnek 1: Yapılacaklar Listesi</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;✔️ HTML öğren&lt;/li&gt;
+  &lt;li&gt;✔️ CSS öğren&lt;/li&gt;
+  &lt;li&gt;⏳ JavaScript öğren&lt;/li&gt;
+  &lt;li&gt;⏳ React öğren&lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <ul style="margin-left: 1.5rem;">
+        <li>✅ HTML öğren (tamamlandı)</li>
+        <li>✅ CSS öğren (tamamlandı)</li>
+        <li>⏳ JavaScript öğren (devam ediyor)</li>
+        <li>⏳ React öğren (planlandı)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 2: İçindekiler Tablosu</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;ol&gt;
+  &lt;li&gt;Giriş&lt;/li&gt;
+  &lt;li&gt;HTML Temelleri
+    &lt;ol&gt;
+      &lt;li&gt;Etiketler&lt;/li&gt;
+      &lt;li&gt;Öznitelikler&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;CSS Temelleri&lt;/li&gt;
+  &lt;li&gt;Sonuç&lt;/li&gt;
+&lt;/ol&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <ol style="margin-left: 1.5rem;">
+        <li>Giriş</li>
+        <li>HTML Temelleri
+          <ol>
+            <li>Etiketler</li>
+            <li>Öznitelikler</li>
+          </ol>
+        </li>
+        <li>CSS Temelleri</li>
+        <li>Sonuç</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 3: Ürün Özellikleri Listesi</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Marka:&lt;/strong&gt; Apple&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Model:&lt;/strong&gt; iPhone 14&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Renk:&lt;/strong&gt; Gece Yarısı&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Depolama:&lt;/strong&gt; 128GB&lt;/li&gt;
+&lt;/ul&gt;
+      </pre>
+    </div>
+    <div class="demo-box">
+      <ul style="margin-left: 1.5rem;">
+        <li><strong>Marka:</strong> Apple</li>
+        <li><strong>Model:</strong> iPhone 14</li>
+        <li><strong>Renk:</strong> Gece Yarısı</li>
+        <li><strong>Depolama:</strong> 128GB</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Özet Tablo -->
+  <h2>📊 Özet: &lt;li&gt; Etiketi</h2>
+  <table class="comparison-table">
+    <thead>
+      <tr><th>Özellik</th><th>Açıklama</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Etiket</strong></td><td><code>&lt;li&gt;...&lt;/li&gt;</code></td>
+      </tr>
+      <tr><td><strong>Display tipi</strong></td><td><code>block</code> (list-item)</td>
+      </tr>
+      <tr><td><strong>Kapsayıcı</strong></td><td><code>&lt;ul&gt;</code> (sırasız) veya <code>&lt;ol&gt;</code> (sıralı)</td>
+      </tr>
+      <tr><td><strong>Kullanım</strong></td><td>Liste elemanı (öğesi) tanımlamak</td>
+      </tr>
+      <tr><td><strong>İç içe kullanım</strong></td><td>✅ Evet, <code>&lt;li&gt;</code> içinde başka liste olabilir</td>
+      </tr>
+      <tr><td><strong>Varsayılan stil</strong></td><td><code>ul</code> → madde işareti (•), <code>ol</code> → numara (1,2,3)</td>
+      </tr>
+      <tr><td><strong>Öznitelikler</strong></td><td><code>value</code> (sadece ol içinde), <code>type</code> (eski)</td>
+      </tr>
+      <tr><td><strong>Zorunlu mu?</strong></td><td>Evet, liste elemanları mutlaka <code>&lt;li&gt;</code> içinde olmalı</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 9: Sık Yapılan Hatalar -->
+  <h2>⚠️ Sık Yapılan Hatalar</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> &lt;li&gt;'yi tek başına kullanmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;li&gt;Bu yanlış!&lt;/li&gt;  ❌
+        </pre>
+      </div>
+      <strong>✅ Doğrusu:</strong> &lt;li&gt; mutlaka &lt;ul&gt; veya &lt;ol&gt; içinde olmalı!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> Liste kapsayıcısını kapatmayı unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;ul&gt;
+  &lt;li&gt;Elma&lt;/li&gt;
+  &lt;li&gt;Armut&lt;/li&gt;
+&lt;/ul&gt;  ← Kapatmayı unutma!
+        </pre>
+      </div>
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 3:</strong> &lt;li&gt; dışında içerik bırakmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;ul&gt;
+  Elma  ❌ (li dışında)
+  &lt;li&gt;Armut&lt;/li&gt;
+&lt;/ul&gt;
+        </pre>
+      </div>
+      <strong>✅ Doğrusu:</strong> Tüm liste elemanları &lt;li&gt; içinde olmalı!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 10: Özet -->
+  <h2>📋 Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📌 <strong>&lt;li&gt;</strong> = Liste öğesi (List Item)</li>
+      <li>📦 Her zaman <strong>&lt;ul&gt;</strong> (sırasız) veya <strong>&lt;ol&gt;</strong> (sıralı) içinde kullanılır</li>
+      <li>🔢 <strong>&lt;ol&gt;</strong> → Numaralı liste (1, 2, 3...)</li>
+      <li>• <strong>&lt;ul&gt;</strong> → Madde işaretli liste (•, -, *)</li>
+      <li>📁 <strong>İç içe</strong> listeler oluşturulabilir</li>
+      <li>🎨 CSS ile <strong>tamamen özelleştirilebilir</strong> (renk, arka plan, hizalama)</li>
+      <li>⚠️ Tek başına <strong>kullanılamaz</strong>, mutlaka bir liste kabına ihtiyaç duyar</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — &lt;li&gt; List Item | HTML listelerinin yapı taşı
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* html-li-tag.css - li etiketi ders stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Liste stilleri için demo */
+.list-demo ul, .list-demo ol {
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+.list-demo li {
+  margin: 0.3rem 0;
+}
+
+/* Özel stilli liste */
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.custom-list li {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background: #3a3a4a;
+  border-radius: 8px;
+  border-left: 4px solid #e8ff47;
+}
+
+/* Menü örneği */
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  background: #2a2a32;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.menu li {
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu li:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+/* İç içe liste */
+.nested-list ul {
+  margin-left: 1.5rem;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .menu {
+    flex-direction: column;
+    text-align: center;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=li-etiketi-liste-ogesi" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>li Etiketi — Liste Öğesi — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>&lt;li&gt; Etiketi - Liste Öğesi - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"html-li-tag.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📋 <span class=\"highlight\">&lt;li&gt;</span> Etiketi</h1>\n  <div class=\"subtitle\">List Item — Liste Öğesi | HTML listelerinin yapı taşı</div>\n\n  <!-- BÖLÜM 1: li Nedir? -->\n  <h2>📖 &lt;li&gt; Nedir?</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📌 List Item (Liste Öğesi)</div>\n    <p><strong>&lt;li&gt;</strong> etiketi, HTML'de <strong>listelerin her bir elemanını</strong> tanımlamak için kullanılır. Tek başına kullanılmaz, mutlaka bir <strong>liste kabı</strong> içinde olmalıdır.</p>\n    \n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;Elma&lt;/li&gt;\n  &lt;li&gt;Armut&lt;/li&gt;\n  &lt;li&gt;Muz&lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Canlı Önizleme</h4>\n      <div class=\"demo-container list-demo\">\n        <ul>\n          <li>Elma</li>\n          <li>Armut</li>\n          <li>Muz</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Liste Türleri -->\n  <h2>🔷 Liste Türleri ve &lt;li&gt;</h2>\n  <div class=\"card\">\n    <p><strong>&lt;li&gt;</strong> etiketi iki farklı liste kapsayıcısı ile kullanılır:</p>\n\n    <h3>📌 Sırasız Liste (&lt;ul&gt; + &lt;li&gt;)</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;Kahve&lt;/li&gt;\n  &lt;li&gt;Çay&lt;/li&gt;\n  &lt;li&gt;Süt&lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <ul style=\"margin-left: 1.5rem;\">\n        <li>Kahve</li>\n        <li>Çay</li>\n        <li>Süt</li>\n      </ul>\n    </div>\n\n    <h3>🔢 Sıralı Liste (&lt;ol&gt; + &lt;li&gt;)</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;ol&gt;\n  &lt;li&gt;İlk adım&lt;/li&gt;\n  &lt;li&gt;İkinci adım&lt;/li&gt;\n  &lt;li&gt;Üçüncü adım&lt;/li&gt;\n&lt;/ol&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <ol style=\"margin-left: 1.5rem;\">\n        <li>İlk adım</li>\n        <li>İkinci adım</li>\n        <li>Üçüncü adım</li>\n      </ol>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Fark:</strong> <code>&lt;ul&gt;</code> madde işaretli (•) liste oluştururken, <code>&lt;ol&gt;</code> numaralı (1,2,3) liste oluşturur.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: İç İçe Listeler -->\n  <h2>🔷 İç İçe Listeler (Nested Lists)</h2>\n  <div class=\"card\">\n    <p><strong>&lt;li&gt;</strong> etiketinin içine <strong>başka bir liste</strong> koyarak alt listeler oluşturabilirsiniz.</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;Meyveler\n    &lt;ul&gt;\n      &lt;li&gt;Elma&lt;/li&gt;\n      &lt;li&gt;Armut&lt;/li&gt;\n      &lt;li&gt;Muz&lt;/li&gt;\n    &lt;/ul&gt;\n  &lt;/li&gt;\n  &lt;li&gt;Sebzeler\n    &lt;ul&gt;\n      &lt;li&gt;Domates&lt;/li&gt;\n      &lt;li&gt;Salatalık&lt;/li&gt;\n      &lt;li&gt;Biber&lt;/li&gt;\n    &lt;/ul&gt;\n  &lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box nested-list\">\n      <ul>\n        <li>Meyveler\n          <ul>\n            <li>Elma</li>\n            <li>Armut</li>\n            <li>Muz</li>\n          </ul>\n        </li>\n        <li>Sebzeler\n          <ul>\n            <li>Domates</li>\n            <li>Salatalık</li>\n            <li>Biber</li>\n          </ul>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: li Öznitelikleri (Attributes) -->\n  <h2>🔷 &lt;li&gt; Öznitelikleri</h2>\n  <div class=\"card\">\n    <h3>📌 value (Sadece &lt;ol&gt; içinde)</h3>\n    <p>Liste numaralarını <strong>belirli bir değerden başlatmak</strong> veya <strong>atlamak</strong> için kullanılır.</p>\n    \n    <div class=\"code-block\">\n      <pre>\n&lt;ol&gt;\n  &lt;li&gt;Birinci&lt;/li&gt;\n  &lt;li value=\"5\"&gt;Beşinci (atlamalı)&lt;/li&gt;\n  &lt;li&gt;Altıncı&lt;/li&gt;\n&lt;/ol&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ol style=\"margin-left: 1.5rem;\">\n        <li>Birinci</li>\n        <li value=\"5\">Beşinci (atlamalı)</li>\n        <li>Altıncı</li>\n      </ol>\n    </div>\n\n    <h3>📌 type (Eski yöntem, CSS tercih edilir)</h3>\n    <p>Madde işareti veya numara tipini belirler.</p>\n    \n    <div class=\"code-block\">\n      <pre>\n&lt;ol type=\"A\"&gt;\n  &lt;li&gt;A harfi ile&lt;/li&gt;\n  &lt;li&gt;Devam eder&lt;/li&gt;\n&lt;/ol&gt;\n\n&lt;ul type=\"square\"&gt;\n  &lt;li&gt;Kare madde işareti&lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ol type=\"A\" style=\"margin-left: 1.5rem;\">\n        <li>A harfi ile</li>\n        <li>Devam eder</li>\n      </ol>\n      <ul type=\"square\" style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Kare madde işareti</li>\n      </ul>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Öneri:</strong> <code>type</code> özniteliği yerine <strong>CSS</strong> kullanmak daha modern ve esnektir:<br>\n      <code>list-style-type: upper-alpha; /* A, B, C */</code><br>\n      <code>list-style-type: square; /* Kare madde işareti */</code>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: li İçinde Neler Olabilir? -->\n  <h2>🔷 &lt;li&gt; İçinde Neler Olabilir?</h2>\n  <div class=\"card\">\n    <p><strong>&lt;li&gt;</strong> etiketinin içine <strong>hemen hemen her şey</strong> koyabilirsiniz: metin, resim, link, başlık, hatta başka listeler!</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;\n    &lt;h3&gt;Ürün Adı&lt;/h3&gt;\n    &lt;p&gt;Ürün açıklaması burada...&lt;/p&gt;\n    &lt;img src=\"urun.jpg\" alt=\"Ürün\"&gt;\n    &lt;a href=\"#\"&gt;Detaylar&lt;/a&gt;\n  &lt;/li&gt;\n  &lt;li&gt;\n    &lt;strong&gt;Önemli Not:&lt;/strong&gt; İçerik çok zengin olabilir!\n  &lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ul style=\"list-style: none; padding-left: 0;\">\n        <li style=\"background: #3a3a4a; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;\">\n          <h4 style=\"margin: 0 0 0.3rem 0; color: #e8ff47;\">📱 Akıllı Telefon</h4>\n          <p style=\"margin: 0; font-size: 0.85rem;\">En yeni model, yüksek performanslı telefon.</p>\n          <a href=\"#\" style=\"color: #e8ff47; font-size: 0.8rem;\">Detaylar →</a>\n        </li>\n        <li style=\"background: #3a3a4a; padding: 1rem; border-radius: 8px;\">\n          <strong>💡 İpucu:</strong> li içinde çok farklı elementler kullanabilirsiniz!\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: CSS ile li Stillendirme -->\n  <h2>🎨 CSS ile &lt;li&gt; Stillendirme</h2>\n  <div class=\"card\">\n    <h3>📌 Madde İşareti Tipini Değiştirme</h3>\n    <div class=\"code-block\">\n      <pre>\n/* Madde işareti tipi */\nul {\n  list-style-type: square;  /* kare, circle, disc, none */\n}\n\n/* Sıralı liste numara tipi */\nol {\n  list-style-type: upper-roman;  /* I, II, III */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ul style=\"list-style-type: square; margin-left: 1.5rem;\">\n        <li>Kare madde işareti</li>\n        <li>İkinci öğe</li>\n      </ul>\n      <ol style=\"list-style-type: upper-roman; margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Roma rakamı (I)</li>\n        <li>Roma rakamı (II)</li>\n      </ol>\n    </div>\n\n    <h3>📌 Özel Stil: Madde İşaretlerini Kaldırma</h3>\n    <div class=\"code-block\">\n      <pre>\n.custom-list {\n  list-style: none;\n  padding-left: 0;\n}\n\n.custom-list li {\n  background: #f0f0f0;\n  margin: 5px 0;\n  padding: 10px;\n  border-radius: 5px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ul class=\"custom-list\" style=\"list-style: none; padding-left: 0;\">\n        <li style=\"background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;\">✨ Özel stilli liste öğesi 1</li>\n        <li style=\"background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;\">✨ Özel stilli liste öğesi 2</li>\n        <li style=\"background: #3a3a4a; padding: 0.5rem; margin: 0.3rem 0; border-radius: 6px;\">✨ Özel stilli liste öğesi 3</li>\n      </ul>\n    </div>\n\n    <h3>📌 Yatay Menü (li ile)</h3>\n    <div class=\"code-block\">\n      <pre>\n.menu {\n  list-style: none;\n  display: flex;\n  gap: 1rem;\n}\n\n.menu li {\n  padding: 0.5rem 1rem;\n  background: #333;\n  border-radius: 5px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <ul class=\"menu\" style=\"list-style: none; display: flex; gap: 1rem; padding: 0; background: #2a2a32; border-radius: 8px;\">\n        <li style=\"padding: 0.8rem 1.5rem; cursor: pointer;\">🏠 Anasayfa</li>\n        <li style=\"padding: 0.8rem 1.5rem; cursor: pointer;\">📦 Ürünler</li>\n        <li style=\"padding: 0.8rem 1.5rem; cursor: pointer;\">📞 İletişim</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: Pratik Örnekler -->\n  <h2>💡 Pratik Örnekler</h2>\n\n  <h3>📌 Örnek 1: Yapılacaklar Listesi</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;✔️ HTML öğren&lt;/li&gt;\n  &lt;li&gt;✔️ CSS öğren&lt;/li&gt;\n  &lt;li&gt;⏳ JavaScript öğren&lt;/li&gt;\n  &lt;li&gt;⏳ React öğren&lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <ul style=\"margin-left: 1.5rem;\">\n        <li>✅ HTML öğren (tamamlandı)</li>\n        <li>✅ CSS öğren (tamamlandı)</li>\n        <li>⏳ JavaScript öğren (devam ediyor)</li>\n        <li>⏳ React öğren (planlandı)</li>\n      </ul>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 2: İçindekiler Tablosu</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;ol&gt;\n  &lt;li&gt;Giriş&lt;/li&gt;\n  &lt;li&gt;HTML Temelleri\n    &lt;ol&gt;\n      &lt;li&gt;Etiketler&lt;/li&gt;\n      &lt;li&gt;Öznitelikler&lt;/li&gt;\n    &lt;/ol&gt;\n  &lt;/li&gt;\n  &lt;li&gt;CSS Temelleri&lt;/li&gt;\n  &lt;li&gt;Sonuç&lt;/li&gt;\n&lt;/ol&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <ol style=\"margin-left: 1.5rem;\">\n        <li>Giriş</li>\n        <li>HTML Temelleri\n          <ol>\n            <li>Etiketler</li>\n            <li>Öznitelikler</li>\n          </ol>\n        </li>\n        <li>CSS Temelleri</li>\n        <li>Sonuç</li>\n      </ol>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 3: Ürün Özellikleri Listesi</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n&lt;ul&gt;\n  &lt;li&gt;&lt;strong&gt;Marka:&lt;/strong&gt; Apple&lt;/li&gt;\n  &lt;li&gt;&lt;strong&gt;Model:&lt;/strong&gt; iPhone 14&lt;/li&gt;\n  &lt;li&gt;&lt;strong&gt;Renk:&lt;/strong&gt; Gece Yarısı&lt;/li&gt;\n  &lt;li&gt;&lt;strong&gt;Depolama:&lt;/strong&gt; 128GB&lt;/li&gt;\n&lt;/ul&gt;\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <ul style=\"margin-left: 1.5rem;\">\n        <li><strong>Marka:</strong> Apple</li>\n        <li><strong>Model:</strong> iPhone 14</li>\n        <li><strong>Renk:</strong> Gece Yarısı</li>\n        <li><strong>Depolama:</strong> 128GB</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Özet Tablo -->\n  <h2>📊 Özet: &lt;li&gt; Etiketi</h2>\n  <table class=\"comparison-table\">\n    <thead>\n      <tr><th>Özellik</th><th>Açıklama</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><strong>Etiket</strong></td><td><code>&lt;li&gt;...&lt;/li&gt;</code></td>\n      </tr>\n      <tr><td><strong>Display tipi</strong></td><td><code>block</code> (list-item)</td>\n      </tr>\n      <tr><td><strong>Kapsayıcı</strong></td><td><code>&lt;ul&gt;</code> (sırasız) veya <code>&lt;ol&gt;</code> (sıralı)</td>\n      </tr>\n      <tr><td><strong>Kullanım</strong></td><td>Liste elemanı (öğesi) tanımlamak</td>\n      </tr>\n      <tr><td><strong>İç içe kullanım</strong></td><td>✅ Evet, <code>&lt;li&gt;</code> içinde başka liste olabilir</td>\n      </tr>\n      <tr><td><strong>Varsayılan stil</strong></td><td><code>ul</code> → madde işareti (•), <code>ol</code> → numara (1,2,3)</td>\n      </tr>\n      <tr><td><strong>Öznitelikler</strong></td><td><code>value</code> (sadece ol içinde), <code>type</code> (eski)</td>\n      </tr>\n      <tr><td><strong>Zorunlu mu?</strong></td><td>Evet, liste elemanları mutlaka <code>&lt;li&gt;</code> içinde olmalı</td>\n      </tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 9: Sık Yapılan Hatalar -->\n  <h2>⚠️ Sık Yapılan Hatalar</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> &lt;li&gt;'yi tek başına kullanmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;li&gt;Bu yanlış!&lt;/li&gt;  ❌\n        </pre>\n      </div>\n      <strong>✅ Doğrusu:</strong> &lt;li&gt; mutlaka &lt;ul&gt; veya &lt;ol&gt; içinde olmalı!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> Liste kapsayıcısını kapatmayı unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;ul&gt;\n  &lt;li&gt;Elma&lt;/li&gt;\n  &lt;li&gt;Armut&lt;/li&gt;\n&lt;/ul&gt;  ← Kapatmayı unutma!\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 3:</strong> &lt;li&gt; dışında içerik bırakmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;ul&gt;\n  Elma  ❌ (li dışında)\n  &lt;li&gt;Armut&lt;/li&gt;\n&lt;/ul&gt;\n        </pre>\n      </div>\n      <strong>✅ Doğrusu:</strong> Tüm liste elemanları &lt;li&gt; içinde olmalı!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 10: Özet -->\n  <h2>📋 Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📌 <strong>&lt;li&gt;</strong> = Liste öğesi (List Item)</li>\n      <li>📦 Her zaman <strong>&lt;ul&gt;</strong> (sırasız) veya <strong>&lt;ol&gt;</strong> (sıralı) içinde kullanılır</li>\n      <li>🔢 <strong>&lt;ol&gt;</strong> → Numaralı liste (1, 2, 3...)</li>\n      <li>• <strong>&lt;ul&gt;</strong> → Madde işaretli liste (•, -, *)</li>\n      <li>📁 <strong>İç içe</strong> listeler oluşturulabilir</li>\n      <li>🎨 CSS ile <strong>tamamen özelleştirilebilir</strong> (renk, arka plan, hizalama)</li>\n      <li>⚠️ Tek başına <strong>kullanılamaz</strong>, mutlaka bir liste kabına ihtiyaç duyar</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — &lt;li&gt; List Item | HTML listelerinin yapı taşı\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* html-li-tag.css - li etiketi ders stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Demo kutuları */\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n/* Liste stilleri için demo */\n.list-demo ul, .list-demo ol {\n  margin-left: 1.5rem;\n  padding-left: 0.5rem;\n}\n\n.list-demo li {\n  margin: 0.3rem 0;\n}\n\n/* Özel stilli liste */\n.custom-list {\n  list-style: none;\n  padding-left: 0;\n}\n\n.custom-list li {\n  padding: 0.5rem;\n  margin: 0.5rem 0;\n  background: #3a3a4a;\n  border-radius: 8px;\n  border-left: 4px solid #e8ff47;\n}\n\n/* Menü örneği */\n.menu {\n  list-style: none;\n  display: flex;\n  gap: 1rem;\n  padding: 0;\n  background: #2a2a32;\n  border-radius: 8px;\n  overflow: hidden;\n}\n\n.menu li {\n  padding: 0.8rem 1.5rem;\n  cursor: pointer;\n  transition: background 0.2s;\n}\n\n.menu li:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n/* İç içe liste */\n.nested-list ul {\n  margin-left: 1.5rem;\n}\n\n/* Tablo */\n.comparison-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.comparison-table th,\n.comparison-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.comparison-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.comparison-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.comparison-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .menu {\n    flex-direction: column;\n    text-align: center;\n  }\n  .comparison-table th,\n  .comparison-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
