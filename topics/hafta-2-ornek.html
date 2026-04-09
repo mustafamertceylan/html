@@ -65,7 +65,39 @@ Deneme metni 1 &lt;br&gt;
 &lt;/div&gt;
 &lt;div class =&quot;link&quot;&gt;
  &lt;br&gt; &lt;a href=&quot;google.com&quot;&gt;click here &lt;/a&gt;
-&lt;/div&gt;</div>
+&lt;/div&gt;
+&lt;div class=&quot;resim&quot;&gt;
+&lt;image src=&quot;http://i.imgur.com/WJToVGv.jpg&quot; &gt; 
+&lt;/div&gt;
+
+&lt;div class=&quot;kutu&quot;&gt;
+  &lt;h1&gt;Başlık&lt;/h1&gt;
+  &lt;p&gt;Bu bir paragraf. Div içinde gruplanmış içerik.&lt;/p&gt;
+  &lt;button&gt;Tıkla&lt;/button&gt;
+&lt;p&gt;İkinci div yeni satırda başlar&lt;/p&gt;
+
+&lt;p&gt;
+  Bugün &lt;span id=highlight&gt;HTML  &lt;/span&gt; öğreniyoruz.
+  &lt;span class=&quot;important&quot;&gt;Div ve span&lt;/span&gt; çok önemli!
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;gallery&quot;&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h4&gt;Ürün 1&lt;/h4&gt;
+    &lt;p&gt;Açıklama...&lt;/p&gt;
+    &lt;span&gt;$49.99&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h4&gt;Ürün 2&lt;/h4&gt;
+    &lt;p&gt;Açıklama...&lt;/p&gt;
+    &lt;span&gt;$59.99&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+      
+
+
+</div>
       </div>
       <div class="panel">
         <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
@@ -77,7 +109,37 @@ background-color: pink;
 
 }
 .link{
-text-align:center;}</div>
+text-align:center;}
+
+.resim{
+display:inline-bock;
+margin:10px;
+padding : 10px;
+border:2px solid red;
+width:500px;
+heigth:100px;
+
+}
+
+.kutu {
+margin:10px;
+padding:5px;
+border:5px solid red;
+display: inline-block;
+}
+
+
+#highlight{
+background-color:yellow;
+}
+
+.card{
+border-radius:50%;
+border:5px solid red;
+display:inline-block;
+}
+
+</div>
       </div>
       <div class="panel">
         <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
@@ -92,6 +154,38 @@ Deneme metni 1 <br>
 <div class ="link">
  <br> <a href="google.com">click here </a>
 </div>
+<div class="resim">
+<image src="http://i.imgur.com/WJToVGv.jpg" > 
+</div>
+
+<div class="kutu">
+  <h1>Başlık</h1>
+  <p>Bu bir paragraf. Div içinde gruplanmış içerik.</p>
+  <button>Tıkla</button>
+<p>İkinci div yeni satırda başlar</p>
+
+<p>
+  Bugün <span id=highlight>HTML  </span> öğreniyoruz.
+  <span class="important">Div ve span</span> çok önemli!
+</p>
+</div>
+
+<div class="gallery">
+  <div class="card">
+    <h4>Ürün 1</h4>
+    <p>Açıklama...</p>
+    <span>$49.99</span>
+  </div>
+  <div class="card">
+    <h4>Ürün 2</h4>
+    <p>Açıklama...</p>
+    <span>$59.99</span>
+  </div>
+</div>
+      
+
+
+
 <!--USER_HTML_END-->
           <style>
 <!--USER_CSS_START-->
@@ -104,6 +198,36 @@ background-color: pink;
 }
 .link{
 text-align:center;}
+
+.resim{
+display:inline-bock;
+margin:10px;
+padding : 10px;
+border:2px solid red;
+width:500px;
+heigth:100px;
+
+}
+
+.kutu {
+margin:10px;
+padding:5px;
+border:5px solid red;
+display: inline-block;
+}
+
+
+#highlight{
+background-color:yellow;
+}
+
+.card{
+border-radius:50%;
+border:5px solid red;
+display:inline-block;
+}
+
+
 <!--USER_CSS_END-->
 </style>
         </div>
@@ -126,8 +250,8 @@ text-align:center;}
   </div>
 
   <script>
-    const htmlCode = "<div class=\"deneme \">\n<h1> CS193X : WEB Fun </h1>\n<p> <strong> Announcement </strong> <br>\nDeneme metni 1 <br>\n deneme metni 2 <br>\n</div>\n<div class =\"link\">\n <br> <a href=\"google.com\">click here </a>\n</div>";
-    const cssCode = "\n.deneme {\ntext-align : center;\nborder: 5px solid red;\nbackground-color: pink;\n\n}\n.link{\ntext-align:center;}";
+    const htmlCode = "<div class=\"deneme \">\n<h1> CS193X : WEB Fun </h1>\n<p> <strong> Announcement </strong> <br>\nDeneme metni 1 <br>\n deneme metni 2 <br>\n</div>\n<div class =\"link\">\n <br> <a href=\"google.com\">click here </a>\n</div>\n<div class=\"resim\">\n<image src=\"http://i.imgur.com/WJToVGv.jpg\" > \n</div>\n\n<div class=\"kutu\">\n  <h1>Başlık</h1>\n  <p>Bu bir paragraf. Div içinde gruplanmış içerik.</p>\n  <button>Tıkla</button>\n<p>İkinci div yeni satırda başlar</p>\n\n<p>\n  Bugün <span id=highlight>HTML  </span> öğreniyoruz.\n  <span class=\"important\">Div ve span</span> çok önemli!\n</p>\n</div>\n\n<div class=\"gallery\">\n  <div class=\"card\">\n    <h4>Ürün 1</h4>\n    <p>Açıklama...</p>\n    <span>$49.99</span>\n  </div>\n  <div class=\"card\">\n    <h4>Ürün 2</h4>\n    <p>Açıklama...</p>\n    <span>$59.99</span>\n  </div>\n</div>\n      \n\n\n";
+    const cssCode = "\n.deneme {\ntext-align : center;\nborder: 5px solid red;\nbackground-color: pink;\n\n}\n.link{\ntext-align:center;}\n\n.resim{\ndisplay:inline-bock;\nmargin:10px;\npadding : 10px;\nborder:2px solid red;\nwidth:500px;\nheigth:100px;\n\n}\n\n.kutu {\nmargin:10px;\npadding:5px;\nborder:5px solid red;\ndisplay: inline-block;\n}\n\n\n#highlight{\nbackground-color:yellow;\n}\n\n.card{\nborder-radius:50%;\nborder:5px solid red;\ndisplay:inline-block;\n}\n\n";
 
     function openPreview() {
       const overlay = document.getElementById('overlay');
