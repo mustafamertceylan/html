@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Belgesi ve Temel Kavramlar - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    main{max-width:1200px;margin:0 auto;padding:3rem 2rem}
+    h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.05;margin-bottom:.8rem}
+    .desc{color:var(--muted);font-size:1rem;margin-bottom:3rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    @media(max-width:768px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.7rem 1.2rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block}
+    .code-area{background:var(--code-bg);padding:1.5rem;font-family:'Space Mono',monospace;font-size:.8rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.5rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:2rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.6rem 1.5rem;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.05em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+  </header>
+  <main>
+    <h1>HTML Belgesi ve Temel Kavramlar</h1>
+    <p class="desc">DOCTYPE, html, head, body, meta, title, br, em, &amp;hearts; — ilk HTML belgendeki tüm kavramların detaylı açıklaması</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot"></span> HTML Kodu</div>
+        <div class="code-area">&lt;h1&gt;📄 İlk HTML Belgesi — Satır Satır Analiz&lt;/h1&gt;
+
+&lt;p&gt;Aşağıdaki örnek, &lt;strong&gt;tam teşekküllü bir HTML4 belgesidir&lt;/strong&gt;. Her satırı inceleyelim:&lt;/p&gt;
+
+&lt;pre style=&quot;background:#1e1e2e; color:#f8f8f2; padding:1rem; overflow-x:auto; font-family:'Space Mono',monospace; font-size:0.8rem;&quot;&gt;
+&amp;lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;
+&quot;http://www.w3.org/TR/html4/strict.dtd&quot;&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&amp;gt;
+  &amp;lt;title&amp;gt;Hello HTML 4 World&amp;lt;/title&amp;gt;
+  &amp;lt;!-- Simple hello world in HTML 4.01 strict example --&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  &amp;lt;h1&amp;gt;Welcome to the World of HTML&amp;lt;/h1&amp;gt;
+  &amp;lt;br&amp;gt;
+  &amp;lt;p&amp;gt;HTML &amp;lt;em&amp;gt;really&amp;lt;/em&amp;gt; isn't so hard!&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Soon you will &amp;amp;hearts; using HTML.&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;You can put lots of text here if you want.
+  We could go on and on with fake text for you
+  to read, but let's get back to the book.&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/pre&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;🔍 1. DOCTYPE — Belge Türü Bildirimi&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/code&gt; (veya buradaki gibi uzun hali) tarayıcıya &lt;strong&gt;&quot;Bu bir HTML belgesidir&quot;&lt;/strong&gt; söyler. Eski HTML4 sürümünde hangi standartta çalışılacağını belirtir. Modern HTML5'te sadece &lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/code&gt; yazılır.&lt;/p&gt;
+
+&lt;h2&gt;📦 2. &amp;lt;html&amp;gt; — Kök Etiket&lt;/h2&gt;
+&lt;p&gt;Tüm HTML belgesini saran ana kutudur. Sayfanın başlangıcı ve bitişi bu etiketler arasındadır.&lt;/p&gt;
+
+&lt;h2&gt;🧠 3. &amp;lt;head&amp;gt; — Bilgi Bölümü&lt;/h2&gt;
+&lt;p&gt;Sayfada &lt;strong&gt;görünmeyen&lt;/strong&gt; ama tarayıcı ve arama motorları için önemli bilgiler buradadır:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;&amp;lt;meta charset=&quot;utf-8&quot;&amp;gt;&lt;/code&gt; → Türkçe karakterlerin (ğ,ü,ş,ı,ö,ç) doğru görünmesini sağlar.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;lt;title&amp;gt;&lt;/code&gt; → Tarayıcı sekmesinde görünen başlık.&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;lt;!-- yorum --&amp;gt;&lt;/code&gt; → Kod içine not almak için kullanılır, tarayıcı göstermez.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;👁️ 4. &amp;lt;body&amp;gt; — Görünen Kısım&lt;/h2&gt;
+&lt;p&gt;Kullanıcının tarayıcıda &lt;strong&gt;gördüğü her şey&lt;/strong&gt; bu etiketin içine yazılır: başlıklar, paragraflar, resimler, linkler...&lt;/p&gt;
+
+&lt;h2&gt;📝 5. &amp;lt;h1&amp;gt; — Ana Başlık&lt;/h2&gt;
+&lt;p&gt;Sayfanın en önemli başlığı. Genelde sayfada &lt;strong&gt;bir kez&lt;/strong&gt; kullanılır. Arama motorları için çok değerlidir.&lt;/p&gt;
+
+&lt;h2&gt;↩️ 6. &amp;lt;br&amp;gt; — Satır Sonu (Line Break)&lt;/h2&gt;
+&lt;p&gt;Kapanış etiketi &lt;strong&gt;olmayan&lt;/strong&gt; bir elementtir. Bulunduğu yerde metni bir alt satıra indirir. Paragraf boşluğu &lt;strong&gt;eklemez&lt;/strong&gt;, sadece satır atlatır.&lt;/p&gt;
+
+&lt;h2&gt;💪 7. &amp;lt;em&amp;gt; — Vurgu (emphasis)&lt;/h2&gt;
+&lt;p&gt;Metni &lt;em&gt;italik&lt;/em&gt; gösterir ve anlam olarak &lt;strong&gt;&quot;bu kelimeye dikkat et&quot;&lt;/strong&gt; mesajı verir. Ekran okuyucular vurgulu okur.&lt;/p&gt;
+
+&lt;h2&gt;❤️ 8. &amp;amp;hearts; — HTML Karakter Referansı (Entity)&lt;/h2&gt;
+&lt;p&gt;Klavyede olmayan sembolleri yazmak için kullanılır. &lt;code&gt;&amp;amp;hearts;&lt;/code&gt; → ❤️ kalp sembolü verir. Diğer örnekler:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;&amp;amp;lt;&lt;/code&gt; → &amp;lt; (küçüktür işareti)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;amp;gt;&lt;/code&gt; → &amp;gt; (büyüktür işareti)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;amp;amp;&lt;/code&gt; → &amp;amp; (ve işareti)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;amp;copy;&lt;/code&gt; → © (copyright)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;📄 9. Paragraf içinde uzun metin&lt;/h2&gt;
+&lt;p&gt;HTML'de &lt;strong&gt;satır sonları ve boşluklar&lt;/strong&gt; otomatik olarak sıkıştırılır. Örnekteki 3 satırlık metin tarayıcıda &lt;strong&gt;tek satır&lt;/strong&gt; olarak görünür. Satırı bölmek istersen &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; kullanman gerekir.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;🎯 Özet Tablo&lt;/h2&gt;
+&lt;table style=&quot;width:100%; border-collapse:collapse; background:#16161a;&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Etiket/Kavram&lt;/th&gt;&lt;th style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Ne İşe Yarar?&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;!DOCTYPE&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Tarayıcıya HTML sürümünü söyler&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Belgenin kökü&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Meta bilgiler, başlık, CSS bağlantıları&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;body&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Görünen içerik&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;h1&amp;gt;...&amp;lt;h6&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Başlıklar (h1 en büyük)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Paragraf&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Satır sonu (boşluksuz alt satır)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Vurgu (italik, anlamlı)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;amp;hearts;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Kalp sembolü ❤️&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;&lt;code&gt;&amp;lt;!-- --&amp;gt;&lt;/code&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #2a2a32; padding:8px;&quot;&gt;Yorum satırı (görünmez not)&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;🧪 Kendin Dene!&lt;/h2&gt;
+&lt;p&gt;Yukarıdaki kodu kopyalayıp kendi &lt;strong&gt;editor.html&lt;/strong&gt; sayfanda dene. Sonra şu değişiklikleri yap:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;&amp;amp;hearts;&lt;/code&gt; yerine &lt;code&gt;&amp;amp;copy;&lt;/code&gt; dene → ©&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt; yerine &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt; dene → &lt;strong&gt;kalın&lt;/strong&gt; vurgu&lt;/li&gt;
+  &lt;li&gt;Başlığı &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; yerine &lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt; yap ve farkı gör&lt;/li&gt;
+&lt;/ul&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area"><!-- USER_CODE_START -->
+<h1>📄 İlk HTML Belgesi — Satır Satır Analiz</h1>
+
+<p>Aşağıdaki örnek, <strong>tam teşekküllü bir HTML4 belgesidir</strong>. Her satırı inceleyelim:</p>
+
+<pre style="background:#1e1e2e; color:#f8f8f2; padding:1rem; overflow-x:auto; font-family:'Space Mono',monospace; font-size:0.8rem;">
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;
+  &lt;title&gt;Hello HTML 4 World&lt;/title&gt;
+  &lt;!-- Simple hello world in HTML 4.01 strict example --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Welcome to the World of HTML&lt;/h1&gt;
+  &lt;br&gt;
+  &lt;p&gt;HTML &lt;em&gt;really&lt;/em&gt; isn't so hard!&lt;/p&gt;
+  &lt;p&gt;Soon you will &amp;hearts; using HTML.&lt;/p&gt;
+  &lt;p&gt;You can put lots of text here if you want.
+  We could go on and on with fake text for you
+  to read, but let's get back to the book.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<hr>
+
+<h2>🔍 1. DOCTYPE — Belge Türü Bildirimi</h2>
+<p><code>&lt;!DOCTYPE html&gt;</code> (veya buradaki gibi uzun hali) tarayıcıya <strong>"Bu bir HTML belgesidir"</strong> söyler. Eski HTML4 sürümünde hangi standartta çalışılacağını belirtir. Modern HTML5'te sadece <code>&lt;!DOCTYPE html&gt;</code> yazılır.</p>
+
+<h2>📦 2. &lt;html&gt; — Kök Etiket</h2>
+<p>Tüm HTML belgesini saran ana kutudur. Sayfanın başlangıcı ve bitişi bu etiketler arasındadır.</p>
+
+<h2>🧠 3. &lt;head&gt; — Bilgi Bölümü</h2>
+<p>Sayfada <strong>görünmeyen</strong> ama tarayıcı ve arama motorları için önemli bilgiler buradadır:</p>
+<ul>
+  <li><code>&lt;meta charset="utf-8"&gt;</code> → Türkçe karakterlerin (ğ,ü,ş,ı,ö,ç) doğru görünmesini sağlar.</li>
+  <li><code>&lt;title&gt;</code> → Tarayıcı sekmesinde görünen başlık.</li>
+  <li><code>&lt;!-- yorum --&gt;</code> → Kod içine not almak için kullanılır, tarayıcı göstermez.</li>
+</ul>
+
+<h2>👁️ 4. &lt;body&gt; — Görünen Kısım</h2>
+<p>Kullanıcının tarayıcıda <strong>gördüğü her şey</strong> bu etiketin içine yazılır: başlıklar, paragraflar, resimler, linkler...</p>
+
+<h2>📝 5. &lt;h1&gt; — Ana Başlık</h2>
+<p>Sayfanın en önemli başlığı. Genelde sayfada <strong>bir kez</strong> kullanılır. Arama motorları için çok değerlidir.</p>
+
+<h2>↩️ 6. &lt;br&gt; — Satır Sonu (Line Break)</h2>
+<p>Kapanış etiketi <strong>olmayan</strong> bir elementtir. Bulunduğu yerde metni bir alt satıra indirir. Paragraf boşluğu <strong>eklemez</strong>, sadece satır atlatır.</p>
+
+<h2>💪 7. &lt;em&gt; — Vurgu (emphasis)</h2>
+<p>Metni <em>italik</em> gösterir ve anlam olarak <strong>"bu kelimeye dikkat et"</strong> mesajı verir. Ekran okuyucular vurgulu okur.</p>
+
+<h2>❤️ 8. &amp;hearts; — HTML Karakter Referansı (Entity)</h2>
+<p>Klavyede olmayan sembolleri yazmak için kullanılır. <code>&amp;hearts;</code> → ❤️ kalp sembolü verir. Diğer örnekler:</p>
+<ul>
+  <li><code>&amp;lt;</code> → &lt; (küçüktür işareti)</li>
+  <li><code>&amp;gt;</code> → &gt; (büyüktür işareti)</li>
+  <li><code>&amp;amp;</code> → &amp; (ve işareti)</li>
+  <li><code>&amp;copy;</code> → © (copyright)</li>
+</ul>
+
+<h2>📄 9. Paragraf içinde uzun metin</h2>
+<p>HTML'de <strong>satır sonları ve boşluklar</strong> otomatik olarak sıkıştırılır. Örnekteki 3 satırlık metin tarayıcıda <strong>tek satır</strong> olarak görünür. Satırı bölmek istersen <code>&lt;br&gt;</code> kullanman gerekir.</p>
+
+<hr>
+
+<h2>🎯 Özet Tablo</h2>
+<table style="width:100%; border-collapse:collapse; background:#16161a;">
+  <thead>
+    <tr><th style="border:1px solid #2a2a32; padding:8px;">Etiket/Kavram</th><th style="border:1px solid #2a2a32; padding:8px;">Ne İşe Yarar?</th></tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;!DOCTYPE&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Tarayıcıya HTML sürümünü söyler</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;html&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Belgenin kökü</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;head&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Meta bilgiler, başlık, CSS bağlantıları</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;body&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Görünen içerik</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;h1&gt;...&lt;h6&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Başlıklar (h1 en büyük)</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;p&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Paragraf</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;br&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Satır sonu (boşluksuz alt satır)</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;em&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Vurgu (italik, anlamlı)</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&amp;hearts;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Kalp sembolü ❤️</td></tr>
+    <tr><td style="border:1px solid #2a2a32; padding:8px;"><code>&lt;!-- --&gt;</code></td><td style="border:1px solid #2a2a32; padding:8px;">Yorum satırı (görünmez not)</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h2>🧪 Kendin Dene!</h2>
+<p>Yukarıdaki kodu kopyalayıp kendi <strong>editor.html</strong> sayfanda dene. Sonra şu değişiklikleri yap:</p>
+<ul>
+  <li><code>&amp;hearts;</code> yerine <code>&amp;copy;</code> dene → ©</li>
+  <li><code>&lt;em&gt;</code> yerine <code>&lt;strong&gt;</code> dene → <strong>kalın</strong> vurgu</li>
+  <li>Başlığı <code>&lt;h1&gt;</code> yerine <code>&lt;h2&gt;</code> yap ve farkı gör</li>
+</ul>
+<!-- USER_CODE_END --></div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=html-belgesi-ve-temel-kavramlar" class="btn btn-ghost">Duzenle</a>
+      <a href="/" class="btn">Listeye Don</a>
+    </div>
+  </main>
+</body>
+</html>
