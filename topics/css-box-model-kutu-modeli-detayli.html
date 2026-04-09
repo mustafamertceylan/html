@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Box Model — Kutu Modeli (Detaylı) - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>CSS Box Model — Kutu Modeli (Detaylı)</h1>
+    <p class="desc">CSS Box Model: Her HTML elementi bir kutudur. Content (içerik), Padding (iç boşluk), Border (kenarlık), Margin (dış boşluk) katmanlarının detaylı açıklaması. Toplam boyut hesaplama, box-sizing: border-box, margin collapse, pratik örnekler ve sık yapılan hatalar.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;CSS Box Model - Kutu Modeli - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-box-model.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📦 &lt;span class=&quot;highlight&quot;&gt;CSS Box Model&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Her HTML elementi bir kutudur — Margin · Border · Padding · Content&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: Box Model Nedir? --&gt;
+  &lt;h2&gt;📖 Box Model Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;CSS Box Model (Kutu Modeli)&lt;/strong&gt;, tüm HTML elementlerinin birer &lt;strong&gt;dikdörtgen kutu&lt;/strong&gt; olarak ele alındığını açıklayan temel bir kavramdır. Her kutu 4 katmandan oluşur:&lt;/p&gt;
+
+    &lt;div class=&quot;box-model-visual&quot;&gt;
+      &lt;div class=&quot;margin-area&quot;&gt;
+        &lt;div class=&quot;margin-label&quot;&gt;📐 MARGIN (Dış Boşluk)&lt;/div&gt;
+        &lt;div class=&quot;border-area&quot;&gt;
+          &lt;div class=&quot;border-label&quot;&gt;🖌️ BORDER (Kenarlık)&lt;/div&gt;
+          &lt;div class=&quot;padding-area&quot;&gt;
+            &lt;div class=&quot;padding-label&quot;&gt;📏 PADDING (İç Boşluk)&lt;/div&gt;
+            &lt;div class=&quot;content-area&quot;&gt;
+              &lt;div class=&quot;content-label&quot;&gt;📄 CONTENT (İçerik)&lt;/div&gt;
+              &lt;div style=&quot;padding: 1rem; text-align: center;&quot;&gt;Burada içerik var!&lt;br&gt;Metin, resim, diğer elementler...&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 Box Model'in 4 Katmanı (İçten Dışa):&lt;/strong&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Content (İçerik)&lt;/strong&gt; — Metin, resim veya diğer elementlerin bulunduğu alan&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Padding (İç Boşluk)&lt;/strong&gt; — İçerik ile border arasındaki boşluk&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Border (Kenarlık)&lt;/strong&gt; — Padding ve margin arasındaki çizgi/kenarlık&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Margin (Dış Boşluk)&lt;/strong&gt; — Bu kutunun diğer kutularla arasındaki dış boşluk&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Content (İçerik) --&gt;
+  &lt;h2&gt;📄 1. CONTENT — İçerik Alanı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Content&lt;/strong&gt;, kutunun en iç kısmıdır. Metin, resim, video veya diğer HTML elementleri bu alanda bulunur.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Content özellikleri */
+width: 300px;      /* İçerik genişliği */
+height: 200px;     /* İçerik yüksekliği */
+min-width: 100px;  /* Minimum genişlik */
+max-width: 500px;  /* Maksimum genişlik */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Content Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 200px; height: 80px; display: flex; align-items: center; justify-content: center;&quot;&gt;
+          width: 200px&lt;br&gt;height: 80px
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Bu kutunun &lt;strong&gt;content alanı&lt;/strong&gt; 200x80 pikseldir.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Önemli:&lt;/strong&gt; &lt;code&gt;width&lt;/code&gt; ve &lt;code&gt;height&lt;/code&gt; varsayılan olarak &lt;strong&gt;sadece content alanını&lt;/strong&gt; belirler. Padding ve border buna eklenir!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: Padding (İç Boşluk) --&gt;
+  &lt;h2&gt;📏 2. PADDING — İç Boşluk&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Padding&lt;/strong&gt;, içerik ile border arasındaki &lt;strong&gt;iç boşluk&lt;/strong&gt; alanıdır. Kutunun içindeki elementlerin kenarlara yapışmasını engeller.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Padding kullanımı */
+padding: 10px;              /* 4 yönde de 10px */
+padding: 10px 20px;         /* üst/alt:10px, sağ/sol:20px */
+padding: 10px 20px 30px;    /* üst:10px, sağ/sol:20px, alt:30px */
+padding: 10px 20px 30px 40px; /* üst, sağ, alt, sol (saat yönünde) */
+
+/* Tek yönlü padding */
+padding-top: 10px;
+padding-right: 20px;
+padding-bottom: 30px;
+padding-left: 40px;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Padding Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 20px; border: 1px solid #64c8ff;&quot;&gt;
+          &lt;span style=&quot;background: #e8ff47; color: #000; padding: 5px;&quot;&gt;İçerik&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Mavi border ile içerik arasında &lt;strong&gt;20px padding&lt;/strong&gt; var. İçerik kenara yapışmıyor!&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Padding'siz vs Padding'li Karşılaştırması&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; style=&quot;display: flex; gap: 1rem; flex-wrap: wrap;&quot;&gt;
+        &lt;div style=&quot;flex: 1; background: #3a3a4a; border: 1px solid #ff6464;&quot;&gt;
+          &lt;div style=&quot;background: #e8ff47; color: #000;&quot;&gt;Padding yok&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;flex: 1; background: #3a3a4a; border: 1px solid #64c8ff; padding: 20px;&quot;&gt;
+          &lt;div style=&quot;background: #e8ff47; color: #000;&quot;&gt;Padding 20px&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: Border (Kenarlık) --&gt;
+  &lt;h2&gt;🖌️ 3. BORDER — Kenarlık&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Border&lt;/strong&gt;, padding ve margin arasındaki &lt;strong&gt;kenarlık çizgisidir&lt;/strong&gt;. Stil, kalınlık ve renk olarak özelleştirilebilir.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Border kullanımı */
+border: 2px solid black;     /* kalınlık, stil, renk */
+border-width: 2px;
+border-style: solid;         /* solid, dotted, dashed, double, groove, ridge, inset, outset, none */
+border-color: #ff0000;
+
+/* Tek yönlü border */
+border-top: 2px solid red;
+border-right: 2px dashed green;
+border-bottom: 2px dotted blue;
+border-left: 2px double yellow;
+
+/* Border radius (yuvarlak köşeler) */
+border-radius: 10px;         /* 4 köşe de 10px */
+border-radius: 10px 20px;    /* sol-üst/sağ-alt:10px, sağ-üst/sol-alt:20px */
+border-radius: 50%;          /* Tam daire */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Border Stilleri&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; style=&quot;display: flex; gap: 1rem; flex-wrap: wrap;&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px solid #ff6464;&quot;&gt;solid&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px dotted #ff6464;&quot;&gt;dotted&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px dashed #ff6464;&quot;&gt;dashed&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px double #ff6464;&quot;&gt;double&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px groove #ff6464;&quot;&gt;groove&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 10px; border: 2px ridge #ff6464;&quot;&gt;ridge&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Border Radius (Yuvarlak Köşeler)&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot; style=&quot;display: flex; gap: 1rem; flex-wrap: wrap;&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 80px; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center;&quot;&gt;10px&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;&quot;&gt;20px&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 80px; height: 80px; border-radius: 40px; display: flex; align-items: center; justify-content: center;&quot;&gt;40px&lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;&quot;&gt;Daire&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Margin (Dış Boşluk) --&gt;
+  &lt;h2&gt;📐 4. MARGIN — Dış Boşluk&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Margin&lt;/strong&gt;, bu kutunun &lt;strong&gt;diğer kutularla arasındaki dış boşluktur&lt;/strong&gt;. Margin, elementin dışına eklenir ve diğer elementleri iter.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Margin kullanımı */
+margin: 10px;               /* 4 yönde de 10px */
+margin: 10px 20px;          /* üst/alt:10px, sağ/sol:20px */
+margin: 10px 20px 30px;     /* üst:10px, sağ/sol:20px, alt:30px */
+margin: 10px 20px 30px 40px; /* üst, sağ, alt, sol */
+
+/* Tek yönlü margin */
+margin-top: 10px;
+margin-right: 20px;
+margin-bottom: 30px;
+margin-left: 40px;
+
+/* Otomatik margin (ortalamak için) */
+margin: 0 auto;             /* Yatayda ortalama */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Margin Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 5px; margin-bottom: 20px;&quot;&gt;
+          &lt;div style=&quot;background: #e8ff47; color: #000; padding: 5px;&quot;&gt;Kutu 1 (margin-bottom: 20px)&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #64c8ff; padding: 5px;&quot;&gt;
+          &lt;div style=&quot;background: #e8ff47; color: #000; padding: 5px;&quot;&gt;Kutu 2&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ İki kutu arasında &lt;strong&gt;20px margin&lt;/strong&gt; var!&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Margin ile Ortalama&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 200px; margin: 0 auto; text-align: center; padding: 10px;&quot;&gt;
+          margin: 0 auto ile ortalanmış kutu
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Margin Çökmesi (Margin Collapse):&lt;/strong&gt; İki elementin dikey margin'leri birleştiğinde, &lt;strong&gt;en büyük olan&lt;/strong&gt; geçerli olur, toplanmaz!
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+Kutu A: margin-bottom: 30px;
+Kutu B: margin-top: 20px;
+→ Aralarındaki boşluk 50px DEĞİL, 30px olur!
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: Toplam Kutu Boyutu Hesaplama --&gt;
+  &lt;h2&gt;🧮 Toplam Kutu Boyutu Nasıl Hesaplanır?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Varsayılan olarak (box-sizing: content-box):&lt;/strong&gt;&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+Toplam Genişlik = width + padding-left + padding-right + border-left + border-right + margin-left + margin-right
+Toplam Yükseklik = height + padding-top + padding-bottom + border-top + border-bottom + margin-top + margin-bottom
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;📊 Örnek Hesaplama:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.kutu {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  margin: 10px;
+}
+
+Toplam Genişlik = 200 + 20 + 20 + 5 + 5 + 10 + 10 = 270px!
+                    ↑   ↑   ↑   ↑   ↑   ↑   ↑
+                  width pL pR bL bR mL mR
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Gerçek Örnek&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; width: 200px; padding: 20px; border: 5px solid #e8ff47; margin: 10px; text-align: center;&quot;&gt;
+          width: 200px&lt;br&gt;
+          padding: 20px&lt;br&gt;
+          border: 5px&lt;br&gt;
+          margin: 10px
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Bu kutunun toplam genişliği &lt;strong&gt;270px&lt;/strong&gt;! (200 + 20 + 20 + 5 + 5 + 10 + 10)&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: box-sizing Özelliği --&gt;
+  &lt;h2&gt;⚙️ box-sizing — Hayat Kurtaran Özellik&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;box-sizing&lt;/strong&gt; özelliği, &lt;code&gt;width&lt;/code&gt; ve &lt;code&gt;height&lt;/code&gt;'in &lt;strong&gt;nasıl hesaplanacağını&lt;/strong&gt; belirler. Bu, CSS'deki en önemli özelliklerden biridir!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* content-box (Varsayılan) */
+box-sizing: content-box;
+/* width ve height SADECE content alanını belirler */
+/* Padding ve border EKLENİR */
+
+/* border-box (ÖNERİLEN) */
+box-sizing: border-box;
+/* width ve height content + padding + border'ı içerir */
+/* Padding ve border EKSTRA ALAN EKLEMEZ! */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 border-box neden daha iyi?&lt;/strong&gt;
+      &lt;p&gt;Border-box ile &lt;strong&gt;kutunun tam boyutunu kontrol edebilirsiniz&lt;/strong&gt;. Padding veya border eklediğinizde kutu büyümez, içerik alanı küçülür.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 content-box vs border-box&lt;/h4&gt;
+      &lt;div class=&quot;box-sizing-demo&quot;&gt;
+        &lt;div class=&quot;box-sizing-item&quot;&gt;
+          &lt;strong&gt;content-box (Varsayılan)&lt;/strong&gt;
+          &lt;div class=&quot;box-content&quot; style=&quot;box-sizing: content-box; width: 200px; padding: 20px; border: 5px solid #ff6464;&quot;&gt;
+            200px width
+          &lt;/div&gt;
+          &lt;p style=&quot;font-size: 0.7rem; margin-top: 0.5rem;&quot;&gt;Toplam genişlik: &lt;strong&gt;250px&lt;/strong&gt; (200 + 40 + 10)&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;box-sizing-item&quot;&gt;
+          &lt;strong&gt;border-box (Önerilen)&lt;/strong&gt;
+          &lt;div class=&quot;box-content&quot; style=&quot;box-sizing: border-box; width: 200px; padding: 20px; border: 5px solid #64ff96;&quot;&gt;
+            200px width
+          &lt;/div&gt;
+          &lt;p style=&quot;font-size: 0.7rem; margin-top: 0.5rem;&quot;&gt;Toplam genişlik: &lt;strong&gt;200px&lt;/strong&gt; (padding ve border içeriye alınır)&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 En iyi pratik — Tüm elementlere border-box uygulayın:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Bu, tüm elementlerin &lt;strong&gt;daha öngörülebilir&lt;/strong&gt; boyutlarda olmasını sağlar!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Tüm Özelliklerin Detaylı Tablosu --&gt;
+  &lt;h2&gt;📋 Box Model Özellikleri Tablosu&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Örnek Değerler&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;width&lt;/code&gt;&lt;/td&gt;&lt;td&gt;İçerik genişliği&lt;/td&gt;&lt;td&gt;&lt;code&gt;200px, 50%, 100vw, auto&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;height&lt;/code&gt;&lt;/td&gt;&lt;td&gt;İçerik yüksekliği&lt;/td&gt;&lt;td&gt;&lt;code&gt;100px, 50vh, auto&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;min-width&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Minimum genişlik&lt;/td&gt;&lt;td&gt;&lt;code&gt;100px, 20%&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;max-width&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Maksimum genişlik&lt;/td&gt;&lt;td&gt;&lt;code&gt;500px, 80%&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;padding&lt;/code&gt;&lt;/td&gt;&lt;td&gt;İç boşluk (kısayol)&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 10px 20px, 10px 20px 30px 40px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;padding-top/right/bottom/left&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Tek yönlü iç boşluk&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 2rem, 5%&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kenarlık (kısayol)&lt;/td&gt;&lt;td&gt;&lt;code&gt;2px solid black, 1px dotted red&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border-width&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kenarlık kalınlığı&lt;/td&gt;&lt;td&gt;&lt;code&gt;1px, 2px, 0.5rem&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border-style&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kenarlık stili&lt;/td&gt;&lt;td&gt;&lt;code&gt;solid, dotted, dashed, double, none&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border-color&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kenarlık rengi&lt;/td&gt;&lt;td&gt;&lt;code&gt;red, #ff0000, rgb(255,0,0)&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border-radius&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Köşe yuvarlama&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 50%, 10px 20px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;margin&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Dış boşluk (kısayol)&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 10px 20px, 0 auto&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;margin-top/right/bottom/left&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Tek yönlü dış boşluk&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 2rem, 5%&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;box-sizing&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kutu boyutu hesaplama&lt;/td&gt;&lt;td&gt;&lt;code&gt;content-box, border-box&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 9: Pratik Örnekler --&gt;
+  &lt;h2&gt;💡 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;h3&gt;📌 Örnek 1: Kart Tasarımı&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.card {
+  width: 300px;
+  padding: 20px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: 20px;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  margin-bottom: 15px;
+}
+
+.card button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;width: 300px; padding: 20px; border-radius: 12px; background: white; color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);&quot;&gt;
+        &lt;h3 style=&quot;margin-bottom: 10px;&quot;&gt;📱 Ürün Kartı&lt;/h3&gt;
+        &lt;p style=&quot;margin-bottom: 15px;&quot;&gt;Bu kart, box model kullanılarak tasarlanmıştır. Padding, margin, border-radius ve box-shadow içerir.&lt;/p&gt;
+        &lt;button style=&quot;padding: 10px 20px; border: none; border-radius: 6px; background: #007bff; color: white;&quot;&gt;Satın Al&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 2: Profil Kartı&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.profile-card {
+  width: 250px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  border: 3px solid #e8ff47;
+}
+
+.profile-name {
+  margin-bottom: 5px;
+}
+
+.profile-title {
+  margin-bottom: 15px;
+  color: #666;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;width: 250px; padding: 20px; border: 1px solid #444; border-radius: 16px; text-align: center; background: #2a2a32;&quot;&gt;
+        &lt;div style=&quot;width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px; border: 3px solid #e8ff47; background: #3a3a4a; display: flex; align-items: center; justify-content: center;&quot;&gt;👤&lt;/div&gt;
+        &lt;h4 style=&quot;margin-bottom: 5px;&quot;&gt;Ahmet Yılmaz&lt;/h4&gt;
+        &lt;p style=&quot;margin-bottom: 15px; color: #aaa; font-size: 0.8rem;&quot;&gt;Frontend Developer&lt;/p&gt;
+        &lt;button style=&quot;padding: 8px 16px; border: none; border-radius: 8px; background: #e8ff47; color: #000;&quot;&gt;Takip Et&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 3: Buton Tasarımı&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;button style=&quot;padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; margin: 5px; background: #007bff; color: white;&quot;&gt;Primary Button&lt;/button&gt;
+      &lt;button style=&quot;padding: 12px 24px; border: 2px solid #e8ff47; border-radius: 8px; font-size: 16px; margin: 5px; background: transparent; color: #e8ff47;&quot;&gt;Outline Button&lt;/button&gt;
+      &lt;button style=&quot;padding: 12px 24px; border: none; border-radius: 50px; font-size: 16px; margin: 5px; background: #6bcb77; color: white;&quot;&gt;Pill Button&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 10: Sık Yapılan Hatalar --&gt;
+  &lt;h2&gt;⚠️ Sık Yapılan Hatalar ve Çözümleri&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; Padding ve border'ın toplam genişliğe eklendiğini unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.kutu {
+  width: 200px;
+  padding: 20px;   /* Toplam 240px olur! */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;box-sizing: border-box;&lt;/code&gt; kullanın!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; Margin çökmesini (collapse) bilmemek
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.kutu1 { margin-bottom: 30px; }
+.kutu2 { margin-top: 20px; }
+/* Aralarındaki boşluk 50px DEĞİL, 30px! */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Sadece bir yönde margin kullanın (örn: sadece margin-bottom).
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 3:&lt;/strong&gt; İnline elementlere margin/padding vermek
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+span {
+  margin: 20px;  /* Sadece sağ/sol çalışır, üst/alt çalışmaz! */
+  padding: 20px; /* Çalışır ama diğer elementleri etkilemez */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;display: inline-block;&lt;/code&gt; veya &lt;code&gt;display: block;&lt;/code&gt; kullanın.
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 4:&lt;/strong&gt; Yüzdesel margin/padding'in ebeveyne göre hesaplandığını unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.parent { width: 500px; }
+.child { padding: 10%; }  /* 500px'in %10'u = 50px */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Yüzdesel değerlerin her zaman &lt;strong&gt;ebeveynin genişliğine&lt;/strong&gt; göre hesaplandığını unutmayın!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 11: Özet --&gt;
+  &lt;h2&gt;📋 Box Model Özeti&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📦 &lt;strong&gt;Her HTML elementi bir kutudur&lt;/strong&gt; — Content, Padding, Border, Margin&lt;/li&gt;
+      &lt;li&gt;📄 &lt;strong&gt;Content&lt;/strong&gt; — İçerik alanı (width/height burayı belirler)&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;Padding&lt;/strong&gt; — İç boşluk (içerik ile border arası)&lt;/li&gt;
+      &lt;li&gt;🖌️ &lt;strong&gt;Border&lt;/strong&gt; — Kenarlık (stil, kalınlık, renk)&lt;/li&gt;
+      &lt;li&gt;📐 &lt;strong&gt;Margin&lt;/strong&gt; — Dış boşluk (diğer kutularla arası)&lt;/li&gt;
+      &lt;li&gt;🧮 &lt;strong&gt;Toplam genişlik&lt;/strong&gt; = width + padding + border + margin (content-box'ta)&lt;/li&gt;
+      &lt;li&gt;⚙️ &lt;strong&gt;box-sizing: border-box&lt;/strong&gt; — Tüm elementlere uygulayın! (Hayat kurtarır)&lt;/li&gt;
+      &lt;li&gt;⚠️ &lt;strong&gt;Margin collapse&lt;/strong&gt; — Dikey margin'ler birleşir, toplanmaz&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — CSS Box Model | Margin · Border · Padding · Content | box-sizing: border-box
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-box-model.css - CSS Box Model Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* BOX MODEL DEMO - Ana görsel */
+.box-model-visual {
+  background: #1a1a20;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.margin-area {
+  background: rgba(255, 200, 100, 0.3);
+  border: 2px dashed #ffc864;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.margin-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #ffc864;
+}
+
+.border-area {
+  background: rgba(255, 100, 100, 0.3);
+  border: 2px solid #ff6464;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.border-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #ff6464;
+}
+
+.padding-area {
+  background: rgba(100, 200, 255, 0.3);
+  border: 2px solid #64c8ff;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.padding-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #64c8ff;
+}
+
+.content-area {
+  background: rgba(100, 255, 150, 0.3);
+  border: 2px solid #64ff96;
+  padding: 1rem;
+}
+
+.content-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #64ff96;
+  margin-bottom: 0.5rem;
+}
+
+/* Örnek kutular */
+.example-box {
+  background: #e8ff47;
+  color: #000;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  margin: 1rem 0;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* box-sizing demo */
+.box-sizing-demo {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.box-sizing-item {
+  flex: 1;
+  min-width: 200px;
+  background: #2a2a32;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.box-content {
+  background: #3a3a4a;
+  width: 200px;
+  height: 100px;
+  margin: 0.5rem 0;
+  text-align: center;
+  line-height: 100px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .box-sizing-demo {
+    flex-direction: column;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Box Model - Kutu Modeli - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-box-model.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📦 <span class="highlight">CSS Box Model</span></h1>
+  <div class="subtitle">Her HTML elementi bir kutudur — Margin · Border · Padding · Content</div>
+
+  <!-- BÖLÜM 1: Box Model Nedir? -->
+  <h2>📖 Box Model Nedir?</h2>
+  <div class="card">
+    <p><strong>CSS Box Model (Kutu Modeli)</strong>, tüm HTML elementlerinin birer <strong>dikdörtgen kutu</strong> olarak ele alındığını açıklayan temel bir kavramdır. Her kutu 4 katmandan oluşur:</p>
+
+    <div class="box-model-visual">
+      <div class="margin-area">
+        <div class="margin-label">📐 MARGIN (Dış Boşluk)</div>
+        <div class="border-area">
+          <div class="border-label">🖌️ BORDER (Kenarlık)</div>
+          <div class="padding-area">
+            <div class="padding-label">📏 PADDING (İç Boşluk)</div>
+            <div class="content-area">
+              <div class="content-label">📄 CONTENT (İçerik)</div>
+              <div style="padding: 1rem; text-align: center;">Burada içerik var!<br>Metin, resim, diğer elementler...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 Box Model'in 4 Katmanı (İçten Dışa):</strong>
+      <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Content (İçerik)</strong> — Metin, resim veya diğer elementlerin bulunduğu alan</li>
+        <li><strong>Padding (İç Boşluk)</strong> — İçerik ile border arasındaki boşluk</li>
+        <li><strong>Border (Kenarlık)</strong> — Padding ve margin arasındaki çizgi/kenarlık</li>
+        <li><strong>Margin (Dış Boşluk)</strong> — Bu kutunun diğer kutularla arasındaki dış boşluk</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Content (İçerik) -->
+  <h2>📄 1. CONTENT — İçerik Alanı</h2>
+  <div class="card">
+    <p><strong>Content</strong>, kutunun en iç kısmıdır. Metin, resim, video veya diğer HTML elementleri bu alanda bulunur.</p>
+
+    <div class="code-block">
+      <pre>
+/* Content özellikleri */
+width: 300px;      /* İçerik genişliği */
+height: 200px;     /* İçerik yüksekliği */
+min-width: 100px;  /* Minimum genişlik */
+max-width: 500px;  /* Maksimum genişlik */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Content Örneği</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; width: 200px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          width: 200px<br>height: 80px
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Bu kutunun <strong>content alanı</strong> 200x80 pikseldir.</p>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Önemli:</strong> <code>width</code> ve <code>height</code> varsayılan olarak <strong>sadece content alanını</strong> belirler. Padding ve border buna eklenir!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: Padding (İç Boşluk) -->
+  <h2>📏 2. PADDING — İç Boşluk</h2>
+  <div class="card">
+    <p><strong>Padding</strong>, içerik ile border arasındaki <strong>iç boşluk</strong> alanıdır. Kutunun içindeki elementlerin kenarlara yapışmasını engeller.</p>
+
+    <div class="code-block">
+      <pre>
+/* Padding kullanımı */
+padding: 10px;              /* 4 yönde de 10px */
+padding: 10px 20px;         /* üst/alt:10px, sağ/sol:20px */
+padding: 10px 20px 30px;    /* üst:10px, sağ/sol:20px, alt:30px */
+padding: 10px 20px 30px 40px; /* üst, sağ, alt, sol (saat yönünde) */
+
+/* Tek yönlü padding */
+padding-top: 10px;
+padding-right: 20px;
+padding-bottom: 30px;
+padding-left: 40px;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Padding Örneği</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; padding: 20px; border: 1px solid #64c8ff;">
+          <span style="background: #e8ff47; color: #000; padding: 5px;">İçerik</span>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Mavi border ile içerik arasında <strong>20px padding</strong> var. İçerik kenara yapışmıyor!</p>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Padding'siz vs Padding'li Karşılaştırması</h4>
+      <div class="demo-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="flex: 1; background: #3a3a4a; border: 1px solid #ff6464;">
+          <div style="background: #e8ff47; color: #000;">Padding yok</div>
+        </div>
+        <div style="flex: 1; background: #3a3a4a; border: 1px solid #64c8ff; padding: 20px;">
+          <div style="background: #e8ff47; color: #000;">Padding 20px</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: Border (Kenarlık) -->
+  <h2>🖌️ 3. BORDER — Kenarlık</h2>
+  <div class="card">
+    <p><strong>Border</strong>, padding ve margin arasındaki <strong>kenarlık çizgisidir</strong>. Stil, kalınlık ve renk olarak özelleştirilebilir.</p>
+
+    <div class="code-block">
+      <pre>
+/* Border kullanımı */
+border: 2px solid black;     /* kalınlık, stil, renk */
+border-width: 2px;
+border-style: solid;         /* solid, dotted, dashed, double, groove, ridge, inset, outset, none */
+border-color: #ff0000;
+
+/* Tek yönlü border */
+border-top: 2px solid red;
+border-right: 2px dashed green;
+border-bottom: 2px dotted blue;
+border-left: 2px double yellow;
+
+/* Border radius (yuvarlak köşeler) */
+border-radius: 10px;         /* 4 köşe de 10px */
+border-radius: 10px 20px;    /* sol-üst/sağ-alt:10px, sağ-üst/sol-alt:20px */
+border-radius: 50%;          /* Tam daire */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Border Stilleri</h4>
+      <div class="demo-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="background: #3a3a4a; padding: 10px; border: 2px solid #ff6464;">solid</div>
+        <div style="background: #3a3a4a; padding: 10px; border: 2px dotted #ff6464;">dotted</div>
+        <div style="background: #3a3a4a; padding: 10px; border: 2px dashed #ff6464;">dashed</div>
+        <div style="background: #3a3a4a; padding: 10px; border: 2px double #ff6464;">double</div>
+        <div style="background: #3a3a4a; padding: 10px; border: 2px groove #ff6464;">groove</div>
+        <div style="background: #3a3a4a; padding: 10px; border: 2px ridge #ff6464;">ridge</div>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Border Radius (Yuvarlak Köşeler)</h4>
+      <div class="demo-container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="background: #3a3a4a; width: 80px; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">10px</div>
+        <div style="background: #3a3a4a; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;">20px</div>
+        <div style="background: #3a3a4a; width: 80px; height: 80px; border-radius: 40px; display: flex; align-items: center; justify-content: center;">40px</div>
+        <div style="background: #3a3a4a; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">Daire</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Margin (Dış Boşluk) -->
+  <h2>📐 4. MARGIN — Dış Boşluk</h2>
+  <div class="card">
+    <p><strong>Margin</strong>, bu kutunun <strong>diğer kutularla arasındaki dış boşluktur</strong>. Margin, elementin dışına eklenir ve diğer elementleri iter.</p>
+
+    <div class="code-block">
+      <pre>
+/* Margin kullanımı */
+margin: 10px;               /* 4 yönde de 10px */
+margin: 10px 20px;          /* üst/alt:10px, sağ/sol:20px */
+margin: 10px 20px 30px;     /* üst:10px, sağ/sol:20px, alt:30px */
+margin: 10px 20px 30px 40px; /* üst, sağ, alt, sol */
+
+/* Tek yönlü margin */
+margin-top: 10px;
+margin-right: 20px;
+margin-bottom: 30px;
+margin-left: 40px;
+
+/* Otomatik margin (ortalamak için) */
+margin: 0 auto;             /* Yatayda ortalama */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Margin Örneği</h4>
+      <div class="demo-container">
+        <div style="background: #ff6464; padding: 5px; margin-bottom: 20px;">
+          <div style="background: #e8ff47; color: #000; padding: 5px;">Kutu 1 (margin-bottom: 20px)</div>
+        </div>
+        <div style="background: #64c8ff; padding: 5px;">
+          <div style="background: #e8ff47; color: #000; padding: 5px;">Kutu 2</div>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ İki kutu arasında <strong>20px margin</strong> var!</p>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Margin ile Ortalama</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; width: 200px; margin: 0 auto; text-align: center; padding: 10px;">
+          margin: 0 auto ile ortalanmış kutu
+        </div>
+      </div>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Margin Çökmesi (Margin Collapse):</strong> İki elementin dikey margin'leri birleştiğinde, <strong>en büyük olan</strong> geçerli olur, toplanmaz!
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+Kutu A: margin-bottom: 30px;
+Kutu B: margin-top: 20px;
+→ Aralarındaki boşluk 50px DEĞİL, 30px olur!
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: Toplam Kutu Boyutu Hesaplama -->
+  <h2>🧮 Toplam Kutu Boyutu Nasıl Hesaplanır?</h2>
+  <div class="card">
+    <p><strong>Varsayılan olarak (box-sizing: content-box):</strong></p>
+    <div class="code-block">
+      <pre>
+Toplam Genişlik = width + padding-left + padding-right + border-left + border-right + margin-left + margin-right
+Toplam Yükseklik = height + padding-top + padding-bottom + border-top + border-bottom + margin-top + margin-bottom
+      </pre>
+    </div>
+
+    <div class="success-note">
+      <strong>📊 Örnek Hesaplama:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.kutu {
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  margin: 10px;
+}
+
+Toplam Genişlik = 200 + 20 + 20 + 5 + 5 + 10 + 10 = 270px!
+                    ↑   ↑   ↑   ↑   ↑   ↑   ↑
+                  width pL pR bL bR mL mR
+        </pre>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Gerçek Örnek</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; width: 200px; padding: 20px; border: 5px solid #e8ff47; margin: 10px; text-align: center;">
+          width: 200px<br>
+          padding: 20px<br>
+          border: 5px<br>
+          margin: 10px
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Bu kutunun toplam genişliği <strong>270px</strong>! (200 + 20 + 20 + 5 + 5 + 10 + 10)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: box-sizing Özelliği -->
+  <h2>⚙️ box-sizing — Hayat Kurtaran Özellik</h2>
+  <div class="card">
+    <p><strong>box-sizing</strong> özelliği, <code>width</code> ve <code>height</code>'in <strong>nasıl hesaplanacağını</strong> belirler. Bu, CSS'deki en önemli özelliklerden biridir!</p>
+
+    <div class="code-block">
+      <pre>
+/* content-box (Varsayılan) */
+box-sizing: content-box;
+/* width ve height SADECE content alanını belirler */
+/* Padding ve border EKLENİR */
+
+/* border-box (ÖNERİLEN) */
+box-sizing: border-box;
+/* width ve height content + padding + border'ı içerir */
+/* Padding ve border EKSTRA ALAN EKLEMEZ! */
+      </pre>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 border-box neden daha iyi?</strong>
+      <p>Border-box ile <strong>kutunun tam boyutunu kontrol edebilirsiniz</strong>. Padding veya border eklediğinizde kutu büyümez, içerik alanı küçülür.</p>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 content-box vs border-box</h4>
+      <div class="box-sizing-demo">
+        <div class="box-sizing-item">
+          <strong>content-box (Varsayılan)</strong>
+          <div class="box-content" style="box-sizing: content-box; width: 200px; padding: 20px; border: 5px solid #ff6464;">
+            200px width
+          </div>
+          <p style="font-size: 0.7rem; margin-top: 0.5rem;">Toplam genişlik: <strong>250px</strong> (200 + 40 + 10)</p>
+        </div>
+        <div class="box-sizing-item">
+          <strong>border-box (Önerilen)</strong>
+          <div class="box-content" style="box-sizing: border-box; width: 200px; padding: 20px; border: 5px solid #64ff96;">
+            200px width
+          </div>
+          <p style="font-size: 0.7rem; margin-top: 0.5rem;">Toplam genişlik: <strong>200px</strong> (padding ve border içeriye alınır)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 En iyi pratik — Tüm elementlere border-box uygulayın:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+        </pre>
+      </div>
+      <p>Bu, tüm elementlerin <strong>daha öngörülebilir</strong> boyutlarda olmasını sağlar!</p>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Tüm Özelliklerin Detaylı Tablosu -->
+  <h2>📋 Box Model Özellikleri Tablosu</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Özellik</th><th>Açıklama</th><th>Örnek Değerler</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>width</code></td><td>İçerik genişliği</td><td><code>200px, 50%, 100vw, auto</code></td></tr>
+      <tr><td><code>height</code></td><td>İçerik yüksekliği</td><td><code>100px, 50vh, auto</code></td></tr>
+      <tr><td><code>min-width</code></td><td>Minimum genişlik</td><td><code>100px, 20%</code></td></tr>
+      <tr><td><code>max-width</code></td><td>Maksimum genişlik</td><td><code>500px, 80%</code></td></tr>
+      <tr><td><code>padding</code></td><td>İç boşluk (kısayol)</td><td><code>10px, 10px 20px, 10px 20px 30px 40px</code></td></tr>
+      <tr><td><code>padding-top/right/bottom/left</code></td><td>Tek yönlü iç boşluk</td><td><code>10px, 2rem, 5%</code></td></tr>
+      <tr><td><code>border</code></td><td>Kenarlık (kısayol)</td><td><code>2px solid black, 1px dotted red</code></td></tr>
+      <tr><td><code>border-width</code></td><td>Kenarlık kalınlığı</td><td><code>1px, 2px, 0.5rem</code></td></tr>
+      <tr><td><code>border-style</code></td><td>Kenarlık stili</td><td><code>solid, dotted, dashed, double, none</code></td></tr>
+      <tr><td><code>border-color</code></td><td>Kenarlık rengi</td><td><code>red, #ff0000, rgb(255,0,0)</code></td></tr>
+      <tr><td><code>border-radius</code></td><td>Köşe yuvarlama</td><td><code>10px, 50%, 10px 20px</code></td></tr>
+      <tr><td><code>margin</code></td><td>Dış boşluk (kısayol)</td><td><code>10px, 10px 20px, 0 auto</code></td></tr>
+      <tr><td><code>margin-top/right/bottom/left</code></td><td>Tek yönlü dış boşluk</td><td><code>10px, 2rem, 5%</code></td></tr>
+      <tr><td><code>box-sizing</code></td><td>Kutu boyutu hesaplama</td><td><code>content-box, border-box</code></td></tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 9: Pratik Örnekler -->
+  <h2>💡 Pratik Örnekler</h2>
+
+  <h3>📌 Örnek 1: Kart Tasarımı</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.card {
+  width: 300px;
+  padding: 20px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: 20px;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  margin-bottom: 15px;
+}
+
+.card button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="width: 300px; padding: 20px; border-radius: 12px; background: white; color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <h3 style="margin-bottom: 10px;">📱 Ürün Kartı</h3>
+        <p style="margin-bottom: 15px;">Bu kart, box model kullanılarak tasarlanmıştır. Padding, margin, border-radius ve box-shadow içerir.</p>
+        <button style="padding: 10px 20px; border: none; border-radius: 6px; background: #007bff; color: white;">Satın Al</button>
+      </div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 2: Profil Kartı</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.profile-card {
+  width: 250px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  border: 3px solid #e8ff47;
+}
+
+.profile-name {
+  margin-bottom: 5px;
+}
+
+.profile-title {
+  margin-bottom: 15px;
+  color: #666;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="width: 250px; padding: 20px; border: 1px solid #444; border-radius: 16px; text-align: center; background: #2a2a32;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px; border: 3px solid #e8ff47; background: #3a3a4a; display: flex; align-items: center; justify-content: center;">👤</div>
+        <h4 style="margin-bottom: 5px;">Ahmet Yılmaz</h4>
+        <p style="margin-bottom: 15px; color: #aaa; font-size: 0.8rem;">Frontend Developer</p>
+        <button style="padding: 8px 16px; border: none; border-radius: 8px; background: #e8ff47; color: #000;">Takip Et</button>
+      </div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 3: Buton Tasarımı</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <button style="padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; margin: 5px; background: #007bff; color: white;">Primary Button</button>
+      <button style="padding: 12px 24px; border: 2px solid #e8ff47; border-radius: 8px; font-size: 16px; margin: 5px; background: transparent; color: #e8ff47;">Outline Button</button>
+      <button style="padding: 12px 24px; border: none; border-radius: 50px; font-size: 16px; margin: 5px; background: #6bcb77; color: white;">Pill Button</button>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 10: Sık Yapılan Hatalar -->
+  <h2>⚠️ Sık Yapılan Hatalar ve Çözümleri</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> Padding ve border'ın toplam genişliğe eklendiğini unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.kutu {
+  width: 200px;
+  padding: 20px;   /* Toplam 240px olur! */
+}
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>box-sizing: border-box;</code> kullanın!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> Margin çökmesini (collapse) bilmemek
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.kutu1 { margin-bottom: 30px; }
+.kutu2 { margin-top: 20px; }
+/* Aralarındaki boşluk 50px DEĞİL, 30px! */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> Sadece bir yönde margin kullanın (örn: sadece margin-bottom).
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 3:</strong> İnline elementlere margin/padding vermek
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+span {
+  margin: 20px;  /* Sadece sağ/sol çalışır, üst/alt çalışmaz! */
+  padding: 20px; /* Çalışır ama diğer elementleri etkilemez */
+}
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>display: inline-block;</code> veya <code>display: block;</code> kullanın.
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 4:</strong> Yüzdesel margin/padding'in ebeveyne göre hesaplandığını unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.parent { width: 500px; }
+.child { padding: 10%; }  /* 500px'in %10'u = 50px */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> Yüzdesel değerlerin her zaman <strong>ebeveynin genişliğine</strong> göre hesaplandığını unutmayın!
+    </div>
+  </div>
+
+  <!-- BÖLÜM 11: Özet -->
+  <h2>📋 Box Model Özeti</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📦 <strong>Her HTML elementi bir kutudur</strong> — Content, Padding, Border, Margin</li>
+      <li>📄 <strong>Content</strong> — İçerik alanı (width/height burayı belirler)</li>
+      <li>📏 <strong>Padding</strong> — İç boşluk (içerik ile border arası)</li>
+      <li>🖌️ <strong>Border</strong> — Kenarlık (stil, kalınlık, renk)</li>
+      <li>📐 <strong>Margin</strong> — Dış boşluk (diğer kutularla arası)</li>
+      <li>🧮 <strong>Toplam genişlik</strong> = width + padding + border + margin (content-box'ta)</li>
+      <li>⚙️ <strong>box-sizing: border-box</strong> — Tüm elementlere uygulayın! (Hayat kurtarır)</li>
+      <li>⚠️ <strong>Margin collapse</strong> — Dikey margin'ler birleşir, toplanmaz</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — CSS Box Model | Margin · Border · Padding · Content | box-sizing: border-box
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-box-model.css - CSS Box Model Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* BOX MODEL DEMO - Ana görsel */
+.box-model-visual {
+  background: #1a1a20;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.margin-area {
+  background: rgba(255, 200, 100, 0.3);
+  border: 2px dashed #ffc864;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.margin-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #ffc864;
+}
+
+.border-area {
+  background: rgba(255, 100, 100, 0.3);
+  border: 2px solid #ff6464;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.border-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #ff6464;
+}
+
+.padding-area {
+  background: rgba(100, 200, 255, 0.3);
+  border: 2px solid #64c8ff;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.padding-label {
+  position: absolute;
+  top: -1.2rem;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #64c8ff;
+}
+
+.content-area {
+  background: rgba(100, 255, 150, 0.3);
+  border: 2px solid #64ff96;
+  padding: 1rem;
+}
+
+.content-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #64ff96;
+  margin-bottom: 0.5rem;
+}
+
+/* Örnek kutular */
+.example-box {
+  background: #e8ff47;
+  color: #000;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  margin: 1rem 0;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* box-sizing demo */
+.box-sizing-demo {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.box-sizing-item {
+  flex: 1;
+  min-width: 200px;
+  background: #2a2a32;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.box-content {
+  background: #3a3a4a;
+  width: 200px;
+  height: 100px;
+  margin: 0.5rem 0;
+  text-align: center;
+  line-height: 100px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .box-sizing-demo {
+    flex-direction: column;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=css-box-model-kutu-modeli-detayli" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>CSS Box Model — Kutu Modeli (Detaylı) — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>CSS Box Model - Kutu Modeli - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-box-model.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📦 <span class=\"highlight\">CSS Box Model</span></h1>\n  <div class=\"subtitle\">Her HTML elementi bir kutudur — Margin · Border · Padding · Content</div>\n\n  <!-- BÖLÜM 1: Box Model Nedir? -->\n  <h2>📖 Box Model Nedir?</h2>\n  <div class=\"card\">\n    <p><strong>CSS Box Model (Kutu Modeli)</strong>, tüm HTML elementlerinin birer <strong>dikdörtgen kutu</strong> olarak ele alındığını açıklayan temel bir kavramdır. Her kutu 4 katmandan oluşur:</p>\n\n    <div class=\"box-model-visual\">\n      <div class=\"margin-area\">\n        <div class=\"margin-label\">📐 MARGIN (Dış Boşluk)</div>\n        <div class=\"border-area\">\n          <div class=\"border-label\">🖌️ BORDER (Kenarlık)</div>\n          <div class=\"padding-area\">\n            <div class=\"padding-label\">📏 PADDING (İç Boşluk)</div>\n            <div class=\"content-area\">\n              <div class=\"content-label\">📄 CONTENT (İçerik)</div>\n              <div style=\"padding: 1rem; text-align: center;\">Burada içerik var!<br>Metin, resim, diğer elementler...</div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 Box Model'in 4 Katmanı (İçten Dışa):</strong>\n      <ol style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>Content (İçerik)</strong> — Metin, resim veya diğer elementlerin bulunduğu alan</li>\n        <li><strong>Padding (İç Boşluk)</strong> — İçerik ile border arasındaki boşluk</li>\n        <li><strong>Border (Kenarlık)</strong> — Padding ve margin arasındaki çizgi/kenarlık</li>\n        <li><strong>Margin (Dış Boşluk)</strong> — Bu kutunun diğer kutularla arasındaki dış boşluk</li>\n      </ol>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Content (İçerik) -->\n  <h2>📄 1. CONTENT — İçerik Alanı</h2>\n  <div class=\"card\">\n    <p><strong>Content</strong>, kutunun en iç kısmıdır. Metin, resim, video veya diğer HTML elementleri bu alanda bulunur.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Content özellikleri */\nwidth: 300px;      /* İçerik genişliği */\nheight: 200px;     /* İçerik yüksekliği */\nmin-width: 100px;  /* Minimum genişlik */\nmax-width: 500px;  /* Maksimum genişlik */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Content Örneği</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; width: 200px; height: 80px; display: flex; align-items: center; justify-content: center;\">\n          width: 200px<br>height: 80px\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Bu kutunun <strong>content alanı</strong> 200x80 pikseldir.</p>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Önemli:</strong> <code>width</code> ve <code>height</code> varsayılan olarak <strong>sadece content alanını</strong> belirler. Padding ve border buna eklenir!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: Padding (İç Boşluk) -->\n  <h2>📏 2. PADDING — İç Boşluk</h2>\n  <div class=\"card\">\n    <p><strong>Padding</strong>, içerik ile border arasındaki <strong>iç boşluk</strong> alanıdır. Kutunun içindeki elementlerin kenarlara yapışmasını engeller.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Padding kullanımı */\npadding: 10px;              /* 4 yönde de 10px */\npadding: 10px 20px;         /* üst/alt:10px, sağ/sol:20px */\npadding: 10px 20px 30px;    /* üst:10px, sağ/sol:20px, alt:30px */\npadding: 10px 20px 30px 40px; /* üst, sağ, alt, sol (saat yönünde) */\n\n/* Tek yönlü padding */\npadding-top: 10px;\npadding-right: 20px;\npadding-bottom: 30px;\npadding-left: 40px;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Padding Örneği</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; padding: 20px; border: 1px solid #64c8ff;\">\n          <span style=\"background: #e8ff47; color: #000; padding: 5px;\">İçerik</span>\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Mavi border ile içerik arasında <strong>20px padding</strong> var. İçerik kenara yapışmıyor!</p>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Padding'siz vs Padding'li Karşılaştırması</h4>\n      <div class=\"demo-container\" style=\"display: flex; gap: 1rem; flex-wrap: wrap;\">\n        <div style=\"flex: 1; background: #3a3a4a; border: 1px solid #ff6464;\">\n          <div style=\"background: #e8ff47; color: #000;\">Padding yok</div>\n        </div>\n        <div style=\"flex: 1; background: #3a3a4a; border: 1px solid #64c8ff; padding: 20px;\">\n          <div style=\"background: #e8ff47; color: #000;\">Padding 20px</div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: Border (Kenarlık) -->\n  <h2>🖌️ 3. BORDER — Kenarlık</h2>\n  <div class=\"card\">\n    <p><strong>Border</strong>, padding ve margin arasındaki <strong>kenarlık çizgisidir</strong>. Stil, kalınlık ve renk olarak özelleştirilebilir.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Border kullanımı */\nborder: 2px solid black;     /* kalınlık, stil, renk */\nborder-width: 2px;\nborder-style: solid;         /* solid, dotted, dashed, double, groove, ridge, inset, outset, none */\nborder-color: #ff0000;\n\n/* Tek yönlü border */\nborder-top: 2px solid red;\nborder-right: 2px dashed green;\nborder-bottom: 2px dotted blue;\nborder-left: 2px double yellow;\n\n/* Border radius (yuvarlak köşeler) */\nborder-radius: 10px;         /* 4 köşe de 10px */\nborder-radius: 10px 20px;    /* sol-üst/sağ-alt:10px, sağ-üst/sol-alt:20px */\nborder-radius: 50%;          /* Tam daire */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Border Stilleri</h4>\n      <div class=\"demo-container\" style=\"display: flex; gap: 1rem; flex-wrap: wrap;\">\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px solid #ff6464;\">solid</div>\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px dotted #ff6464;\">dotted</div>\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px dashed #ff6464;\">dashed</div>\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px double #ff6464;\">double</div>\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px groove #ff6464;\">groove</div>\n        <div style=\"background: #3a3a4a; padding: 10px; border: 2px ridge #ff6464;\">ridge</div>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Border Radius (Yuvarlak Köşeler)</h4>\n      <div class=\"demo-container\" style=\"display: flex; gap: 1rem; flex-wrap: wrap;\">\n        <div style=\"background: #3a3a4a; width: 80px; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center;\">10px</div>\n        <div style=\"background: #3a3a4a; width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;\">20px</div>\n        <div style=\"background: #3a3a4a; width: 80px; height: 80px; border-radius: 40px; display: flex; align-items: center; justify-content: center;\">40px</div>\n        <div style=\"background: #3a3a4a; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center;\">Daire</div>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Margin (Dış Boşluk) -->\n  <h2>📐 4. MARGIN — Dış Boşluk</h2>\n  <div class=\"card\">\n    <p><strong>Margin</strong>, bu kutunun <strong>diğer kutularla arasındaki dış boşluktur</strong>. Margin, elementin dışına eklenir ve diğer elementleri iter.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Margin kullanımı */\nmargin: 10px;               /* 4 yönde de 10px */\nmargin: 10px 20px;          /* üst/alt:10px, sağ/sol:20px */\nmargin: 10px 20px 30px;     /* üst:10px, sağ/sol:20px, alt:30px */\nmargin: 10px 20px 30px 40px; /* üst, sağ, alt, sol */\n\n/* Tek yönlü margin */\nmargin-top: 10px;\nmargin-right: 20px;\nmargin-bottom: 30px;\nmargin-left: 40px;\n\n/* Otomatik margin (ortalamak için) */\nmargin: 0 auto;             /* Yatayda ortalama */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Margin Örneği</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #ff6464; padding: 5px; margin-bottom: 20px;\">\n          <div style=\"background: #e8ff47; color: #000; padding: 5px;\">Kutu 1 (margin-bottom: 20px)</div>\n        </div>\n        <div style=\"background: #64c8ff; padding: 5px;\">\n          <div style=\"background: #e8ff47; color: #000; padding: 5px;\">Kutu 2</div>\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ İki kutu arasında <strong>20px margin</strong> var!</p>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Margin ile Ortalama</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; width: 200px; margin: 0 auto; text-align: center; padding: 10px;\">\n          margin: 0 auto ile ortalanmış kutu\n        </div>\n      </div>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Margin Çökmesi (Margin Collapse):</strong> İki elementin dikey margin'leri birleştiğinde, <strong>en büyük olan</strong> geçerli olur, toplanmaz!\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nKutu A: margin-bottom: 30px;\nKutu B: margin-top: 20px;\n→ Aralarındaki boşluk 50px DEĞİL, 30px olur!\n        </pre>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: Toplam Kutu Boyutu Hesaplama -->\n  <h2>🧮 Toplam Kutu Boyutu Nasıl Hesaplanır?</h2>\n  <div class=\"card\">\n    <p><strong>Varsayılan olarak (box-sizing: content-box):</strong></p>\n    <div class=\"code-block\">\n      <pre>\nToplam Genişlik = width + padding-left + padding-right + border-left + border-right + margin-left + margin-right\nToplam Yükseklik = height + padding-top + padding-bottom + border-top + border-bottom + margin-top + margin-bottom\n      </pre>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>📊 Örnek Hesaplama:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.kutu {\n  width: 200px;\n  padding: 20px;\n  border: 5px solid black;\n  margin: 10px;\n}\n\nToplam Genişlik = 200 + 20 + 20 + 5 + 5 + 10 + 10 = 270px!\n                    ↑   ↑   ↑   ↑   ↑   ↑   ↑\n                  width pL pR bL bR mL mR\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Gerçek Örnek</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; width: 200px; padding: 20px; border: 5px solid #e8ff47; margin: 10px; text-align: center;\">\n          width: 200px<br>\n          padding: 20px<br>\n          border: 5px<br>\n          margin: 10px\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Bu kutunun toplam genişliği <strong>270px</strong>! (200 + 20 + 20 + 5 + 5 + 10 + 10)</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: box-sizing Özelliği -->\n  <h2>⚙️ box-sizing — Hayat Kurtaran Özellik</h2>\n  <div class=\"card\">\n    <p><strong>box-sizing</strong> özelliği, <code>width</code> ve <code>height</code>'in <strong>nasıl hesaplanacağını</strong> belirler. Bu, CSS'deki en önemli özelliklerden biridir!</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* content-box (Varsayılan) */\nbox-sizing: content-box;\n/* width ve height SADECE content alanını belirler */\n/* Padding ve border EKLENİR */\n\n/* border-box (ÖNERİLEN) */\nbox-sizing: border-box;\n/* width ve height content + padding + border'ı içerir */\n/* Padding ve border EKSTRA ALAN EKLEMEZ! */\n      </pre>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 border-box neden daha iyi?</strong>\n      <p>Border-box ile <strong>kutunun tam boyutunu kontrol edebilirsiniz</strong>. Padding veya border eklediğinizde kutu büyümez, içerik alanı küçülür.</p>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 content-box vs border-box</h4>\n      <div class=\"box-sizing-demo\">\n        <div class=\"box-sizing-item\">\n          <strong>content-box (Varsayılan)</strong>\n          <div class=\"box-content\" style=\"box-sizing: content-box; width: 200px; padding: 20px; border: 5px solid #ff6464;\">\n            200px width\n          </div>\n          <p style=\"font-size: 0.7rem; margin-top: 0.5rem;\">Toplam genişlik: <strong>250px</strong> (200 + 40 + 10)</p>\n        </div>\n        <div class=\"box-sizing-item\">\n          <strong>border-box (Önerilen)</strong>\n          <div class=\"box-content\" style=\"box-sizing: border-box; width: 200px; padding: 20px; border: 5px solid #64ff96;\">\n            200px width\n          </div>\n          <p style=\"font-size: 0.7rem; margin-top: 0.5rem;\">Toplam genişlik: <strong>200px</strong> (padding ve border içeriye alınır)</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 En iyi pratik — Tüm elementlere border-box uygulayın:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n        </pre>\n      </div>\n      <p>Bu, tüm elementlerin <strong>daha öngörülebilir</strong> boyutlarda olmasını sağlar!</p>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Tüm Özelliklerin Detaylı Tablosu -->\n  <h2>📋 Box Model Özellikleri Tablosu</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Özellik</th><th>Açıklama</th><th>Örnek Değerler</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>width</code></td><td>İçerik genişliği</td><td><code>200px, 50%, 100vw, auto</code></td></tr>\n      <tr><td><code>height</code></td><td>İçerik yüksekliği</td><td><code>100px, 50vh, auto</code></td></tr>\n      <tr><td><code>min-width</code></td><td>Minimum genişlik</td><td><code>100px, 20%</code></td></tr>\n      <tr><td><code>max-width</code></td><td>Maksimum genişlik</td><td><code>500px, 80%</code></td></tr>\n      <tr><td><code>padding</code></td><td>İç boşluk (kısayol)</td><td><code>10px, 10px 20px, 10px 20px 30px 40px</code></td></tr>\n      <tr><td><code>padding-top/right/bottom/left</code></td><td>Tek yönlü iç boşluk</td><td><code>10px, 2rem, 5%</code></td></tr>\n      <tr><td><code>border</code></td><td>Kenarlık (kısayol)</td><td><code>2px solid black, 1px dotted red</code></td></tr>\n      <tr><td><code>border-width</code></td><td>Kenarlık kalınlığı</td><td><code>1px, 2px, 0.5rem</code></td></tr>\n      <tr><td><code>border-style</code></td><td>Kenarlık stili</td><td><code>solid, dotted, dashed, double, none</code></td></tr>\n      <tr><td><code>border-color</code></td><td>Kenarlık rengi</td><td><code>red, #ff0000, rgb(255,0,0)</code></td></tr>\n      <tr><td><code>border-radius</code></td><td>Köşe yuvarlama</td><td><code>10px, 50%, 10px 20px</code></td></tr>\n      <tr><td><code>margin</code></td><td>Dış boşluk (kısayol)</td><td><code>10px, 10px 20px, 0 auto</code></td></tr>\n      <tr><td><code>margin-top/right/bottom/left</code></td><td>Tek yönlü dış boşluk</td><td><code>10px, 2rem, 5%</code></td></tr>\n      <tr><td><code>box-sizing</code></td><td>Kutu boyutu hesaplama</td><td><code>content-box, border-box</code></td></tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 9: Pratik Örnekler -->\n  <h2>💡 Pratik Örnekler</h2>\n\n  <h3>📌 Örnek 1: Kart Tasarımı</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.card {\n  width: 300px;\n  padding: 20px;\n  border-radius: 12px;\n  background: white;\n  box-shadow: 0 4px 10px rgba(0,0,0,0.1);\n  margin: 20px;\n}\n\n.card h3 {\n  margin-bottom: 10px;\n}\n\n.card p {\n  margin-bottom: 15px;\n}\n\n.card button {\n  padding: 10px 20px;\n  border: none;\n  border-radius: 6px;\n  background: #007bff;\n  color: white;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"width: 300px; padding: 20px; border-radius: 12px; background: white; color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.2);\">\n        <h3 style=\"margin-bottom: 10px;\">📱 Ürün Kartı</h3>\n        <p style=\"margin-bottom: 15px;\">Bu kart, box model kullanılarak tasarlanmıştır. Padding, margin, border-radius ve box-shadow içerir.</p>\n        <button style=\"padding: 10px 20px; border: none; border-radius: 6px; background: #007bff; color: white;\">Satın Al</button>\n      </div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 2: Profil Kartı</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.profile-card {\n  width: 250px;\n  padding: 20px;\n  border: 1px solid #ddd;\n  border-radius: 16px;\n  text-align: center;\n  margin: 20px auto;\n}\n\n.profile-img {\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n  margin: 0 auto 15px;\n  border: 3px solid #e8ff47;\n}\n\n.profile-name {\n  margin-bottom: 5px;\n}\n\n.profile-title {\n  margin-bottom: 15px;\n  color: #666;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"width: 250px; padding: 20px; border: 1px solid #444; border-radius: 16px; text-align: center; background: #2a2a32;\">\n        <div style=\"width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 15px; border: 3px solid #e8ff47; background: #3a3a4a; display: flex; align-items: center; justify-content: center;\">👤</div>\n        <h4 style=\"margin-bottom: 5px;\">Ahmet Yılmaz</h4>\n        <p style=\"margin-bottom: 15px; color: #aaa; font-size: 0.8rem;\">Frontend Developer</p>\n        <button style=\"padding: 8px 16px; border: none; border-radius: 8px; background: #e8ff47; color: #000;\">Takip Et</button>\n      </div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 3: Buton Tasarımı</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.btn {\n  padding: 12px 24px;\n  border: none;\n  border-radius: 8px;\n  font-size: 16px;\n  cursor: pointer;\n  margin: 5px;\n}\n\n.btn-primary {\n  background: #007bff;\n  color: white;\n}\n\n.btn-primary:hover {\n  background: #0056b3;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <button style=\"padding: 12px 24px; border: none; border-radius: 8px; font-size: 16px; margin: 5px; background: #007bff; color: white;\">Primary Button</button>\n      <button style=\"padding: 12px 24px; border: 2px solid #e8ff47; border-radius: 8px; font-size: 16px; margin: 5px; background: transparent; color: #e8ff47;\">Outline Button</button>\n      <button style=\"padding: 12px 24px; border: none; border-radius: 50px; font-size: 16px; margin: 5px; background: #6bcb77; color: white;\">Pill Button</button>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 10: Sık Yapılan Hatalar -->\n  <h2>⚠️ Sık Yapılan Hatalar ve Çözümleri</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> Padding ve border'ın toplam genişliğe eklendiğini unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.kutu {\n  width: 200px;\n  padding: 20px;   /* Toplam 240px olur! */\n}\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>box-sizing: border-box;</code> kullanın!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> Margin çökmesini (collapse) bilmemek\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.kutu1 { margin-bottom: 30px; }\n.kutu2 { margin-top: 20px; }\n/* Aralarındaki boşluk 50px DEĞİL, 30px! */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> Sadece bir yönde margin kullanın (örn: sadece margin-bottom).\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 3:</strong> İnline elementlere margin/padding vermek\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nspan {\n  margin: 20px;  /* Sadece sağ/sol çalışır, üst/alt çalışmaz! */\n  padding: 20px; /* Çalışır ama diğer elementleri etkilemez */\n}\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>display: inline-block;</code> veya <code>display: block;</code> kullanın.\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 4:</strong> Yüzdesel margin/padding'in ebeveyne göre hesaplandığını unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.parent { width: 500px; }\n.child { padding: 10%; }  /* 500px'in %10'u = 50px */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> Yüzdesel değerlerin her zaman <strong>ebeveynin genişliğine</strong> göre hesaplandığını unutmayın!\n    </div>\n  </div>\n\n  <!-- BÖLÜM 11: Özet -->\n  <h2>📋 Box Model Özeti</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📦 <strong>Her HTML elementi bir kutudur</strong> — Content, Padding, Border, Margin</li>\n      <li>📄 <strong>Content</strong> — İçerik alanı (width/height burayı belirler)</li>\n      <li>📏 <strong>Padding</strong> — İç boşluk (içerik ile border arası)</li>\n      <li>🖌️ <strong>Border</strong> — Kenarlık (stil, kalınlık, renk)</li>\n      <li>📐 <strong>Margin</strong> — Dış boşluk (diğer kutularla arası)</li>\n      <li>🧮 <strong>Toplam genişlik</strong> = width + padding + border + margin (content-box'ta)</li>\n      <li>⚙️ <strong>box-sizing: border-box</strong> — Tüm elementlere uygulayın! (Hayat kurtarır)</li>\n      <li>⚠️ <strong>Margin collapse</strong> — Dikey margin'ler birleşir, toplanmaz</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — CSS Box Model | Margin · Border · Padding · Content | box-sizing: border-box\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-box-model.css - CSS Box Model Ders Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\nh4 {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #aaa;\n  margin: 1rem 0 0.5rem 0;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Demo kutuları */\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n/* BOX MODEL DEMO - Ana görsel */\n.box-model-visual {\n  background: #1a1a20;\n  border-radius: 12px;\n  padding: 2rem;\n  text-align: center;\n  margin: 1rem 0;\n}\n\n.margin-area {\n  background: rgba(255, 200, 100, 0.3);\n  border: 2px dashed #ffc864;\n  padding: 1.5rem;\n  position: relative;\n}\n\n.margin-label {\n  position: absolute;\n  top: -1.2rem;\n  left: 0;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #ffc864;\n}\n\n.border-area {\n  background: rgba(255, 100, 100, 0.3);\n  border: 2px solid #ff6464;\n  padding: 1.5rem;\n  position: relative;\n}\n\n.border-label {\n  position: absolute;\n  top: -1.2rem;\n  left: 0;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #ff6464;\n}\n\n.padding-area {\n  background: rgba(100, 200, 255, 0.3);\n  border: 2px solid #64c8ff;\n  padding: 1.5rem;\n  position: relative;\n}\n\n.padding-label {\n  position: absolute;\n  top: -1.2rem;\n  left: 0;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #64c8ff;\n}\n\n.content-area {\n  background: rgba(100, 255, 150, 0.3);\n  border: 2px solid #64ff96;\n  padding: 1rem;\n}\n\n.content-label {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #64ff96;\n  margin-bottom: 0.5rem;\n}\n\n/* Örnek kutular */\n.example-box {\n  background: #e8ff47;\n  color: #000;\n  text-align: center;\n  font-family: 'Space Mono', monospace;\n  margin: 1rem 0;\n}\n\n/* Tablo */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n/* box-sizing demo */\n.box-sizing-demo {\n  display: flex;\n  gap: 2rem;\n  flex-wrap: wrap;\n  margin: 1rem 0;\n}\n\n.box-sizing-item {\n  flex: 1;\n  min-width: 200px;\n  background: #2a2a32;\n  padding: 1rem;\n  border-radius: 8px;\n}\n\n.box-content {\n  background: #3a3a4a;\n  width: 200px;\n  height: 100px;\n  margin: 0.5rem 0;\n  text-align: center;\n  line-height: 100px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .box-sizing-demo {\n    flex-direction: column;\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
