@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block · Inline · Inline-Block — Detaylı - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Block · Inline · Inline-Block — Detaylı</h1>
+    <p class="desc">HTML elementlerinin 3 temel tipi: Block (tam genişlik), Inline (içerik kadar), Inline-Block (yan yana + width/height). İnline-Block'a nasıl genişlik ve yükseklik verilir</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Block vs Inline vs Inline-Block - Detaylı - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-display-types.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;🤔 &lt;span class=&quot;highlight&quot;&gt;HTML/CSS Neden Bu Kadar Tuhaf?&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Cevap: Öğrenmediğimiz çok önemli bir kural var — block vs inline display!&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 0: Giriş - HTML Nedir? --&gt;
+  &lt;h2&gt;📖 HTML Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;HTML (Hypertext Markup Language)&lt;/strong&gt;, bir web sayfasının &lt;strong&gt;içeriğini ve yapısını&lt;/strong&gt; tanımlar. Yapı taşlarına &lt;strong&gt;element&lt;/strong&gt; denir.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;p&amp;gt;
+  HTML is &amp;lt;em&amp;gt;awesome!!!&amp;lt;/em&amp;gt;
+  &amp;lt;img src=&quot;puppy.png&quot; /&amp;gt;
+&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;HTML elementleri &lt;strong&gt;3 temel tipe&lt;/strong&gt; ayrılır:&lt;/p&gt;
+    &lt;ol style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+      &lt;li&gt;&lt;strong&gt;Block&lt;/strong&gt; — büyük içerik blokları, yükseklik ve genişliği vardır&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Inline&lt;/strong&gt; — küçük içerik miktarı, yükseklik/genişlik yoktur&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Inline-Block&lt;/strong&gt; — inline gibi akar ama width/height alabilir&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: Block Elementler --&gt;
+  &lt;h2&gt;🔷 Block Elementler&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📦 display: block;&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;Block elementler&lt;/strong&gt; sayfanın &lt;strong&gt;tam genişliğini kaplar&lt;/strong&gt; (yukarıdan aşağıya akar) ve &lt;strong&gt;yükseklik/genişlik&lt;/strong&gt; özelliklerine sahiptir.&lt;/p&gt;
+    
+    &lt;div class=&quot;element-list&quot;&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;h1&amp;gt;...&amp;lt;h6&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;blockquote&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;ol&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;ul&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;section&amp;gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;h1&amp;gt;About vrk&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;
+  She likes &amp;lt;em&amp;gt;puppies&amp;lt;/em&amp;gt;
+&amp;lt;/p&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Canlı Demo (Kırmızı border = block element)&lt;/h4&gt;
+      &lt;div class=&quot;demo-container block-demo&quot;&gt;
+        &lt;h1 style=&quot;border: 5px solid #ff6464; padding: 0.5rem;&quot;&gt;About vrk&lt;/h1&gt;
+        &lt;p style=&quot;border: 5px solid #ff6464; padding: 0.5rem;&quot;&gt;She likes &lt;em&gt;puppies&lt;/em&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Block elementler &lt;strong&gt;tam genişliği kaplar&lt;/strong&gt; ve yukarıdan aşağıya akar.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+h1 {
+  border: 5px solid red;
+  width: 50%;   /* Block elementin genişliği değiştirilebilir! */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Genişliği Değiştirilmiş Block Demo&lt;/h4&gt;
+      &lt;div class=&quot;demo-container block-demo-width&quot;&gt;
+        &lt;h1 style=&quot;border: 5px solid #6bcb77; width: 50%; padding: 0.5rem;&quot;&gt;About vrk (width: 50%)&lt;/h1&gt;
+        &lt;p style=&quot;border: 5px solid #ff6464; padding: 0.5rem;&quot;&gt;She likes &lt;em&gt;puppies&lt;/em&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Block elementin &lt;strong&gt;genişliği değiştirilebilir&lt;/strong&gt; ama yine yukarıdan aşağıya akar.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Block Özet:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Tam genişlik kaplar (yukarıdan aşağıya akar)&lt;/li&gt;
+        &lt;li&gt;Yükseklik ve genişlik &lt;strong&gt;özelleştirilebilir&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;İçinde block veya inline elementler barındırabilir&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: Inline Elementler --&gt;
+  &lt;h2&gt;🔹 Inline Elementler&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;📝 display: inline;&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;Inline elementler&lt;/strong&gt; sadece &lt;strong&gt;ihtiyaç duyduğu kadar genişlik kaplar&lt;/strong&gt; (soldan sağa akar) ve &lt;strong&gt;yükseklik/genişlik&lt;/strong&gt; özelliklerine &lt;strong&gt;sahip olamaz&lt;/strong&gt;.&lt;/p&gt;
+    
+    &lt;div class=&quot;element-list&quot;&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;a&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;em&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;strong&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;br&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;span&amp;gt;&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;strong&amp;gt;Web programming resources:&amp;lt;/strong&amp;gt;
+&amp;lt;a href=&quot;#&quot;&amp;gt;CS 193X&amp;lt;/a&amp;gt;
+&amp;lt;a href=&quot;#&quot;&amp;gt;MDN&amp;lt;/a&amp;gt;
+&amp;lt;a href=&quot;#&quot;&amp;gt;Google&amp;lt;/a&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Canlı Demo (Turuncu border = inline element)&lt;/h4&gt;
+      &lt;div class=&quot;demo-container inline-demo&quot;&gt;
+        &lt;strong style=&quot;border: 5px solid #ffaa44; padding: 0.2rem;&quot;&gt;Web programming resources:&lt;/strong&gt;
+        &lt;a href=&quot;#&quot; style=&quot;border: 5px solid #ffaa44; padding: 0.2rem;&quot;&gt;CS 193X&lt;/a&gt;
+        &lt;a href=&quot;#&quot; style=&quot;border: 5px solid #ffaa44; padding: 0.2rem;&quot;&gt;MDN&lt;/a&gt;
+        &lt;a href=&quot;#&quot; style=&quot;border: 5px solid #ffaa44; padding: 0.2rem;&quot;&gt;Google&lt;/a&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Inline elementler &lt;strong&gt;yan yana&lt;/strong&gt; akar ve sadece içerik kadar yer kaplar.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ ÖNEMLİ: Inline elementlerde width/height ÇALIŞMAZ!&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+strong {
+  border: 5px solid red;
+  width: 1000px;   /* ❌ Bu ÇALIŞMAZ! strong inline bir elementtir */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Inline Elementte Width İşe Yaramaz&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;strong style=&quot;border: 5px solid #ffaa44; width: 1000px; display: inline-block;&quot;&gt;Bu bir inline element (width çalışmaz)&lt;/strong&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem; color: #ff6464;&quot;&gt;⬆️ width: 1000px verilmesine rağmen element sadece içerik kadar yer kaplar!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Inline Özet:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Soldan sağa akar (yan yana dizilir)&lt;/li&gt;
+        &lt;li&gt;Sadece içerik kadar genişlik kaplar&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;width ve height özellikleri ÇALIŞMAZ&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;İçinde block element bulunduramaz&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: Inline-Block Elementler (EN ÖNEMLİ) --&gt;
+  &lt;h2&gt;🔶 Inline-Block Elementler&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;card-header&quot;&gt;⚡ display: inline-block;&lt;/div&gt;
+    &lt;p&gt;&lt;strong&gt;Inline-Block elementler&lt;/strong&gt; inline gibi &lt;strong&gt;soldan sağa akar&lt;/strong&gt; (yan yana dizilir) &lt;strong&gt;AMA&lt;/strong&gt; block gibi &lt;strong&gt;width ve height&lt;/strong&gt; özelliklerine sahiptir!&lt;/p&gt;
+    
+    &lt;div class=&quot;element-list&quot;&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;&amp;lt;img&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;element-tag&quot;&gt;display: inline-block (CSS ile)&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 İnline-Block'a Width ve Height Verme:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* 1. YÖNTEM: img etiketi zaten inline-block'tur */
+img {
+  width: 50px;      /* ✅ ÇALIŞIR */
+  height: 50px;     /* ✅ ÇALIŞIR */
+}
+
+/* 2. YÖNTEM: Herhangi bir elementi inline-block yapmak */
+.kutum {
+  display: inline-block;
+  width: 150px;     /* ✅ ÇALIŞIR */
+  height: 100px;    /* ✅ ÇALIŞIR */
+  margin: 10px;     /* ✅ ÇALIŞIR */
+  padding: 15px;    /* ✅ ÇALIŞIR */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;img src=&quot;puppy.jpg&quot; /&amp;gt;
+&amp;lt;img src=&quot;puppy.jpg&quot; /&amp;gt;
+&amp;lt;img src=&quot;puppy.jpg&quot; /&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Canlı Demo: Inline-Block (Resimler)&lt;/h4&gt;
+      &lt;div class=&quot;demo-container inline-block-demo&quot;&gt;
+        &lt;img src=&quot;https://picsum.photos/id/20/100/100&quot; alt=&quot;puppy&quot; style=&quot;width: 50px; border-radius: 8px;&quot;&gt;
+        &lt;img src=&quot;https://picsum.photos/id/20/100/100&quot; alt=&quot;puppy&quot; style=&quot;width: 50px; border-radius: 8px;&quot;&gt;
+        &lt;img src=&quot;https://picsum.photos/id/20/100/100&quot; alt=&quot;puppy&quot; style=&quot;width: 50px; border-radius: 8px;&quot;&gt;
+        &lt;img src=&quot;https://picsum.photos/id/20/100/100&quot; alt=&quot;puppy&quot; style=&quot;width: 50px; border-radius: 8px;&quot;&gt;
+        &lt;img src=&quot;https://picsum.photos/id/20/100/100&quot; alt=&quot;puppy&quot; style=&quot;width: 50px; border-radius: 8px;&quot;&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Her resmin &lt;strong&gt;width: 50px&lt;/strong&gt;! Inline-block olduğu için width çalışır VE yan yana dizilirler.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;🎨 Kendi Inline-Block Kutularımızı Oluşturalım&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.inline-block-box {
+  display: inline-block;
+  width: 120px;      /* Genişlik belirleyebiliriz */
+  height: 80px;      /* Yükseklik belirleyebiliriz */
+  margin: 10px;      /* Dış boşluk her yönde çalışır */
+  padding: 10px;     /* İç boşluk her yönde çalışır */
+  background: #3a3a4a;
+  border-radius: 8px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Inline-Block Kutular (width: 120px, height: 80px)&lt;/h4&gt;
+      &lt;div class=&quot;demo-container inline-block-boxes&quot;&gt;
+        &lt;div class=&quot;inline-block-box&quot;&gt;Kutu 1&lt;br&gt;120x80&lt;/div&gt;
+        &lt;div class=&quot;inline-block-box&quot;&gt;Kutu 2&lt;br&gt;120x80&lt;/div&gt;
+        &lt;div class=&quot;inline-block-box&quot;&gt;Kutu 3&lt;br&gt;120x80&lt;/div&gt;
+        &lt;div class=&quot;inline-block-box&quot;&gt;Kutu 4&lt;br&gt;120x80&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Her kutu &lt;strong&gt;yan yana&lt;/strong&gt; ama her birinin &lt;strong&gt;genişliği 120px, yüksekliği 80px&lt;/strong&gt;!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Inline-Block Özet:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ Inline gibi &lt;strong&gt;soldan sağa akar&lt;/strong&gt; (yan yana dizilir)&lt;/li&gt;
+        &lt;li&gt;✅ Block gibi &lt;strong&gt;width ve height&lt;/strong&gt; özelleştirilebilir&lt;/li&gt;
+        &lt;li&gt;✅ margin/padding her yönde çalışır&lt;/li&gt;
+        &lt;li&gt;✅ İçinde block element bulundurabilir&lt;/li&gt;
+        &lt;li&gt;🎯 &lt;strong&gt;Menüler, kart galerileri, buton grupları için idealdir!&lt;/strong&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: display CSS Özelliği ile Tip Değiştirme --&gt;
+  &lt;h2&gt;🔄 display CSS Özelliği ile Tip Değiştirme&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Bir elementin &lt;strong&gt;varsayılan görüntüleme tipini&lt;/strong&gt; &lt;code&gt;display&lt;/code&gt; özelliği ile &lt;strong&gt;değiştirebilirsiniz&lt;/strong&gt;!&lt;/p&gt;
+    
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Inline bir elementi block yapmak */
+a {
+  display: block;
+}
+
+/* Block bir elementi inline yapmak */
+p {
+  display: inline;
+}
+
+/* Herhangi bir elementi inline-block yapmak */
+.my-element {
+  display: inline-block;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 display ile Tip Değiştirme Örneği&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;&quot;&gt;
+          🔹 Bu div aslında block ama display: inline yapıldı
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;&quot;&gt;
+          🔹 İkinci div de inline oldu, yan yana dizildiler!
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Normalde &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; block elementtir, ama &lt;code&gt;display: inline&lt;/code&gt; ile yan yana dizildi!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 display için olası değerler:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;code&gt;display: block;&lt;/code&gt; → element block gibi davranır&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;display: inline;&lt;/code&gt; → element inline gibi davranır&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;display: inline-block;&lt;/code&gt; → element inline-block gibi davranır&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;display: none;&lt;/code&gt; → elementi tamamen gizler&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;display: flex;&lt;/code&gt; → flexbox container yapar&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;display: grid;&lt;/code&gt; → grid container yapar&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Karşılaştırma Tablosu --&gt;
+  &lt;h2&gt;📊 Block vs Inline vs Inline-Block Karşılaştırması&lt;/h2&gt;
+  &lt;table class=&quot;comparison-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Block&lt;/th&gt;&lt;th&gt;Inline&lt;/th&gt;&lt;th&gt;Inline-Block&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;Akış yönü&lt;/td&gt;&lt;td&gt;⬇️ Yukarıdan aşağıya&lt;/td&gt;&lt;td&gt;➡️ Soldan sağa&lt;/td&gt;&lt;td&gt;➡️ Soldan sağa&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;Yeni satır başlatır&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;width/height çalışır&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;margin her yönde&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Sadece sağ/sol&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;padding her yönde&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td&gt;⚠️ Evet ama taşabilir&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;İçinde block element&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;td class=&quot;cross&quot;&gt;❌ Hayır&lt;/td&gt;&lt;td class=&quot;check&quot;&gt;✅ Evet&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;Örnek elementler&lt;/td&gt;&lt;td&gt;&lt;code&gt;div, p, h1, ul&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;span, a, strong, em&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;img&lt;/code&gt; + CSS ile&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- BÖLÜM 6: Pratik İpucu --&gt;
+  &lt;h2&gt;💡 Pratik İpucu: Inline Elementlerde width/height Çalıştırma&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Sorun:&lt;/strong&gt; &lt;code&gt;&amp;lt;span&amp;gt;&lt;/code&gt; veya &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; gibi inline elementlere width/height veremiyorum!
+    &lt;/div&gt;
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Onları &lt;code&gt;inline-block&lt;/code&gt; veya &lt;code&gt;block&lt;/code&gt; yapın!
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+span {
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  background: yellow;
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Inline → Inline-Block Dönüşümü&lt;/h4&gt;
+      &lt;div class=&quot;demo-container&quot;&gt;
+        &lt;span style=&quot;display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;&quot;&gt;Inline-Block&lt;/span&gt;
+        &lt;span style=&quot;display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;&quot;&gt;Kutu 2&lt;/span&gt;
+        &lt;span style=&quot;display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;&quot;&gt;Kutu 3&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;code&gt;&amp;lt;span&amp;gt;&lt;/code&gt; elementleri &lt;code&gt;display: inline-block&lt;/code&gt; ile hem yan yana hem de width/height sahibi oldu!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Özet --&gt;
+  &lt;h2&gt;📋 Genel Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;🔷 &lt;strong&gt;Block:&lt;/strong&gt; Tam genişlik, yukarıdan aşağıya, width/height var → &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;🔹 &lt;strong&gt;Inline:&lt;/strong&gt; İçerik kadar genişlik, soldan sağa, width/height YOK → &lt;code&gt;&amp;lt;span&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;🔶 &lt;strong&gt;Inline-Block:&lt;/strong&gt; Soldan sağa akar &lt;strong&gt;AMA&lt;/strong&gt; width/height var → &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;, veya &lt;code&gt;display: inline-block&lt;/code&gt; ile&lt;/li&gt;
+      &lt;li&gt;🔄 &lt;strong&gt;display özelliği&lt;/strong&gt; ile bir elementin tipini değiştirebilirsin!&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;Inline elemente width/height vermek istiyorsan → display: inline-block kullan!&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Block vs Inline vs Inline-Block | display özelliği ile element tipleri
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-display-types.css - Block, Inline, Inline-Block Detaylı Anlatım */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Block demo ile border gösterme */
+.block-demo h1, .block-demo p {
+  border: 5px solid #ff6464;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.block-demo-width h1 {
+  border: 5px solid #6bcb77;
+  width: 50%;
+  padding: 0.5rem;
+}
+
+/* Inline demo */
+.inline-demo strong, .inline-demo a {
+  border: 5px solid #ffaa44;
+  padding: 0.2rem;
+}
+
+.inline-demo-width strong {
+  border: 5px solid #ffaa44;
+  width: 1000px;  /* Bu çalışmayacak! */
+  display: inline-block;
+}
+
+/* Inline-block demo - RESİMLER İÇİN */
+.inline-block-demo img {
+  width: 50px;
+  border-radius: 8px;
+  margin: 0.2rem;
+}
+
+/* Inline-block kutu demo */
+.inline-block-boxes {
+  text-align: center;
+}
+
+.inline-block-box {
+  display: inline-block;
+  width: 120px;
+  height: 80px;
+  background: #3a3a4a;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  border: 2px solid #e8ff47;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.check {
+  color: #6bcb77;
+}
+
+.cross {
+  color: #ff6464;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong, .warning-note strong, .success-note strong {
+  color: #e8ff47;
+}
+
+/* Element listesi */
+.element-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.element-tag {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block vs Inline vs Inline-Block - Detaylı - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-display-types.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>🤔 <span class="highlight">HTML/CSS Neden Bu Kadar Tuhaf?</span></h1>
+  <div class="subtitle">Cevap: Öğrenmediğimiz çok önemli bir kural var — block vs inline display!</div>
+
+  <!-- BÖLÜM 0: Giriş - HTML Nedir? -->
+  <h2>📖 HTML Nedir?</h2>
+  <div class="card">
+    <p><strong>HTML (Hypertext Markup Language)</strong>, bir web sayfasının <strong>içeriğini ve yapısını</strong> tanımlar. Yapı taşlarına <strong>element</strong> denir.</p>
+    <div class="code-block">
+      <pre>
+&lt;p&gt;
+  HTML is &lt;em&gt;awesome!!!&lt;/em&gt;
+  &lt;img src="puppy.png" /&gt;
+&lt;/p&gt;
+      </pre>
+    </div>
+    <p>HTML elementleri <strong>3 temel tipe</strong> ayrılır:</p>
+    <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+      <li><strong>Block</strong> — büyük içerik blokları, yükseklik ve genişliği vardır</li>
+      <li><strong>Inline</strong> — küçük içerik miktarı, yükseklik/genişlik yoktur</li>
+      <li><strong>Inline-Block</strong> — inline gibi akar ama width/height alabilir</li>
+    </ol>
+  </div>
+
+  <!-- BÖLÜM 1: Block Elementler -->
+  <h2>🔷 Block Elementler</h2>
+  <div class="card">
+    <div class="card-header">📦 display: block;</div>
+    <p><strong>Block elementler</strong> sayfanın <strong>tam genişliğini kaplar</strong> (yukarıdan aşağıya akar) ve <strong>yükseklik/genişlik</strong> özelliklerine sahiptir.</p>
+    
+    <div class="element-list">
+      <span class="element-tag">&lt;p&gt;</span>
+      <span class="element-tag">&lt;h1&gt;...&lt;h6&gt;</span>
+      <span class="element-tag">&lt;blockquote&gt;</span>
+      <span class="element-tag">&lt;ol&gt;</span>
+      <span class="element-tag">&lt;ul&gt;</span>
+      <span class="element-tag">&lt;li&gt;</span>
+      <span class="element-tag">&lt;div&gt;</span>
+      <span class="element-tag">&lt;section&gt;</span>
+    </div>
+
+    <div class="code-block">
+      <pre>
+&lt;h1&gt;About vrk&lt;/h1&gt;
+&lt;p&gt;
+  She likes &lt;em&gt;puppies&lt;/em&gt;
+&lt;/p&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Canlı Demo (Kırmızı border = block element)</h4>
+      <div class="demo-container block-demo">
+        <h1 style="border: 5px solid #ff6464; padding: 0.5rem;">About vrk</h1>
+        <p style="border: 5px solid #ff6464; padding: 0.5rem;">She likes <em>puppies</em></p>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Block elementler <strong>tam genişliği kaplar</strong> ve yukarıdan aşağıya akar.</p>
+    </div>
+
+    <div class="code-block">
+      <pre>
+h1 {
+  border: 5px solid red;
+  width: 50%;   /* Block elementin genişliği değiştirilebilir! */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Genişliği Değiştirilmiş Block Demo</h4>
+      <div class="demo-container block-demo-width">
+        <h1 style="border: 5px solid #6bcb77; width: 50%; padding: 0.5rem;">About vrk (width: 50%)</h1>
+        <p style="border: 5px solid #ff6464; padding: 0.5rem;">She likes <em>puppies</em></p>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Block elementin <strong>genişliği değiştirilebilir</strong> ama yine yukarıdan aşağıya akar.</p>
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Block Özet:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Tam genişlik kaplar (yukarıdan aşağıya akar)</li>
+        <li>Yükseklik ve genişlik <strong>özelleştirilebilir</strong></li>
+        <li>İçinde block veya inline elementler barındırabilir</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: Inline Elementler -->
+  <h2>🔹 Inline Elementler</h2>
+  <div class="card">
+    <div class="card-header">📝 display: inline;</div>
+    <p><strong>Inline elementler</strong> sadece <strong>ihtiyaç duyduğu kadar genişlik kaplar</strong> (soldan sağa akar) ve <strong>yükseklik/genişlik</strong> özelliklerine <strong>sahip olamaz</strong>.</p>
+    
+    <div class="element-list">
+      <span class="element-tag">&lt;a&gt;</span>
+      <span class="element-tag">&lt;em&gt;</span>
+      <span class="element-tag">&lt;strong&gt;</span>
+      <span class="element-tag">&lt;br&gt;</span>
+      <span class="element-tag">&lt;span&gt;</span>
+    </div>
+
+    <div class="code-block">
+      <pre>
+&lt;strong&gt;Web programming resources:&lt;/strong&gt;
+&lt;a href="#"&gt;CS 193X&lt;/a&gt;
+&lt;a href="#"&gt;MDN&lt;/a&gt;
+&lt;a href="#"&gt;Google&lt;/a&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Canlı Demo (Turuncu border = inline element)</h4>
+      <div class="demo-container inline-demo">
+        <strong style="border: 5px solid #ffaa44; padding: 0.2rem;">Web programming resources:</strong>
+        <a href="#" style="border: 5px solid #ffaa44; padding: 0.2rem;">CS 193X</a>
+        <a href="#" style="border: 5px solid #ffaa44; padding: 0.2rem;">MDN</a>
+        <a href="#" style="border: 5px solid #ffaa44; padding: 0.2rem;">Google</a>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Inline elementler <strong>yan yana</strong> akar ve sadece içerik kadar yer kaplar.</p>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ ÖNEMLİ: Inline elementlerde width/height ÇALIŞMAZ!</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+strong {
+  border: 5px solid red;
+  width: 1000px;   /* ❌ Bu ÇALIŞMAZ! strong inline bir elementtir */
+}
+        </pre>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Inline Elementte Width İşe Yaramaz</h4>
+      <div class="demo-container">
+        <strong style="border: 5px solid #ffaa44; width: 1000px; display: inline-block;">Bu bir inline element (width çalışmaz)</strong>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #ff6464;">⬆️ width: 1000px verilmesine rağmen element sadece içerik kadar yer kaplar!</p>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Inline Özet:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Soldan sağa akar (yan yana dizilir)</li>
+        <li>Sadece içerik kadar genişlik kaplar</li>
+        <li><strong>width ve height özellikleri ÇALIŞMAZ</strong></li>
+        <li>İçinde block element bulunduramaz</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: Inline-Block Elementler (EN ÖNEMLİ) -->
+  <h2>🔶 Inline-Block Elementler</h2>
+  <div class="card">
+    <div class="card-header">⚡ display: inline-block;</div>
+    <p><strong>Inline-Block elementler</strong> inline gibi <strong>soldan sağa akar</strong> (yan yana dizilir) <strong>AMA</strong> block gibi <strong>width ve height</strong> özelliklerine sahiptir!</p>
+    
+    <div class="element-list">
+      <span class="element-tag">&lt;img&gt;</span>
+      <span class="element-tag">display: inline-block (CSS ile)</span>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 İnline-Block'a Width ve Height Verme:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* 1. YÖNTEM: img etiketi zaten inline-block'tur */
+img {
+  width: 50px;      /* ✅ ÇALIŞIR */
+  height: 50px;     /* ✅ ÇALIŞIR */
+}
+
+/* 2. YÖNTEM: Herhangi bir elementi inline-block yapmak */
+.kutum {
+  display: inline-block;
+  width: 150px;     /* ✅ ÇALIŞIR */
+  height: 100px;    /* ✅ ÇALIŞIR */
+  margin: 10px;     /* ✅ ÇALIŞIR */
+  padding: 15px;    /* ✅ ÇALIŞIR */
+}
+        </pre>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <pre>
+&lt;img src="puppy.jpg" /&gt;
+&lt;img src="puppy.jpg" /&gt;
+&lt;img src="puppy.jpg" /&gt;
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Canlı Demo: Inline-Block (Resimler)</h4>
+      <div class="demo-container inline-block-demo">
+        <img src="https://picsum.photos/id/20/100/100" alt="puppy" style="width: 50px; border-radius: 8px;">
+        <img src="https://picsum.photos/id/20/100/100" alt="puppy" style="width: 50px; border-radius: 8px;">
+        <img src="https://picsum.photos/id/20/100/100" alt="puppy" style="width: 50px; border-radius: 8px;">
+        <img src="https://picsum.photos/id/20/100/100" alt="puppy" style="width: 50px; border-radius: 8px;">
+        <img src="https://picsum.photos/id/20/100/100" alt="puppy" style="width: 50px; border-radius: 8px;">
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Her resmin <strong>width: 50px</strong>! Inline-block olduğu için width çalışır VE yan yana dizilirler.</p>
+    </div>
+
+    <h3>🎨 Kendi Inline-Block Kutularımızı Oluşturalım</h3>
+    <div class="code-block">
+      <pre>
+.inline-block-box {
+  display: inline-block;
+  width: 120px;      /* Genişlik belirleyebiliriz */
+  height: 80px;      /* Yükseklik belirleyebiliriz */
+  margin: 10px;      /* Dış boşluk her yönde çalışır */
+  padding: 10px;     /* İç boşluk her yönde çalışır */
+  background: #3a3a4a;
+  border-radius: 8px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Inline-Block Kutular (width: 120px, height: 80px)</h4>
+      <div class="demo-container inline-block-boxes">
+        <div class="inline-block-box">Kutu 1<br>120x80</div>
+        <div class="inline-block-box">Kutu 2<br>120x80</div>
+        <div class="inline-block-box">Kutu 3<br>120x80</div>
+        <div class="inline-block-box">Kutu 4<br>120x80</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Her kutu <strong>yan yana</strong> ama her birinin <strong>genişliği 120px, yüksekliği 80px</strong>!</p>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Inline-Block Özet:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ Inline gibi <strong>soldan sağa akar</strong> (yan yana dizilir)</li>
+        <li>✅ Block gibi <strong>width ve height</strong> özelleştirilebilir</li>
+        <li>✅ margin/padding her yönde çalışır</li>
+        <li>✅ İçinde block element bulundurabilir</li>
+        <li>🎯 <strong>Menüler, kart galerileri, buton grupları için idealdir!</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: display CSS Özelliği ile Tip Değiştirme -->
+  <h2>🔄 display CSS Özelliği ile Tip Değiştirme</h2>
+  <div class="card">
+    <p>Bir elementin <strong>varsayılan görüntüleme tipini</strong> <code>display</code> özelliği ile <strong>değiştirebilirsiniz</strong>!</p>
+    
+    <div class="code-block">
+      <pre>
+/* Inline bir elementi block yapmak */
+a {
+  display: block;
+}
+
+/* Block bir elementi inline yapmak */
+p {
+  display: inline;
+}
+
+/* Herhangi bir elementi inline-block yapmak */
+.my-element {
+  display: inline-block;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 display ile Tip Değiştirme Örneği</h4>
+      <div class="demo-container">
+        <div style="background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;">
+          🔹 Bu div aslında block ama display: inline yapıldı
+        </div>
+        <div style="background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;">
+          🔹 İkinci div de inline oldu, yan yana dizildiler!
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Normalde <code>&lt;div&gt;</code> block elementtir, ama <code>display: inline</code> ile yan yana dizildi!</p>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 display için olası değerler:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><code>display: block;</code> → element block gibi davranır</li>
+        <li><code>display: inline;</code> → element inline gibi davranır</li>
+        <li><code>display: inline-block;</code> → element inline-block gibi davranır</li>
+        <li><code>display: none;</code> → elementi tamamen gizler</li>
+        <li><code>display: flex;</code> → flexbox container yapar</li>
+        <li><code>display: grid;</code> → grid container yapar</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 5: Karşılaştırma Tablosu -->
+  <h2>📊 Block vs Inline vs Inline-Block Karşılaştırması</h2>
+  <table class="comparison-table">
+    <thead>
+      <tr><th>Özellik</th><th>Block</th><th>Inline</th><th>Inline-Block</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Akış yönü</td><td>⬇️ Yukarıdan aşağıya</td><td>➡️ Soldan sağa</td><td>➡️ Soldan sağa</td></tr>
+      <tr><td>Yeni satır başlatır</td><td class="check">✅ Evet</td><td class="cross">❌ Hayır</td><td class="cross">❌ Hayır</td></tr>
+      <tr><td>width/height çalışır</td><td class="check">✅ Evet</td><td class="cross">❌ Hayır</td><td class="check">✅ Evet</td></tr>
+      <tr><td>margin her yönde</td><td class="check">✅ Evet</td><td class="cross">❌ Sadece sağ/sol</td><td class="check">✅ Evet</td></tr>
+      <tr><td>padding her yönde</td><td class="check">✅ Evet</td><td>⚠️ Evet ama taşabilir</td><td class="check">✅ Evet</td></tr>
+      <tr><td>İçinde block element</td><td class="check">✅ Evet</td><td class="cross">❌ Hayır</td><td class="check">✅ Evet</td></tr>
+      <tr><td>Örnek elementler</td><td><code>div, p, h1, ul</code></td><td><code>span, a, strong, em</code></td><td><code>img</code> + CSS ile</td></tr>
+    </tbody>
+  </table>
+
+  <!-- BÖLÜM 6: Pratik İpucu -->
+  <h2>💡 Pratik İpucu: Inline Elementlerde width/height Çalıştırma</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Sorun:</strong> <code>&lt;span&gt;</code> veya <code>&lt;a&gt;</code> gibi inline elementlere width/height veremiyorum!
+    </div>
+    <div class="success-note">
+      <strong>✅ Çözüm:</strong> Onları <code>inline-block</code> veya <code>block</code> yapın!
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+span {
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  background: yellow;
+}
+        </pre>
+      </div>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Inline → Inline-Block Dönüşümü</h4>
+      <div class="demo-container">
+        <span style="display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;">Inline-Block</span>
+        <span style="display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;">Kutu 2</span>
+        <span style="display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;">Kutu 3</span>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <code>&lt;span&gt;</code> elementleri <code>display: inline-block</code> ile hem yan yana hem de width/height sahibi oldu!</p>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: Özet -->
+  <h2>📋 Genel Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>🔷 <strong>Block:</strong> Tam genişlik, yukarıdan aşağıya, width/height var → <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code></li>
+      <li>🔹 <strong>Inline:</strong> İçerik kadar genişlik, soldan sağa, width/height YOK → <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code></li>
+      <li>🔶 <strong>Inline-Block:</strong> Soldan sağa akar <strong>AMA</strong> width/height var → <code>&lt;img&gt;</code>, veya <code>display: inline-block</code> ile</li>
+      <li>🔄 <strong>display özelliği</strong> ile bir elementin tipini değiştirebilirsin!</li>
+      <li>🎯 <strong>Inline elemente width/height vermek istiyorsan → display: inline-block kullan!</strong></li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Block vs Inline vs Inline-Block | display özelliği ile element tipleri
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-display-types.css - Block, Inline, Inline-Block Detaylı Anlatım */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Demo kutuları */
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.demo-container {
+  background: #2a2a32;
+  border: 1px dashed #e8ff47;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Block demo ile border gösterme */
+.block-demo h1, .block-demo p {
+  border: 5px solid #ff6464;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.block-demo-width h1 {
+  border: 5px solid #6bcb77;
+  width: 50%;
+  padding: 0.5rem;
+}
+
+/* Inline demo */
+.inline-demo strong, .inline-demo a {
+  border: 5px solid #ffaa44;
+  padding: 0.2rem;
+}
+
+.inline-demo-width strong {
+  border: 5px solid #ffaa44;
+  width: 1000px;  /* Bu çalışmayacak! */
+  display: inline-block;
+}
+
+/* Inline-block demo - RESİMLER İÇİN */
+.inline-block-demo img {
+  width: 50px;
+  border-radius: 8px;
+  margin: 0.2rem;
+}
+
+/* Inline-block kutu demo */
+.inline-block-boxes {
+  text-align: center;
+}
+
+.inline-block-box {
+  display: inline-block;
+  width: 120px;
+  height: 80px;
+  background: #3a3a4a;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  border: 2px solid #e8ff47;
+}
+
+/* Tablo */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.check {
+  color: #6bcb77;
+}
+
+.cross {
+  color: #ff6464;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong, .warning-note strong, .success-note strong {
+  color: #e8ff47;
+}
+
+/* Element listesi */
+.element-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.element-tag {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=block-inline-inline-block-detayli" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Block · Inline · Inline-Block — Detaylı — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Block vs Inline vs Inline-Block - Detaylı - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-display-types.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>🤔 <span class=\"highlight\">HTML/CSS Neden Bu Kadar Tuhaf?</span></h1>\n  <div class=\"subtitle\">Cevap: Öğrenmediğimiz çok önemli bir kural var — block vs inline display!</div>\n\n  <!-- BÖLÜM 0: Giriş - HTML Nedir? -->\n  <h2>📖 HTML Nedir?</h2>\n  <div class=\"card\">\n    <p><strong>HTML (Hypertext Markup Language)</strong>, bir web sayfasının <strong>içeriğini ve yapısını</strong> tanımlar. Yapı taşlarına <strong>element</strong> denir.</p>\n    <div class=\"code-block\">\n      <pre>\n&lt;p&gt;\n  HTML is &lt;em&gt;awesome!!!&lt;/em&gt;\n  &lt;img src=\"puppy.png\" /&gt;\n&lt;/p&gt;\n      </pre>\n    </div>\n    <p>HTML elementleri <strong>3 temel tipe</strong> ayrılır:</p>\n    <ol style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n      <li><strong>Block</strong> — büyük içerik blokları, yükseklik ve genişliği vardır</li>\n      <li><strong>Inline</strong> — küçük içerik miktarı, yükseklik/genişlik yoktur</li>\n      <li><strong>Inline-Block</strong> — inline gibi akar ama width/height alabilir</li>\n    </ol>\n  </div>\n\n  <!-- BÖLÜM 1: Block Elementler -->\n  <h2>🔷 Block Elementler</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📦 display: block;</div>\n    <p><strong>Block elementler</strong> sayfanın <strong>tam genişliğini kaplar</strong> (yukarıdan aşağıya akar) ve <strong>yükseklik/genişlik</strong> özelliklerine sahiptir.</p>\n    \n    <div class=\"element-list\">\n      <span class=\"element-tag\">&lt;p&gt;</span>\n      <span class=\"element-tag\">&lt;h1&gt;...&lt;h6&gt;</span>\n      <span class=\"element-tag\">&lt;blockquote&gt;</span>\n      <span class=\"element-tag\">&lt;ol&gt;</span>\n      <span class=\"element-tag\">&lt;ul&gt;</span>\n      <span class=\"element-tag\">&lt;li&gt;</span>\n      <span class=\"element-tag\">&lt;div&gt;</span>\n      <span class=\"element-tag\">&lt;section&gt;</span>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;h1&gt;About vrk&lt;/h1&gt;\n&lt;p&gt;\n  She likes &lt;em&gt;puppies&lt;/em&gt;\n&lt;/p&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Canlı Demo (Kırmızı border = block element)</h4>\n      <div class=\"demo-container block-demo\">\n        <h1 style=\"border: 5px solid #ff6464; padding: 0.5rem;\">About vrk</h1>\n        <p style=\"border: 5px solid #ff6464; padding: 0.5rem;\">She likes <em>puppies</em></p>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Block elementler <strong>tam genişliği kaplar</strong> ve yukarıdan aşağıya akar.</p>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\nh1 {\n  border: 5px solid red;\n  width: 50%;   /* Block elementin genişliği değiştirilebilir! */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Genişliği Değiştirilmiş Block Demo</h4>\n      <div class=\"demo-container block-demo-width\">\n        <h1 style=\"border: 5px solid #6bcb77; width: 50%; padding: 0.5rem;\">About vrk (width: 50%)</h1>\n        <p style=\"border: 5px solid #ff6464; padding: 0.5rem;\">She likes <em>puppies</em></p>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Block elementin <strong>genişliği değiştirilebilir</strong> ama yine yukarıdan aşağıya akar.</p>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Block Özet:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Tam genişlik kaplar (yukarıdan aşağıya akar)</li>\n        <li>Yükseklik ve genişlik <strong>özelleştirilebilir</strong></li>\n        <li>İçinde block veya inline elementler barındırabilir</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: Inline Elementler -->\n  <h2>🔹 Inline Elementler</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">📝 display: inline;</div>\n    <p><strong>Inline elementler</strong> sadece <strong>ihtiyaç duyduğu kadar genişlik kaplar</strong> (soldan sağa akar) ve <strong>yükseklik/genişlik</strong> özelliklerine <strong>sahip olamaz</strong>.</p>\n    \n    <div class=\"element-list\">\n      <span class=\"element-tag\">&lt;a&gt;</span>\n      <span class=\"element-tag\">&lt;em&gt;</span>\n      <span class=\"element-tag\">&lt;strong&gt;</span>\n      <span class=\"element-tag\">&lt;br&gt;</span>\n      <span class=\"element-tag\">&lt;span&gt;</span>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;strong&gt;Web programming resources:&lt;/strong&gt;\n&lt;a href=\"#\"&gt;CS 193X&lt;/a&gt;\n&lt;a href=\"#\"&gt;MDN&lt;/a&gt;\n&lt;a href=\"#\"&gt;Google&lt;/a&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Canlı Demo (Turuncu border = inline element)</h4>\n      <div class=\"demo-container inline-demo\">\n        <strong style=\"border: 5px solid #ffaa44; padding: 0.2rem;\">Web programming resources:</strong>\n        <a href=\"#\" style=\"border: 5px solid #ffaa44; padding: 0.2rem;\">CS 193X</a>\n        <a href=\"#\" style=\"border: 5px solid #ffaa44; padding: 0.2rem;\">MDN</a>\n        <a href=\"#\" style=\"border: 5px solid #ffaa44; padding: 0.2rem;\">Google</a>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Inline elementler <strong>yan yana</strong> akar ve sadece içerik kadar yer kaplar.</p>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ ÖNEMLİ: Inline elementlerde width/height ÇALIŞMAZ!</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nstrong {\n  border: 5px solid red;\n  width: 1000px;   /* ❌ Bu ÇALIŞMAZ! strong inline bir elementtir */\n}\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Inline Elementte Width İşe Yaramaz</h4>\n      <div class=\"demo-container\">\n        <strong style=\"border: 5px solid #ffaa44; width: 1000px; display: inline-block;\">Bu bir inline element (width çalışmaz)</strong>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem; color: #ff6464;\">⬆️ width: 1000px verilmesine rağmen element sadece içerik kadar yer kaplar!</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Inline Özet:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Soldan sağa akar (yan yana dizilir)</li>\n        <li>Sadece içerik kadar genişlik kaplar</li>\n        <li><strong>width ve height özellikleri ÇALIŞMAZ</strong></li>\n        <li>İçinde block element bulunduramaz</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: Inline-Block Elementler (EN ÖNEMLİ) -->\n  <h2>🔶 Inline-Block Elementler</h2>\n  <div class=\"card\">\n    <div class=\"card-header\">⚡ display: inline-block;</div>\n    <p><strong>Inline-Block elementler</strong> inline gibi <strong>soldan sağa akar</strong> (yan yana dizilir) <strong>AMA</strong> block gibi <strong>width ve height</strong> özelliklerine sahiptir!</p>\n    \n    <div class=\"element-list\">\n      <span class=\"element-tag\">&lt;img&gt;</span>\n      <span class=\"element-tag\">display: inline-block (CSS ile)</span>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 İnline-Block'a Width ve Height Verme:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* 1. YÖNTEM: img etiketi zaten inline-block'tur */\nimg {\n  width: 50px;      /* ✅ ÇALIŞIR */\n  height: 50px;     /* ✅ ÇALIŞIR */\n}\n\n/* 2. YÖNTEM: Herhangi bir elementi inline-block yapmak */\n.kutum {\n  display: inline-block;\n  width: 150px;     /* ✅ ÇALIŞIR */\n  height: 100px;    /* ✅ ÇALIŞIR */\n  margin: 10px;     /* ✅ ÇALIŞIR */\n  padding: 15px;    /* ✅ ÇALIŞIR */\n}\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;img src=\"puppy.jpg\" /&gt;\n&lt;img src=\"puppy.jpg\" /&gt;\n&lt;img src=\"puppy.jpg\" /&gt;\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Canlı Demo: Inline-Block (Resimler)</h4>\n      <div class=\"demo-container inline-block-demo\">\n        <img src=\"https://picsum.photos/id/20/100/100\" alt=\"puppy\" style=\"width: 50px; border-radius: 8px;\">\n        <img src=\"https://picsum.photos/id/20/100/100\" alt=\"puppy\" style=\"width: 50px; border-radius: 8px;\">\n        <img src=\"https://picsum.photos/id/20/100/100\" alt=\"puppy\" style=\"width: 50px; border-radius: 8px;\">\n        <img src=\"https://picsum.photos/id/20/100/100\" alt=\"puppy\" style=\"width: 50px; border-radius: 8px;\">\n        <img src=\"https://picsum.photos/id/20/100/100\" alt=\"puppy\" style=\"width: 50px; border-radius: 8px;\">\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Her resmin <strong>width: 50px</strong>! Inline-block olduğu için width çalışır VE yan yana dizilirler.</p>\n    </div>\n\n    <h3>🎨 Kendi Inline-Block Kutularımızı Oluşturalım</h3>\n    <div class=\"code-block\">\n      <pre>\n.inline-block-box {\n  display: inline-block;\n  width: 120px;      /* Genişlik belirleyebiliriz */\n  height: 80px;      /* Yükseklik belirleyebiliriz */\n  margin: 10px;      /* Dış boşluk her yönde çalışır */\n  padding: 10px;     /* İç boşluk her yönde çalışır */\n  background: #3a3a4a;\n  border-radius: 8px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Inline-Block Kutular (width: 120px, height: 80px)</h4>\n      <div class=\"demo-container inline-block-boxes\">\n        <div class=\"inline-block-box\">Kutu 1<br>120x80</div>\n        <div class=\"inline-block-box\">Kutu 2<br>120x80</div>\n        <div class=\"inline-block-box\">Kutu 3<br>120x80</div>\n        <div class=\"inline-block-box\">Kutu 4<br>120x80</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Her kutu <strong>yan yana</strong> ama her birinin <strong>genişliği 120px, yüksekliği 80px</strong>!</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Inline-Block Özet:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ Inline gibi <strong>soldan sağa akar</strong> (yan yana dizilir)</li>\n        <li>✅ Block gibi <strong>width ve height</strong> özelleştirilebilir</li>\n        <li>✅ margin/padding her yönde çalışır</li>\n        <li>✅ İçinde block element bulundurabilir</li>\n        <li>🎯 <strong>Menüler, kart galerileri, buton grupları için idealdir!</strong></li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: display CSS Özelliği ile Tip Değiştirme -->\n  <h2>🔄 display CSS Özelliği ile Tip Değiştirme</h2>\n  <div class=\"card\">\n    <p>Bir elementin <strong>varsayılan görüntüleme tipini</strong> <code>display</code> özelliği ile <strong>değiştirebilirsiniz</strong>!</p>\n    \n    <div class=\"code-block\">\n      <pre>\n/* Inline bir elementi block yapmak */\na {\n  display: block;\n}\n\n/* Block bir elementi inline yapmak */\np {\n  display: inline;\n}\n\n/* Herhangi bir elementi inline-block yapmak */\n.my-element {\n  display: inline-block;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 display ile Tip Değiştirme Örneği</h4>\n      <div class=\"demo-container\">\n        <div style=\"background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;\">\n          🔹 Bu div aslında block ama display: inline yapıldı\n        </div>\n        <div style=\"background: #3a3a4a; margin: 0.5rem; padding: 0.5rem; display: inline; width: 200px;\">\n          🔹 İkinci div de inline oldu, yan yana dizildiler!\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Normalde <code>&lt;div&gt;</code> block elementtir, ama <code>display: inline</code> ile yan yana dizildi!</p>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 display için olası değerler:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><code>display: block;</code> → element block gibi davranır</li>\n        <li><code>display: inline;</code> → element inline gibi davranır</li>\n        <li><code>display: inline-block;</code> → element inline-block gibi davranır</li>\n        <li><code>display: none;</code> → elementi tamamen gizler</li>\n        <li><code>display: flex;</code> → flexbox container yapar</li>\n        <li><code>display: grid;</code> → grid container yapar</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 5: Karşılaştırma Tablosu -->\n  <h2>📊 Block vs Inline vs Inline-Block Karşılaştırması</h2>\n  <table class=\"comparison-table\">\n    <thead>\n      <tr><th>Özellik</th><th>Block</th><th>Inline</th><th>Inline-Block</th></tr>\n    </thead>\n    <tbody>\n      <tr><td>Akış yönü</td><td>⬇️ Yukarıdan aşağıya</td><td>➡️ Soldan sağa</td><td>➡️ Soldan sağa</td></tr>\n      <tr><td>Yeni satır başlatır</td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Hayır</td><td class=\"cross\">❌ Hayır</td></tr>\n      <tr><td>width/height çalışır</td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Hayır</td><td class=\"check\">✅ Evet</td></tr>\n      <tr><td>margin her yönde</td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Sadece sağ/sol</td><td class=\"check\">✅ Evet</td></tr>\n      <tr><td>padding her yönde</td><td class=\"check\">✅ Evet</td><td>⚠️ Evet ama taşabilir</td><td class=\"check\">✅ Evet</td></tr>\n      <tr><td>İçinde block element</td><td class=\"check\">✅ Evet</td><td class=\"cross\">❌ Hayır</td><td class=\"check\">✅ Evet</td></tr>\n      <tr><td>Örnek elementler</td><td><code>div, p, h1, ul</code></td><td><code>span, a, strong, em</code></td><td><code>img</code> + CSS ile</td></tr>\n    </tbody>\n  </table>\n\n  <!-- BÖLÜM 6: Pratik İpucu -->\n  <h2>💡 Pratik İpucu: Inline Elementlerde width/height Çalıştırma</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Sorun:</strong> <code>&lt;span&gt;</code> veya <code>&lt;a&gt;</code> gibi inline elementlere width/height veremiyorum!\n    </div>\n    <div class=\"success-note\">\n      <strong>✅ Çözüm:</strong> Onları <code>inline-block</code> veya <code>block</code> yapın!\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nspan {\n  display: inline-block;\n  width: 100px;\n  height: 50px;\n  background: yellow;\n}\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Inline → Inline-Block Dönüşümü</h4>\n      <div class=\"demo-container\">\n        <span style=\"display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;\">Inline-Block</span>\n        <span style=\"display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;\">Kutu 2</span>\n        <span style=\"display: inline-block; width: 100px; height: 50px; background: #e8ff47; color: #000; text-align: center; line-height: 50px;\">Kutu 3</span>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <code>&lt;span&gt;</code> elementleri <code>display: inline-block</code> ile hem yan yana hem de width/height sahibi oldu!</p>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: Özet -->\n  <h2>📋 Genel Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>🔷 <strong>Block:</strong> Tam genişlik, yukarıdan aşağıya, width/height var → <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code></li>\n      <li>🔹 <strong>Inline:</strong> İçerik kadar genişlik, soldan sağa, width/height YOK → <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code></li>\n      <li>🔶 <strong>Inline-Block:</strong> Soldan sağa akar <strong>AMA</strong> width/height var → <code>&lt;img&gt;</code>, veya <code>display: inline-block</code> ile</li>\n      <li>🔄 <strong>display özelliği</strong> ile bir elementin tipini değiştirebilirsin!</li>\n      <li>🎯 <strong>Inline elemente width/height vermek istiyorsan → display: inline-block kullan!</strong></li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Block vs Inline vs Inline-Block | display özelliği ile element tipleri\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-display-types.css - Block, Inline, Inline-Block Detaylı Anlatım */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Demo kutuları */\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.demo-container {\n  background: #2a2a32;\n  border: 1px dashed #e8ff47;\n  padding: 1rem;\n  margin: 0.5rem 0;\n}\n\n/* Block demo ile border gösterme */\n.block-demo h1, .block-demo p {\n  border: 5px solid #ff6464;\n  padding: 0.5rem;\n  margin: 0.5rem 0;\n}\n\n.block-demo-width h1 {\n  border: 5px solid #6bcb77;\n  width: 50%;\n  padding: 0.5rem;\n}\n\n/* Inline demo */\n.inline-demo strong, .inline-demo a {\n  border: 5px solid #ffaa44;\n  padding: 0.2rem;\n}\n\n.inline-demo-width strong {\n  border: 5px solid #ffaa44;\n  width: 1000px;  /* Bu çalışmayacak! */\n  display: inline-block;\n}\n\n/* Inline-block demo - RESİMLER İÇİN */\n.inline-block-demo img {\n  width: 50px;\n  border-radius: 8px;\n  margin: 0.2rem;\n}\n\n/* Inline-block kutu demo */\n.inline-block-boxes {\n  text-align: center;\n}\n\n.inline-block-box {\n  display: inline-block;\n  width: 120px;\n  height: 80px;\n  background: #3a3a4a;\n  margin: 0.5rem;\n  padding: 0.5rem;\n  border-radius: 8px;\n  text-align: center;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  border: 2px solid #e8ff47;\n}\n\n/* Tablo */\n.comparison-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.comparison-table th,\n.comparison-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.comparison-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.comparison-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.comparison-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n.check {\n  color: #6bcb77;\n}\n\n.cross {\n  color: #ff6464;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.info-note strong, .warning-note strong, .success-note strong {\n  color: #e8ff47;\n}\n\n/* Element listesi */\n.element-list {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.8rem;\n  margin: 1rem 0;\n}\n\n.element-tag {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  padding: 0.3rem 0.8rem;\n  border-radius: 20px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .comparison-table th,\n  .comparison-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
