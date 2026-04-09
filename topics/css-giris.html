@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>css giris - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>css giris</h1>
+    <p class="desc"></p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;CSS Giriş - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-basics.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;🎨 &lt;span class=&quot;highlight&quot;&gt;CSS&lt;/span&gt; — Cascading Style Sheets&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Stil kuralları · Seçiciler · Renkler · HTML'e bağlama · Alıştırma&lt;/div&gt;
+
+  &lt;!-- BÖLÜM 1: CSS Nedir? --&gt;
+  &lt;h2&gt;📖 CSS Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;CSS (Cascading Style Sheets)&lt;/strong&gt; bir web sayfasının &lt;strong&gt;görünümünü ve düzenini&lt;/strong&gt; tanımlar.&lt;/p&gt;
+    &lt;p&gt;CSS, &lt;strong&gt;stil kurallarından (style rules)&lt;/strong&gt; oluşur. Her kural, hangi HTML elementlerinin nasıl görüneceğini belirtir.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+selector {
+  property: value;
+}
+
+/* Örnek: Tüm paragraflar mavi ve kalın olsun */
+p {
+  color: blue;
+  font-weight: bold;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;live-preview&quot;&gt;
+      &lt;h4&gt;✨ Canlı Önizleme (CSS uygulanmış)&lt;/h4&gt;
+      &lt;p style=&quot;color: blue; font-weight: bold;&quot;&gt;Bu paragraf mavi ve kalın!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 2: CSS Kuralının Yapısı --&gt;
+  &lt;h2&gt;🔧 CSS Kuralının Yapısı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+selector {
+  property: value;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;&lt;strong&gt;Seçici (selector):&lt;/strong&gt; Hangi HTML element(ler)inin stil alacağını belirtir.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Özellik (property):&lt;/strong&gt; CSS stilinin adı (ör: &lt;code&gt;color&lt;/code&gt;, &lt;code&gt;font-size&lt;/code&gt;).&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Değer (value):&lt;/strong&gt; CSS stili için değer (ör: &lt;code&gt;blue&lt;/code&gt;, &lt;code&gt;16px&lt;/code&gt;).&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Benzetme:&lt;/strong&gt; &lt;code&gt;fork { color: gold; }&lt;/code&gt; → &quot;Masamdaki tüm çatallar altın rengi olsun&quot; gibi düşünebilirsin.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 3: CSS Dosyası ve HTML'e Bağlama --&gt;
+  &lt;h2&gt;🔗 CSS Dosyası ve HTML'e Bağlama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;CSS kuralları &lt;code&gt;style.css&lt;/code&gt; gibi bir dosyada saklanır. HTML dosyasında &lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt; etiketi ile bağlanır:&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;title&amp;gt;CS 193X&amp;lt;/title&amp;gt;
+  &amp;lt;link rel=&quot;stylesheet&quot; href=&quot;filename.css&quot; /&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+  ... sayfa içeriği ...
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Önemli:&lt;/strong&gt; &lt;code&gt;link&lt;/code&gt; etiketi &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; içinde olmalıdır. &lt;code&gt;href&lt;/code&gt; özniteliği CSS dosyasının yolunu belirtir.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 4: Temel CSS Özellikleri --&gt;
+  &lt;h2&gt;📋 Temel CSS Özellikleri&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik (Property)&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Örnek Değer&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;font-family&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Yazı tipi&lt;/td&gt;&lt;td&gt;&lt;code&gt;Helvetica, Arial, sans-serif&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;color&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Yazı rengi&lt;/td&gt;&lt;td&gt;&lt;code&gt;gray, #ff0000, rgb(0,0,255)&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;background-color&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Arka plan rengi&lt;/td&gt;&lt;td&gt;&lt;code&gt;red, lavenderblush&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;border&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kenarlık&lt;/td&gt;&lt;td&gt;&lt;code&gt;3px solid hotpink&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;text-align&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Metin hizalama&lt;/td&gt;&lt;td&gt;&lt;code&gt;left, center, right&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;width&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Genişlik&lt;/td&gt;&lt;td&gt;&lt;code&gt;500px, 80%, 20rem&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;margin&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Dış boşluk&lt;/td&gt;&lt;td&gt;&lt;code&gt;0 auto, 10px, 20px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;padding&lt;/code&gt;&lt;/td&gt;&lt;td&gt;İç boşluk&lt;/td&gt;&lt;td&gt;&lt;code&gt;1rem, 10px 20px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+  &lt;div class=&quot;info-note&quot;&gt;
+    &lt;strong&gt;📚 MDN Referansı:&lt;/strong&gt; Mozilla Developer Network (MDN), HTML elementleri ve CSS özellikleri için &lt;strong&gt;en iyi referanstır&lt;/strong&gt;. W3C belgeleri tarayıcı geliştiricileri içindir.
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 5: Renk Tanımlama Yöntemleri --&gt;
+  &lt;h2&gt;🎨 CSS'de Renk Tanımlama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;CSS'de renkleri &lt;strong&gt;4 farklı şekilde&lt;/strong&gt; tanımlayabilirsin:&lt;/p&gt;
+
+    &lt;div class=&quot;color-demo&quot;&gt;
+      &lt;div class=&quot;color-box&quot; style=&quot;background-color: black; color:white;&quot;&gt;black&lt;/div&gt;
+      &lt;div class=&quot;color-box&quot; style=&quot;background-color: #00ff00;&quot;&gt;#00ff00&lt;/div&gt;
+      &lt;div class=&quot;color-box&quot; style=&quot;background-color: #0f0;&quot;&gt;#0f0&lt;/div&gt;
+      &lt;div class=&quot;color-box&quot; style=&quot;background-color: rgba(0,0,0,0.5);&quot;&gt;rgba&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;table class=&quot;property-table&quot;&gt;
+      &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Yöntem&lt;/th&gt;&lt;th&gt;Örnek&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Önceden tanımlı isimler&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;color: black;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;140 renk ismi var (red, blue, hotpink, vb.)&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Hex (Hexadecimal)&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;color: #00ff00;&lt;/code&gt;&lt;br&gt;&lt;code&gt;color: #0f0;&lt;/code&gt;&lt;br&gt;&lt;code&gt;color: #00ff0080;&lt;/code&gt;&lt;/td&gt;&lt;td&gt;#RRGGBB veya #RGB formatı. Son iki hanede alfa (şeffaflık) olabilir&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td&gt;&lt;strong&gt;rgb() / rgba()&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;color: rgb(34, 12, 64);&lt;/code&gt;&lt;br&gt;&lt;code&gt;color: rgba(0, 0, 0, 0.5);&lt;/code&gt;&lt;/td&gt;&lt;td&gt;0-255 arası değerler. rgba'da &quot;a&quot; = alpha (şeffaflık, 0-1 arası)&lt;/td&gt;&lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;✅ Öneri:&lt;/strong&gt; Daha okunabilir olduğu için sırasıyla tercih et:&lt;br&gt;
+      1. Önceden tanımlı isimler (&lt;code&gt;hotpink&lt;/code&gt;, &lt;code&gt;lavenderblush&lt;/code&gt;)&lt;br&gt;
+      2. rgb / rgba&lt;br&gt;
+      3. Hex değerleri
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 6: Alıştırma - Kurs Web Sayfası --&gt;
+  &lt;h2&gt;✏️ Alıştırma: Kurs Web Sayfası Stilleme&lt;/h2&gt;
+  &lt;div class=&quot;exercise-box&quot;&gt;
+    &lt;h3&gt;🎯 Hedef&lt;/h3&gt;
+    &lt;p&gt;Aşağıdaki CSS kurallarını uygulayarak bir kartı stille:&lt;/p&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+      &lt;li&gt;Yazı tipi: &lt;strong&gt;Helvetica&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Kenarlık: &lt;strong&gt;hotpink 3px solid&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Arka plan rengi: &lt;strong&gt;lavenderblush&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Vurgu (highlight) rengi: &lt;strong&gt;yellow&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Kutu &lt;strong&gt;ortalanmış&lt;/strong&gt; (margin: 0 auto)&lt;/li&gt;
+      &lt;li&gt;Başlık ve link &lt;strong&gt;ortalanmış&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;Kutu içeriği &lt;strong&gt;sola hizalı&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h3&gt;📄 HTML Yapısı&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;div class=&quot;course-card&quot;&amp;gt;
+  &amp;lt;h1&amp;gt;CS 193X&amp;lt;/h1&amp;gt;
+  &amp;lt;p&amp;gt;Bu bir &amp;lt;span class=&quot;highlight&quot;&amp;gt;web programlama&amp;lt;/span&amp;gt; kursudur.&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;CSS ile &amp;lt;strong&amp;gt;stil&amp;lt;/strong&amp;gt; vermeyi öğreniyoruz.&amp;lt;/p&amp;gt;
+  &amp;lt;a href=&quot;#&quot;&amp;gt;Daha fazla bilgi →&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;🎨 CSS Kodu (Çözüm)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.course-card {
+  font-family: Helvetica, sans-serif;
+  border: 3px solid hotpink;
+  background-color: lavenderblush;
+  width: 80%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+.course-card h1 {
+  text-align: center;
+}
+
+.course-card a {
+  text-align: center;
+  display: block;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 0.2rem 0.4rem;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;✨ Canlı Önizleme (CSS uygulanmış)&lt;/h3&gt;
+    &lt;div class=&quot;live-preview&quot;&gt;
+      &lt;div style=&quot;font-family: Helvetica, sans-serif; border: 3px solid hotpink; background-color: lavenderblush; width: 80%; max-width: 500px; margin: 0 auto; padding: 1rem; text-align: left;&quot;&gt;
+        &lt;h1 style=&quot;text-align: center; margin-top: 0;&quot;&gt;CS 193X&lt;/h1&gt;
+        &lt;p&gt;Bu bir &lt;span style=&quot;background-color: yellow; padding: 0.2rem 0.4rem;&quot;&gt;web programlama&lt;/span&gt; kursudur.&lt;/p&gt;
+        &lt;p&gt;CSS ile &lt;strong&gt;stil&lt;/strong&gt; vermeyi öğreniyoruz.&lt;/p&gt;
+        &lt;a href=&quot;#&quot; style=&quot;text-align: center; display: block; color: #e8ff47;&quot;&gt;Daha fazla bilgi →&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 7: Önemli Teknikler ve Karşılaşılan Tuhaf Durumlar --&gt;
+  &lt;h2&gt;🧠 Önemli Teknikler &amp; Karşılaşılan Tuhaf Durumlar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;✅ İyi Bilinen Teknikler&lt;/h3&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0;&quot;&gt;
+      &lt;li&gt;&lt;strong&gt;Görünmez kaplar (containers) ekleyin:&lt;/strong&gt; Element gruplarını seçmek için &lt;code&gt;&amp;lt;div&amp;gt;&lt;/code&gt; veya &lt;code&gt;&amp;lt;span&amp;gt;&lt;/code&gt; kullanın.&lt;/li&gt;
+      &lt;li&gt;&lt;strong&gt;Üst/ata elemente stil uygulayın:&lt;/strong&gt; Üst elemente stil vererek tüm çocuk elementleri de stillendirebilirsiniz.&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h3&gt;⚠️ Karşılaşılan Tuhaf Durumlar&lt;/h3&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;text-align: center;&lt;/strong&gt; → &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; veya &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt; gibi &lt;strong&gt;inline elementlerde&lt;/strong&gt; çalışmaz. Onları &lt;code&gt;display: block;&lt;/code&gt; yapmalısınız.&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;width belirlemek:&lt;/strong&gt; Kutu içeriğine tam otursun istiyorsan &lt;code&gt;width: fit-content;&lt;/code&gt; veya &lt;code&gt;display: inline-block;&lt;/code&gt; kullanabilirsin.&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Kutu ortalama:&lt;/strong&gt; &lt;code&gt;margin: 0 auto;&lt;/code&gt; sadece &lt;code&gt;width&lt;/code&gt; belirtilmiş block elementlerde çalışır.&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 8: Örnek CSS Dosyası --&gt;
+  &lt;h2&gt;📁 Örnek CSS Dosyası (css-basics-demo.css)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Aşağıdaki CSS kuralları &lt;code&gt;css-basics-demo.css&lt;/code&gt; dosyasında saklanır. Bu dosya HTML'den linklenebilir:&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* css-basics-demo.css */
+
+/* Tüm paragraflar mavi ve kalın */
+p {
+  color: blue;
+  font-weight: bold;
+}
+
+/* Sayfa başlığı */
+h1 {
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+}
+
+/* Özel kutu */
+.demo-box {
+  border: 3px solid hotpink;
+  background-color: lavenderblush;
+  width: 80%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+.demo-box h2 {
+  text-align: center;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 0.2rem 0.4rem;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;🔗 Linkleme kodu:&lt;/strong&gt; &lt;code&gt;&amp;lt;link rel=&quot;stylesheet&quot; href=&quot;css-basics-demo.css&quot; /&amp;gt;&lt;/code&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- BÖLÜM 9: Özet --&gt;
+  &lt;h2&gt;📋 Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;✅ CSS = &lt;strong&gt;Cascading Style Sheets&lt;/strong&gt; → sayfa görünümünü belirler&lt;/li&gt;
+      &lt;li&gt;✅ CSS kuralı = &lt;code&gt;seçici { özellik: değer; }&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;✅ CSS dosyası &lt;code&gt;.css&lt;/code&gt; uzantılıdır, HTML'de &lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt; ile bağlanır&lt;/li&gt;
+      &lt;li&gt;✅ Renkler: isim, hex, rgb/rgba ile tanımlanır&lt;/li&gt;
+      &lt;li&gt;✅ &lt;strong&gt;MDN&lt;/strong&gt; en iyi referans kaynağıdır&lt;/li&gt;
+      &lt;li&gt;✅ 500+ CSS özelliği var! Ama temel 10-20 tanesi işin çoğunu görür&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — CSS Giriş | MDN: developer.mozilla.org
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-basics.css - CSS Giriş Dersi Sayfa Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Renk gösterimleri */
+.color-demo {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.color-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-family: 'Space Mono', monospace;
+  color: white;
+  text-shadow: 0 0 2px black;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong {
+  color: #e8ff47;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Alıştırma bölümü */
+.exercise-box {
+  background: #1a1a20;
+  border: 2px solid #e8ff47;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.exercise-box h3 {
+  color: #e8ff47;
+  margin-top: 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Giriş - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-basics.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>🎨 <span class="highlight">CSS</span> — Cascading Style Sheets</h1>
+  <div class="subtitle">Stil kuralları · Seçiciler · Renkler · HTML'e bağlama · Alıştırma</div>
+
+  <!-- BÖLÜM 1: CSS Nedir? -->
+  <h2>📖 CSS Nedir?</h2>
+  <div class="card">
+    <p><strong>CSS (Cascading Style Sheets)</strong> bir web sayfasının <strong>görünümünü ve düzenini</strong> tanımlar.</p>
+    <p>CSS, <strong>stil kurallarından (style rules)</strong> oluşur. Her kural, hangi HTML elementlerinin nasıl görüneceğini belirtir.</p>
+    <div class="code-block">
+      <pre>
+selector {
+  property: value;
+}
+
+/* Örnek: Tüm paragraflar mavi ve kalın olsun */
+p {
+  color: blue;
+  font-weight: bold;
+}
+      </pre>
+    </div>
+    <div class="live-preview">
+      <h4>✨ Canlı Önizleme (CSS uygulanmış)</h4>
+      <p style="color: blue; font-weight: bold;">Bu paragraf mavi ve kalın!</p>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 2: CSS Kuralının Yapısı -->
+  <h2>🔧 CSS Kuralının Yapısı</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+selector {
+  property: value;
+}
+      </pre>
+    </div>
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li><strong>Seçici (selector):</strong> Hangi HTML element(ler)inin stil alacağını belirtir.</li>
+      <li><strong>Özellik (property):</strong> CSS stilinin adı (ör: <code>color</code>, <code>font-size</code>).</li>
+      <li><strong>Değer (value):</strong> CSS stili için değer (ör: <code>blue</code>, <code>16px</code>).</li>
+    </ul>
+    <div class="info-note">
+      <strong>💡 Benzetme:</strong> <code>fork { color: gold; }</code> → "Masamdaki tüm çatallar altın rengi olsun" gibi düşünebilirsin.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 3: CSS Dosyası ve HTML'e Bağlama -->
+  <h2>🔗 CSS Dosyası ve HTML'e Bağlama</h2>
+  <div class="card">
+    <p>CSS kuralları <code>style.css</code> gibi bir dosyada saklanır. HTML dosyasında <code>&lt;link&gt;</code> etiketi ile bağlanır:</p>
+    <div class="code-block">
+      <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;CS 193X&lt;/title&gt;
+  &lt;link rel="stylesheet" href="filename.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  ... sayfa içeriği ...
+&lt;/body&gt;
+&lt;/html&gt;
+      </pre>
+    </div>
+    <div class="info-note">
+      <strong>📌 Önemli:</strong> <code>link</code> etiketi <code>&lt;head&gt;</code> içinde olmalıdır. <code>href</code> özniteliği CSS dosyasının yolunu belirtir.
+    </div>
+  </div>
+
+  <!-- BÖLÜM 4: Temel CSS Özellikleri -->
+  <h2>📋 Temel CSS Özellikleri</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Özellik (Property)</th><th>Açıklama</th><th>Örnek Değer</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>font-family</code></td><td>Yazı tipi</td><td><code>Helvetica, Arial, sans-serif</code></td></tr>
+      <tr><td><code>color</code></td><td>Yazı rengi</td><td><code>gray, #ff0000, rgb(0,0,255)</code></td></tr>
+      <tr><td><code>background-color</code></td><td>Arka plan rengi</td><td><code>red, lavenderblush</code></td></tr>
+      <tr><td><code>border</code></td><td>Kenarlık</td><td><code>3px solid hotpink</code></td></tr>
+      <tr><td><code>text-align</code></td><td>Metin hizalama</td><td><code>left, center, right</code></td></tr>
+      <tr><td><code>width</code></td><td>Genişlik</td><td><code>500px, 80%, 20rem</code></td></tr>
+      <tr><td><code>margin</code></td><td>Dış boşluk</td><td><code>0 auto, 10px, 20px</code></td></tr>
+      <tr><td><code>padding</code></td><td>İç boşluk</td><td><code>1rem, 10px 20px</code></td></tr>
+    </tbody>
+  </table>
+  <div class="info-note">
+    <strong>📚 MDN Referansı:</strong> Mozilla Developer Network (MDN), HTML elementleri ve CSS özellikleri için <strong>en iyi referanstır</strong>. W3C belgeleri tarayıcı geliştiricileri içindir.
+  </div>
+
+  <!-- BÖLÜM 5: Renk Tanımlama Yöntemleri -->
+  <h2>🎨 CSS'de Renk Tanımlama</h2>
+  <div class="card">
+    <p>CSS'de renkleri <strong>4 farklı şekilde</strong> tanımlayabilirsin:</p>
+
+    <div class="color-demo">
+      <div class="color-box" style="background-color: black; color:white;">black</div>
+      <div class="color-box" style="background-color: #00ff00;">#00ff00</div>
+      <div class="color-box" style="background-color: #0f0;">#0f0</div>
+      <div class="color-box" style="background-color: rgba(0,0,0,0.5);">rgba</div>
+    </div>
+
+    <table class="property-table">
+      <thead><tr><th>Yöntem</th><th>Örnek</th><th>Açıklama</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Önceden tanımlı isimler</strong></td><td><code>color: black;</code></td><td>140 renk ismi var (red, blue, hotpink, vb.)</td></tr>
+        <tr><td><strong>Hex (Hexadecimal)</strong></td><td><code>color: #00ff00;</code><br><code>color: #0f0;</code><br><code>color: #00ff0080;</code></td><td>#RRGGBB veya #RGB formatı. Son iki hanede alfa (şeffaflık) olabilir</td></tr>
+        <tr><td><strong>rgb() / rgba()</strong></td><td><code>color: rgb(34, 12, 64);</code><br><code>color: rgba(0, 0, 0, 0.5);</code></td><td>0-255 arası değerler. rgba'da "a" = alpha (şeffaflık, 0-1 arası)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-note">
+      <strong>✅ Öneri:</strong> Daha okunabilir olduğu için sırasıyla tercih et:<br>
+      1. Önceden tanımlı isimler (<code>hotpink</code>, <code>lavenderblush</code>)<br>
+      2. rgb / rgba<br>
+      3. Hex değerleri
+    </div>
+  </div>
+
+  <!-- BÖLÜM 6: Alıştırma - Kurs Web Sayfası -->
+  <h2>✏️ Alıştırma: Kurs Web Sayfası Stilleme</h2>
+  <div class="exercise-box">
+    <h3>🎯 Hedef</h3>
+    <p>Aşağıdaki CSS kurallarını uygulayarak bir kartı stille:</p>
+    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+      <li>Yazı tipi: <strong>Helvetica</strong></li>
+      <li>Kenarlık: <strong>hotpink 3px solid</strong></li>
+      <li>Arka plan rengi: <strong>lavenderblush</strong></li>
+      <li>Vurgu (highlight) rengi: <strong>yellow</strong></li>
+      <li>Kutu <strong>ortalanmış</strong> (margin: 0 auto)</li>
+      <li>Başlık ve link <strong>ortalanmış</strong></li>
+      <li>Kutu içeriği <strong>sola hizalı</strong></li>
+    </ul>
+
+    <h3>📄 HTML Yapısı</h3>
+    <div class="code-block">
+      <pre>
+&lt;div class="course-card"&gt;
+  &lt;h1&gt;CS 193X&lt;/h1&gt;
+  &lt;p&gt;Bu bir &lt;span class="highlight"&gt;web programlama&lt;/span&gt; kursudur.&lt;/p&gt;
+  &lt;p&gt;CSS ile &lt;strong&gt;stil&lt;/strong&gt; vermeyi öğreniyoruz.&lt;/p&gt;
+  &lt;a href="#"&gt;Daha fazla bilgi →&lt;/a&gt;
+&lt;/div&gt;
+      </pre>
+    </div>
+
+    <h3>🎨 CSS Kodu (Çözüm)</h3>
+    <div class="code-block">
+      <pre>
+.course-card {
+  font-family: Helvetica, sans-serif;
+  border: 3px solid hotpink;
+  background-color: lavenderblush;
+  width: 80%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+.course-card h1 {
+  text-align: center;
+}
+
+.course-card a {
+  text-align: center;
+  display: block;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 0.2rem 0.4rem;
+}
+      </pre>
+    </div>
+
+    <h3>✨ Canlı Önizleme (CSS uygulanmış)</h3>
+    <div class="live-preview">
+      <div style="font-family: Helvetica, sans-serif; border: 3px solid hotpink; background-color: lavenderblush; width: 80%; max-width: 500px; margin: 0 auto; padding: 1rem; text-align: left;">
+        <h1 style="text-align: center; margin-top: 0;">CS 193X</h1>
+        <p>Bu bir <span style="background-color: yellow; padding: 0.2rem 0.4rem;">web programlama</span> kursudur.</p>
+        <p>CSS ile <strong>stil</strong> vermeyi öğreniyoruz.</p>
+        <a href="#" style="text-align: center; display: block; color: #e8ff47;">Daha fazla bilgi →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 7: Önemli Teknikler ve Karşılaşılan Tuhaf Durumlar -->
+  <h2>🧠 Önemli Teknikler & Karşılaşılan Tuhaf Durumlar</h2>
+  <div class="card">
+    <h3>✅ İyi Bilinen Teknikler</h3>
+    <ul style="margin-left: 1.5rem; color:#c0c0d0;">
+      <li><strong>Görünmez kaplar (containers) ekleyin:</strong> Element gruplarını seçmek için <code>&lt;div&gt;</code> veya <code>&lt;span&gt;</code> kullanın.</li>
+      <li><strong>Üst/ata elemente stil uygulayın:</strong> Üst elemente stil vererek tüm çocuk elementleri de stillendirebilirsiniz.</li>
+    </ul>
+
+    <h3>⚠️ Karşılaşılan Tuhaf Durumlar</h3>
+    <div class="warning-note">
+      <ul style="margin-left: 1.5rem;">
+        <li><strong>text-align: center;</strong> → <code>&lt;a&gt;</code> veya <code>&lt;strong&gt;</code> gibi <strong>inline elementlerde</strong> çalışmaz. Onları <code>display: block;</code> yapmalısınız.</li>
+        <li><strong>width belirlemek:</strong> Kutu içeriğine tam otursun istiyorsan <code>width: fit-content;</code> veya <code>display: inline-block;</code> kullanabilirsin.</li>
+        <li><strong>Kutu ortalama:</strong> <code>margin: 0 auto;</code> sadece <code>width</code> belirtilmiş block elementlerde çalışır.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 8: Örnek CSS Dosyası -->
+  <h2>📁 Örnek CSS Dosyası (css-basics-demo.css)</h2>
+  <div class="card">
+    <p>Aşağıdaki CSS kuralları <code>css-basics-demo.css</code> dosyasında saklanır. Bu dosya HTML'den linklenebilir:</p>
+    <div class="code-block">
+      <pre>
+/* css-basics-demo.css */
+
+/* Tüm paragraflar mavi ve kalın */
+p {
+  color: blue;
+  font-weight: bold;
+}
+
+/* Sayfa başlığı */
+h1 {
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+}
+
+/* Özel kutu */
+.demo-box {
+  border: 3px solid hotpink;
+  background-color: lavenderblush;
+  width: 80%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: left;
+}
+
+.demo-box h2 {
+  text-align: center;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 0.2rem 0.4rem;
+}
+      </pre>
+    </div>
+    <div class="info-note">
+      <strong>🔗 Linkleme kodu:</strong> <code>&lt;link rel="stylesheet" href="css-basics-demo.css" /&gt;</code>
+    </div>
+  </div>
+
+  <!-- BÖLÜM 9: Özet -->
+  <h2>📋 Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>✅ CSS = <strong>Cascading Style Sheets</strong> → sayfa görünümünü belirler</li>
+      <li>✅ CSS kuralı = <code>seçici { özellik: değer; }</code></li>
+      <li>✅ CSS dosyası <code>.css</code> uzantılıdır, HTML'de <code>&lt;link&gt;</code> ile bağlanır</li>
+      <li>✅ Renkler: isim, hex, rgb/rgba ile tanımlanır</li>
+      <li>✅ <strong>MDN</strong> en iyi referans kaynağıdır</li>
+      <li>✅ 500+ CSS özelliği var! Ama temel 10-20 tanesi işin çoğunu görür</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — CSS Giriş | MDN: developer.mozilla.org
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-basics.css - CSS Giriş Dersi Sayfa Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Başlıklar */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Kartlar */
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Kod blokları */
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Canlı önizleme */
+.live-preview {
+  background: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-family: sans-serif;
+}
+
+.live-preview h4 {
+  font-size: 0.7rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+/* Renk gösterimleri */
+.color-demo {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.color-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-family: 'Space Mono', monospace;
+  color: white;
+  text-shadow: 0 0 2px black;
+}
+
+/* Info notu */
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.info-note strong {
+  color: #e8ff47;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+/* Alıştırma bölümü */
+.exercise-box {
+  background: #1a1a20;
+  border: 2px solid #e8ff47;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.exercise-box h3 {
+  color: #e8ff47;
+  margin-top: 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=css-giris" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>css giris — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>CSS Giriş - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-basics.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>🎨 <span class=\"highlight\">CSS</span> — Cascading Style Sheets</h1>\n  <div class=\"subtitle\">Stil kuralları · Seçiciler · Renkler · HTML'e bağlama · Alıştırma</div>\n\n  <!-- BÖLÜM 1: CSS Nedir? -->\n  <h2>📖 CSS Nedir?</h2>\n  <div class=\"card\">\n    <p><strong>CSS (Cascading Style Sheets)</strong> bir web sayfasının <strong>görünümünü ve düzenini</strong> tanımlar.</p>\n    <p>CSS, <strong>stil kurallarından (style rules)</strong> oluşur. Her kural, hangi HTML elementlerinin nasıl görüneceğini belirtir.</p>\n    <div class=\"code-block\">\n      <pre>\nselector {\n  property: value;\n}\n\n/* Örnek: Tüm paragraflar mavi ve kalın olsun */\np {\n  color: blue;\n  font-weight: bold;\n}\n      </pre>\n    </div>\n    <div class=\"live-preview\">\n      <h4>✨ Canlı Önizleme (CSS uygulanmış)</h4>\n      <p style=\"color: blue; font-weight: bold;\">Bu paragraf mavi ve kalın!</p>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 2: CSS Kuralının Yapısı -->\n  <h2>🔧 CSS Kuralının Yapısı</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\nselector {\n  property: value;\n}\n      </pre>\n    </div>\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li><strong>Seçici (selector):</strong> Hangi HTML element(ler)inin stil alacağını belirtir.</li>\n      <li><strong>Özellik (property):</strong> CSS stilinin adı (ör: <code>color</code>, <code>font-size</code>).</li>\n      <li><strong>Değer (value):</strong> CSS stili için değer (ör: <code>blue</code>, <code>16px</code>).</li>\n    </ul>\n    <div class=\"info-note\">\n      <strong>💡 Benzetme:</strong> <code>fork { color: gold; }</code> → \"Masamdaki tüm çatallar altın rengi olsun\" gibi düşünebilirsin.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 3: CSS Dosyası ve HTML'e Bağlama -->\n  <h2>🔗 CSS Dosyası ve HTML'e Bağlama</h2>\n  <div class=\"card\">\n    <p>CSS kuralları <code>style.css</code> gibi bir dosyada saklanır. HTML dosyasında <code>&lt;link&gt;</code> etiketi ile bağlanır:</p>\n    <div class=\"code-block\">\n      <pre>\n&lt;!DOCTYPE html&gt;\n&lt;html&gt;\n&lt;head&gt;\n  &lt;title&gt;CS 193X&lt;/title&gt;\n  &lt;link rel=\"stylesheet\" href=\"filename.css\" /&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  ... sayfa içeriği ...\n&lt;/body&gt;\n&lt;/html&gt;\n      </pre>\n    </div>\n    <div class=\"info-note\">\n      <strong>📌 Önemli:</strong> <code>link</code> etiketi <code>&lt;head&gt;</code> içinde olmalıdır. <code>href</code> özniteliği CSS dosyasının yolunu belirtir.\n    </div>\n  </div>\n\n  <!-- BÖLÜM 4: Temel CSS Özellikleri -->\n  <h2>📋 Temel CSS Özellikleri</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Özellik (Property)</th><th>Açıklama</th><th>Örnek Değer</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>font-family</code></td><td>Yazı tipi</td><td><code>Helvetica, Arial, sans-serif</code></td></tr>\n      <tr><td><code>color</code></td><td>Yazı rengi</td><td><code>gray, #ff0000, rgb(0,0,255)</code></td></tr>\n      <tr><td><code>background-color</code></td><td>Arka plan rengi</td><td><code>red, lavenderblush</code></td></tr>\n      <tr><td><code>border</code></td><td>Kenarlık</td><td><code>3px solid hotpink</code></td></tr>\n      <tr><td><code>text-align</code></td><td>Metin hizalama</td><td><code>left, center, right</code></td></tr>\n      <tr><td><code>width</code></td><td>Genişlik</td><td><code>500px, 80%, 20rem</code></td></tr>\n      <tr><td><code>margin</code></td><td>Dış boşluk</td><td><code>0 auto, 10px, 20px</code></td></tr>\n      <tr><td><code>padding</code></td><td>İç boşluk</td><td><code>1rem, 10px 20px</code></td></tr>\n    </tbody>\n  </table>\n  <div class=\"info-note\">\n    <strong>📚 MDN Referansı:</strong> Mozilla Developer Network (MDN), HTML elementleri ve CSS özellikleri için <strong>en iyi referanstır</strong>. W3C belgeleri tarayıcı geliştiricileri içindir.\n  </div>\n\n  <!-- BÖLÜM 5: Renk Tanımlama Yöntemleri -->\n  <h2>🎨 CSS'de Renk Tanımlama</h2>\n  <div class=\"card\">\n    <p>CSS'de renkleri <strong>4 farklı şekilde</strong> tanımlayabilirsin:</p>\n\n    <div class=\"color-demo\">\n      <div class=\"color-box\" style=\"background-color: black; color:white;\">black</div>\n      <div class=\"color-box\" style=\"background-color: #00ff00;\">#00ff00</div>\n      <div class=\"color-box\" style=\"background-color: #0f0;\">#0f0</div>\n      <div class=\"color-box\" style=\"background-color: rgba(0,0,0,0.5);\">rgba</div>\n    </div>\n\n    <table class=\"property-table\">\n      <thead><tr><th>Yöntem</th><th>Örnek</th><th>Açıklama</th></tr></thead>\n      <tbody>\n        <tr><td><strong>Önceden tanımlı isimler</strong></td><td><code>color: black;</code></td><td>140 renk ismi var (red, blue, hotpink, vb.)</td></tr>\n        <tr><td><strong>Hex (Hexadecimal)</strong></td><td><code>color: #00ff00;</code><br><code>color: #0f0;</code><br><code>color: #00ff0080;</code></td><td>#RRGGBB veya #RGB formatı. Son iki hanede alfa (şeffaflık) olabilir</td></tr>\n        <tr><td><strong>rgb() / rgba()</strong></td><td><code>color: rgb(34, 12, 64);</code><br><code>color: rgba(0, 0, 0, 0.5);</code></td><td>0-255 arası değerler. rgba'da \"a\" = alpha (şeffaflık, 0-1 arası)</td></tr>\n      </tbody>\n    </table>\n\n    <div class=\"info-note\">\n      <strong>✅ Öneri:</strong> Daha okunabilir olduğu için sırasıyla tercih et:<br>\n      1. Önceden tanımlı isimler (<code>hotpink</code>, <code>lavenderblush</code>)<br>\n      2. rgb / rgba<br>\n      3. Hex değerleri\n    </div>\n  </div>\n\n  <!-- BÖLÜM 6: Alıştırma - Kurs Web Sayfası -->\n  <h2>✏️ Alıştırma: Kurs Web Sayfası Stilleme</h2>\n  <div class=\"exercise-box\">\n    <h3>🎯 Hedef</h3>\n    <p>Aşağıdaki CSS kurallarını uygulayarak bir kartı stille:</p>\n    <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n      <li>Yazı tipi: <strong>Helvetica</strong></li>\n      <li>Kenarlık: <strong>hotpink 3px solid</strong></li>\n      <li>Arka plan rengi: <strong>lavenderblush</strong></li>\n      <li>Vurgu (highlight) rengi: <strong>yellow</strong></li>\n      <li>Kutu <strong>ortalanmış</strong> (margin: 0 auto)</li>\n      <li>Başlık ve link <strong>ortalanmış</strong></li>\n      <li>Kutu içeriği <strong>sola hizalı</strong></li>\n    </ul>\n\n    <h3>📄 HTML Yapısı</h3>\n    <div class=\"code-block\">\n      <pre>\n&lt;div class=\"course-card\"&gt;\n  &lt;h1&gt;CS 193X&lt;/h1&gt;\n  &lt;p&gt;Bu bir &lt;span class=\"highlight\"&gt;web programlama&lt;/span&gt; kursudur.&lt;/p&gt;\n  &lt;p&gt;CSS ile &lt;strong&gt;stil&lt;/strong&gt; vermeyi öğreniyoruz.&lt;/p&gt;\n  &lt;a href=\"#\"&gt;Daha fazla bilgi →&lt;/a&gt;\n&lt;/div&gt;\n      </pre>\n    </div>\n\n    <h3>🎨 CSS Kodu (Çözüm)</h3>\n    <div class=\"code-block\">\n      <pre>\n.course-card {\n  font-family: Helvetica, sans-serif;\n  border: 3px solid hotpink;\n  background-color: lavenderblush;\n  width: 80%;\n  max-width: 500px;\n  margin: 0 auto;\n  padding: 1rem;\n  text-align: left;\n}\n\n.course-card h1 {\n  text-align: center;\n}\n\n.course-card a {\n  text-align: center;\n  display: block;\n}\n\n.highlight {\n  background-color: yellow;\n  padding: 0.2rem 0.4rem;\n}\n      </pre>\n    </div>\n\n    <h3>✨ Canlı Önizleme (CSS uygulanmış)</h3>\n    <div class=\"live-preview\">\n      <div style=\"font-family: Helvetica, sans-serif; border: 3px solid hotpink; background-color: lavenderblush; width: 80%; max-width: 500px; margin: 0 auto; padding: 1rem; text-align: left;\">\n        <h1 style=\"text-align: center; margin-top: 0;\">CS 193X</h1>\n        <p>Bu bir <span style=\"background-color: yellow; padding: 0.2rem 0.4rem;\">web programlama</span> kursudur.</p>\n        <p>CSS ile <strong>stil</strong> vermeyi öğreniyoruz.</p>\n        <a href=\"#\" style=\"text-align: center; display: block; color: #e8ff47;\">Daha fazla bilgi →</a>\n      </div>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 7: Önemli Teknikler ve Karşılaşılan Tuhaf Durumlar -->\n  <h2>🧠 Önemli Teknikler & Karşılaşılan Tuhaf Durumlar</h2>\n  <div class=\"card\">\n    <h3>✅ İyi Bilinen Teknikler</h3>\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0;\">\n      <li><strong>Görünmez kaplar (containers) ekleyin:</strong> Element gruplarını seçmek için <code>&lt;div&gt;</code> veya <code>&lt;span&gt;</code> kullanın.</li>\n      <li><strong>Üst/ata elemente stil uygulayın:</strong> Üst elemente stil vererek tüm çocuk elementleri de stillendirebilirsiniz.</li>\n    </ul>\n\n    <h3>⚠️ Karşılaşılan Tuhaf Durumlar</h3>\n    <div class=\"warning-note\">\n      <ul style=\"margin-left: 1.5rem;\">\n        <li><strong>text-align: center;</strong> → <code>&lt;a&gt;</code> veya <code>&lt;strong&gt;</code> gibi <strong>inline elementlerde</strong> çalışmaz. Onları <code>display: block;</code> yapmalısınız.</li>\n        <li><strong>width belirlemek:</strong> Kutu içeriğine tam otursun istiyorsan <code>width: fit-content;</code> veya <code>display: inline-block;</code> kullanabilirsin.</li>\n        <li><strong>Kutu ortalama:</strong> <code>margin: 0 auto;</code> sadece <code>width</code> belirtilmiş block elementlerde çalışır.</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 8: Örnek CSS Dosyası -->\n  <h2>📁 Örnek CSS Dosyası (css-basics-demo.css)</h2>\n  <div class=\"card\">\n    <p>Aşağıdaki CSS kuralları <code>css-basics-demo.css</code> dosyasında saklanır. Bu dosya HTML'den linklenebilir:</p>\n    <div class=\"code-block\">\n      <pre>\n/* css-basics-demo.css */\n\n/* Tüm paragraflar mavi ve kalın */\np {\n  color: blue;\n  font-weight: bold;\n}\n\n/* Sayfa başlığı */\nh1 {\n  font-family: Helvetica, sans-serif;\n  text-align: center;\n}\n\n/* Özel kutu */\n.demo-box {\n  border: 3px solid hotpink;\n  background-color: lavenderblush;\n  width: 80%;\n  max-width: 500px;\n  margin: 0 auto;\n  padding: 1rem;\n  text-align: left;\n}\n\n.demo-box h2 {\n  text-align: center;\n}\n\n.highlight {\n  background-color: yellow;\n  padding: 0.2rem 0.4rem;\n}\n      </pre>\n    </div>\n    <div class=\"info-note\">\n      <strong>🔗 Linkleme kodu:</strong> <code>&lt;link rel=\"stylesheet\" href=\"css-basics-demo.css\" /&gt;</code>\n    </div>\n  </div>\n\n  <!-- BÖLÜM 9: Özet -->\n  <h2>📋 Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>✅ CSS = <strong>Cascading Style Sheets</strong> → sayfa görünümünü belirler</li>\n      <li>✅ CSS kuralı = <code>seçici { özellik: değer; }</code></li>\n      <li>✅ CSS dosyası <code>.css</code> uzantılıdır, HTML'de <code>&lt;link&gt;</code> ile bağlanır</li>\n      <li>✅ Renkler: isim, hex, rgb/rgba ile tanımlanır</li>\n      <li>✅ <strong>MDN</strong> en iyi referans kaynağıdır</li>\n      <li>✅ 500+ CSS özelliği var! Ama temel 10-20 tanesi işin çoğunu görür</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — CSS Giriş | MDN: developer.mozilla.org\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-basics.css - CSS Giriş Dersi Sayfa Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n/* Container */\n.container {\n  max-width: 1200px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\n/* Başlıklar */\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\n/* Kartlar */\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n/* Kod blokları */\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Canlı önizleme */\n.live-preview {\n  background: #ffffff;\n  color: #000000;\n  padding: 1rem;\n  border-radius: 8px;\n  margin: 1rem 0;\n  font-family: sans-serif;\n}\n\n.live-preview h4 {\n  font-size: 0.7rem;\n  color: #666;\n  text-transform: uppercase;\n  margin-bottom: 0.8rem;\n  border-bottom: 1px solid #ddd;\n  padding-bottom: 0.3rem;\n}\n\n/* Tablo */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n/* Renk gösterimleri */\n.color-demo {\n  display: flex;\n  gap: 1rem;\n  flex-wrap: wrap;\n  margin: 1rem 0;\n}\n\n.color-box {\n  width: 80px;\n  height: 80px;\n  border-radius: 8px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 0.7rem;\n  font-family: 'Space Mono', monospace;\n  color: white;\n  text-shadow: 0 0 2px black;\n}\n\n/* Info notu */\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.info-note strong {\n  color: #e8ff47;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n/* Alıştırma bölümü */\n.exercise-box {\n  background: #1a1a20;\n  border: 2px solid #e8ff47;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.exercise-box h3 {\n  color: #e8ff47;\n  margin-top: 0;\n}\n\n/* Footer */\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n/* Responsive */\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
