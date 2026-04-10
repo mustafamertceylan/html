@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kullanışlı CSS Özellikleri — calc(), Variables, Background, Web Fonts - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Kullanışlı CSS Özellikleri — calc(), Variables, Background, Web Fonts</h1>
+    <p class="desc">CSS'in en kullanışlı özellikleri: calc() ile dinamik hesaplamalar, CSS değişkenleri (custom properties) ile tekrar kullanılabilir değerler, background-size ile resim boyutlandırma, Google Fonts ile web fontları, @font-face ile özel font yükleme ve fallback fontlar.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Kullanışlı CSS Özellikleri - HTMLBook&lt;/title&gt;
+  &lt;!-- Google Fonts örneği --&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-useful-features.css&quot;&gt;
+  &lt;style&gt;
+    /* Ek demo stilleri */
+    .font-demo-inter {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-demo-jetbrains {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;✨ &lt;span class=&quot;highlight&quot;&gt;Random Useful CSS&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;calc() · CSS Variables · Background Properties · Web Fonts · @font-face&lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 1: calc() Fonksiyonu --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🧮 calc() — Dinamik Hesaplamalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;calc()&lt;/strong&gt; fonksiyonu, CSS'de &lt;strong&gt;matematiksel ifadeler&lt;/strong&gt; kullanarak değer hesaplamanızı sağlar. Farklı birimleri (px, %, em, vh, vw) birbiriyle toplayabilir, çıkarabilir, çarpabilir veya bölebilirsiniz.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* calc() kullanım örnekleri */
+width: calc(50% - 10px);      /* Yüzde 50 eksi 10 piksel */
+width: calc(100% / 3);        /* %100'ün 3'te 1'i */
+width: calc(100vw - 80px);    /* Tam viewport genişliği eksi 80px */
+font-size: calc(1rem + 2vw);  /* Responsive font */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 calc() Örneği&lt;/h4&gt;
+      &lt;div class=&quot;calc-demo-container&quot; style=&quot;background: #2a2a32; border-radius: 8px; padding: 1rem;&quot;&gt;
+        &lt;div class=&quot;calc-box&quot; style=&quot;background: #ff6464; color: white; padding: 1rem; text-align: center; border-radius: 8px; width: calc(100% - 40px); margin: 0 auto;&quot;&gt;
+          width: calc(100% - 40px)&lt;br&gt;
+          (Container genişliğinden 40px daha dar)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 calc() ile Esnek Izgara (Grid)&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* 3 sütunlu esnek grid — her sütun eşit genişlikte */
+.grid-item {
+  width: calc(33.333% - 13.33px);  /* gap: 20px için */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;calc-grid&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 20px;&quot;&gt;
+        &lt;div class=&quot;calc-grid-item&quot; style=&quot;background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);&quot;&gt;Item 1&lt;/div&gt;
+        &lt;div class=&quot;calc-grid-item&quot; style=&quot;background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);&quot;&gt;Item 2&lt;/div&gt;
+        &lt;div class=&quot;calc-grid-item&quot; style=&quot;background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);&quot;&gt;Item 3&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 calc() İpuçları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Toplama/çıkarma işlemlerinde &lt;strong&gt;boşluk bırakın&lt;/strong&gt;: &lt;code&gt;calc(50% - 10px)&lt;/code&gt; ✅&lt;/li&gt;
+        &lt;li&gt;Çarpma/bölme işlemlerinde &lt;strong&gt;en az bir sayı birimsiz olmalı&lt;/strong&gt;: &lt;code&gt;calc(100% / 3)&lt;/code&gt; ✅&lt;/li&gt;
+        &lt;li&gt;Farklı birimleri &lt;strong&gt;birbiriyle toplayabilirsiniz&lt;/strong&gt;: &lt;code&gt;calc(100vh - 80px)&lt;/code&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 2: CSS Variables (Değişkenler) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🎨 CSS Variables (Özel Değişkenler)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;CSS Variables (CSS Custom Properties)&lt;/strong&gt;, tüm CSS dosyanızda &lt;strong&gt;yeniden kullanılabilir değerler&lt;/strong&gt; tanımlamanızı sağlar. Değişkenler &lt;code&gt;--&lt;/code&gt; ile başlar ve &lt;code&gt;var()&lt;/code&gt; fonksiyonu ile kullanılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Değişken tanımlama — genellikle :root içinde */
+:root {
+  --primary-color: #e8ff47;
+  --spacing: 1rem;
+  --border-radius: 12px;
+}
+
+/* Değişken kullanma */
+.button {
+  background: var(--primary-color);
+  padding: var(--spacing);
+  border-radius: var(--border-radius);
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 CSS Variables Örneği&lt;/h4&gt;
+      &lt;div class=&quot;variable-card&quot; style=&quot;background: #16161a; border: 1px solid #2a2a32; border-radius: 12px; padding: 1.5rem;&quot;&gt;
+        &lt;h4 style=&quot;color: #e8ff47;&quot;&gt;Değişkenlerle Stillenmiş Kart&lt;/h4&gt;
+        &lt;p&gt;Bu kartın renkleri, boşlukları ve border-radius'u &lt;strong&gt;CSS değişkenleri&lt;/strong&gt; ile kontrol ediliyor.&lt;/p&gt;
+        &lt;button class=&quot;variable-btn&quot; style=&quot;background: #e8ff47; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0.5rem;&quot;&gt;Değişken Buton&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 CSS Variables Avantajları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Tekrar Kullanılabilirlik&lt;/strong&gt; — Aynı değeri bir yerde tanımla, her yerde kullan&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Kolay Bakım&lt;/strong&gt; — Tema rengini değiştirmek için tek bir yeri değiştir&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Dinamik&lt;/strong&gt; — JavaScript ile değiştirilebilir&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Scope (Kapsam)&lt;/strong&gt; — Belirli bir elementin içinde de tanımlanabilir&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 JavaScript ile Değişken Değiştirme:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+// Tüm sayfanın ana rengini değiştir
+document.documentElement.style.setProperty('--primary-color', '#ff0000');
+
+// Belirli bir elementin değişkenini değiştir
+element.style.setProperty('--spacing', '2rem');
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 3: Background Properties --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🖼️ Background Properties — Arka Plan Özellikleri&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Bir elemente &lt;strong&gt;background-image&lt;/strong&gt; ekleyerek, resimleri kolayca yerleştirebilir ve &lt;strong&gt;boyutlandırabilirsiniz&lt;/strong&gt;.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.hero {
+  background-image: url('background.jpg');
+  background-size: cover;      /* Resmi tam kapla, kırp */
+  background-position: center; /* Ortala */
+  background-repeat: no-repeat; /* Tekrar etme */
+  height: 400px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 background-size: cover (Tam kapla, kırparak)&lt;/h3&gt;
+    &lt;div class=&quot;bg-demo&quot; style=&quot;background-image: url('https://picsum.photos/id/104/400/300'); background-size: cover; background-position: center; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;&quot;&gt;
+      background-size: cover
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 background-size: contain (Tam sığdır, boşluk bırakabilir)&lt;/h3&gt;
+    &lt;div class=&quot;bg-contain&quot; style=&quot;background-image: url('https://picsum.photos/id/104/400/300'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 200px; border-radius: 8px; background-color: #2a2a32;&quot;&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Önemli Background Özellikleri:&lt;/strong&gt;
+      &lt;table style=&quot;width: 100%; margin-top: 0.5rem; border-collapse: collapse;&quot;&gt;
+        &lt;tr style=&quot;border-bottom: 1px solid #2a2a32;&quot;&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;&lt;code&gt;background-size: cover&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;Resmi tam kaplar, taşan kısımlar kırpılır&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr style=&quot;border-bottom: 1px solid #2a2a32;&quot;&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;&lt;code&gt;background-size: contain&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;Resmi tam sığdırır, boşluk kalabilir&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr style=&quot;border-bottom: 1px solid #2a2a32;&quot;&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;&lt;code&gt;background-position: center&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;Resmi ortalar (top, bottom, left, right da kullanılabilir)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;&lt;code&gt;background-repeat: no-repeat&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&quot;padding: 0.5rem;&quot;&gt;Resmin tekrar etmesini engeller&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 4: Web Fonts (Google Fonts) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🔤 Web Fonts — Google Fonts ile Daha İyi Fontlar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Google Fonts, web projelerinizde kullanabileceğiniz &lt;strong&gt;ücretsiz ve kaliteli fontlar&lt;/strong&gt; sunar.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;!-- HTML head bölümüne ekle --&amp;gt;
+&amp;lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&amp;gt;
+
+&amp;lt;!-- CSS'te kullan --&amp;gt;
+body {
+  font-family: 'Inter', sans-serif;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Google Fonts Örnekleri&lt;/h4&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;p style=&quot;font-family: 'Inter', sans-serif; margin-bottom: 1rem;&quot;&gt;
+          &lt;strong&gt;Inter Font:&lt;/strong&gt; The quick brown fox jumps over the lazy dog.
+        &lt;/p&gt;
+        &lt;p style=&quot;font-family: 'JetBrains Mono', monospace;&quot;&gt;
+          &lt;strong&gt;JetBrains Mono Font:&lt;/strong&gt; The quick brown fox jumps over the lazy dog.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 Fallback Fontlar (Yedek Fontlar)&lt;/h3&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;p&gt;font-family'de &lt;strong&gt;virgülle ayrılmış birden fazla font&lt;/strong&gt; belirtebilirsiniz. İlk font yüklenemezse, sonraki font kullanılır.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* Önce Inter dene, yoksa Arial, o da yoksa sans-serif kullan */
+font-family: 'Inter', Arial, sans-serif;
+
+/* Generic font ailesi (sans-serif, serif, monospace, cursive) her zaman çalışır! */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem;&quot;&gt;
+        &lt;p style=&quot;font-family: 'NonExistentFont', 'Arial', sans-serif;&quot;&gt;Bu font önce NonExistentFont'u dener, bulamazsa Arial, o da yoksa sans-serif kullanır.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 5: @font-face ile Özel Font Yükleme --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📁 @font-face — Kendi Fontunu Yükle&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;@font-face&lt;/strong&gt; kuralı ile, kendi sunucunuzda barındırdığınız &lt;strong&gt;özel font dosyalarını&lt;/strong&gt; yükleyebilirsiniz.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* CSS dosyasında font tanımlama */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('fonts/myfont.woff2') format('woff2'),
+       url('fonts/myfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Fontu kullanma */
+.custom-text {
+  font-family: 'MyCustomFont', sans-serif;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 @font-face için dosya formatları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;.woff2&lt;/strong&gt; — En iyi sıkıştırma, modern tarayıcılar (önerilen)&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;.woff&lt;/strong&gt; — Geniş tarayıcı desteği&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;.ttf / .otf&lt;/strong&gt; — TrueType/OpenType (daha büyük dosya boyutu)&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;.eot&lt;/strong&gt; — Eski Internet Explorer için&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Google Fonts vs @font-face:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Google Fonts&lt;/strong&gt; → Kolay, hızlı, ücretsiz, geniş seçenek&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;@font-face&lt;/strong&gt; → Tam kontrol, özel/kurumsal fontlar, gizlilik&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 6: Özet Tablo --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Özet Tablo&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Örnek&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;calc()&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Matematiksel ifadelerle değer hesaplama&lt;/td&gt;&lt;td&gt;&lt;code&gt;width: calc(50% - 10px)&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;--variable&lt;/code&gt;&lt;/td&gt;&lt;td&gt;CSS değişkeni tanımlama&lt;/td&gt;&lt;td&gt;&lt;code&gt;--primary-color: #e8ff47;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;var()&lt;/code&gt;&lt;/td&gt;&lt;td&gt;CSS değişkenini kullanma&lt;/td&gt;&lt;td&gt;&lt;code&gt;color: var(--primary-color);&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;background-size: cover&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Resmi tam kapla (kırparak)&lt;/td&gt;&lt;td&gt;&lt;code&gt;background-size: cover;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;background-size: contain&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Resmi tam sığdır (boşluk kalabilir)&lt;/td&gt;&lt;td&gt;&lt;code&gt;background-size: contain;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;@font-face&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Özel font dosyası yükleme&lt;/td&gt;&lt;td&gt;&lt;code&gt;@font-face { font-family: 'Custom'; src: url(...); }&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;font-family fallback&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Yedek font listesi&lt;/td&gt;&lt;td&gt;&lt;code&gt;font-family: 'Inter', Arial, sans-serif;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 7: Özet --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Genel Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;🧮 &lt;strong&gt;calc()&lt;/strong&gt; → Farklı birimleri birbiriyle hesaplayarak kullan&lt;/li&gt;
+      &lt;li&gt;🎨 &lt;strong&gt;CSS Variables&lt;/strong&gt; → Tekrar kullanılabilir değerler, kolay tema yönetimi&lt;/li&gt;
+      &lt;li&gt;🖼️ &lt;strong&gt;background-size: cover/contain&lt;/strong&gt; → Resimleri kolayca boyutlandır&lt;/li&gt;
+      &lt;li&gt;🔤 &lt;strong&gt;Google Fonts&lt;/strong&gt; → Ücretsiz ve kaliteli fontlar, kolay entegrasyon&lt;/li&gt;
+      &lt;li&gt;📁 &lt;strong&gt;@font-face&lt;/strong&gt; → Kendi font dosyalarını yükle, tam kontrol&lt;/li&gt;
+      &lt;li&gt;⚠️ &lt;strong&gt;Fallback fontlar&lt;/strong&gt; → Her zaman bir yedek font belirt!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Random Useful CSS | calc() · CSS Variables · Background · Web Fonts · @font-face
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-useful-features.css - Kullanışlı CSS Özellikleri */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================ */
+/* CSS VARIABLES (Değişkenler) Tanımı */
+/* ============================================ */
+:root {
+  /* Renk değişkenleri */
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  
+  /* Boyut değişkenleri */
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  
+  /* Font değişkenleri */
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* CALC DEMO */
+/* ============================================ */
+.calc-demo-container {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+}
+
+.calc-box {
+  background: var(--secondary-color);
+  color: white;
+  padding: var(--spacing-medium);
+  text-align: center;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+/* ============================================ */
+/* BACKGROUND PROPERTIES DEMO */
+/* ============================================ */
+.bg-demo {
+  background-image: url('https://picsum.photos/id/104/400/300');
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.bg-contain {
+  background-image: url('https://picsum.photos/id/104/400/300');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 200px;
+  border-radius: 8px;
+  background-color: #2a2a32;
+}
+
+/* ============================================ */
+/* VARIABLES DEMO */
+/* ============================================ */
+.variable-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-medium) 0;
+}
+
+.variable-card h4 {
+  color: var(--primary-color);
+}
+
+.variable-btn {
+  background: var(--primary-color);
+  color: #000;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: var(--spacing-small);
+}
+
+/* ============================================ */
+/* GRID DEMO (calc ile) */
+/* ============================================ */
+.calc-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.calc-grid-item {
+  background: var(--accent-color);
+  color: #000;
+  padding: var(--spacing-medium);
+  text-align: center;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  width: calc(33.333% - 13.33px);
+}
+
+/* ============================================ */
+/* Tablo */
+/* ============================================ */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .calc-grid-item {
+    width: calc(50% - 10px);
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calc-grid-item {
+    width: 100%;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kullanışlı CSS Özellikleri - HTMLBook</title>
+  <!-- Google Fonts örneği -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-useful-features.css">
+  <style>
+    /* Ek demo stilleri */
+    .font-demo-inter {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-demo-jetbrains {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>✨ <span class="highlight">Random Useful CSS</span></h1>
+  <div class="subtitle">calc() · CSS Variables · Background Properties · Web Fonts · @font-face</div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 1: calc() Fonksiyonu -->
+  <!-- ============================================================ -->
+  <h2>🧮 calc() — Dinamik Hesaplamalar</h2>
+  <div class="card">
+    <p><strong>calc()</strong> fonksiyonu, CSS'de <strong>matematiksel ifadeler</strong> kullanarak değer hesaplamanızı sağlar. Farklı birimleri (px, %, em, vh, vw) birbiriyle toplayabilir, çıkarabilir, çarpabilir veya bölebilirsiniz.</p>
+
+    <div class="code-block">
+      <pre>
+/* calc() kullanım örnekleri */
+width: calc(50% - 10px);      /* Yüzde 50 eksi 10 piksel */
+width: calc(100% / 3);        /* %100'ün 3'te 1'i */
+width: calc(100vw - 80px);    /* Tam viewport genişliği eksi 80px */
+font-size: calc(1rem + 2vw);  /* Responsive font */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 calc() Örneği</h4>
+      <div class="calc-demo-container" style="background: #2a2a32; border-radius: 8px; padding: 1rem;">
+        <div class="calc-box" style="background: #ff6464; color: white; padding: 1rem; text-align: center; border-radius: 8px; width: calc(100% - 40px); margin: 0 auto;">
+          width: calc(100% - 40px)<br>
+          (Container genişliğinden 40px daha dar)
+        </div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 calc() ile Esnek Izgara (Grid)</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* 3 sütunlu esnek grid — her sütun eşit genişlikte */
+.grid-item {
+  width: calc(33.333% - 13.33px);  /* gap: 20px için */
+}
+        </pre>
+      </div>
+      <div class="calc-grid" style="display: flex; flex-wrap: wrap; gap: 20px;">
+        <div class="calc-grid-item" style="background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);">Item 1</div>
+        <div class="calc-grid-item" style="background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);">Item 2</div>
+        <div class="calc-grid-item" style="background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);">Item 3</div>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 calc() İpuçları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Toplama/çıkarma işlemlerinde <strong>boşluk bırakın</strong>: <code>calc(50% - 10px)</code> ✅</li>
+        <li>Çarpma/bölme işlemlerinde <strong>en az bir sayı birimsiz olmalı</strong>: <code>calc(100% / 3)</code> ✅</li>
+        <li>Farklı birimleri <strong>birbiriyle toplayabilirsiniz</strong>: <code>calc(100vh - 80px)</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 2: CSS Variables (Değişkenler) -->
+  <!-- ============================================================ -->
+  <h2>🎨 CSS Variables (Özel Değişkenler)</h2>
+  <div class="card">
+    <p><strong>CSS Variables (CSS Custom Properties)</strong>, tüm CSS dosyanızda <strong>yeniden kullanılabilir değerler</strong> tanımlamanızı sağlar. Değişkenler <code>--</code> ile başlar ve <code>var()</code> fonksiyonu ile kullanılır.</p>
+
+    <div class="code-block">
+      <pre>
+/* Değişken tanımlama — genellikle :root içinde */
+:root {
+  --primary-color: #e8ff47;
+  --spacing: 1rem;
+  --border-radius: 12px;
+}
+
+/* Değişken kullanma */
+.button {
+  background: var(--primary-color);
+  padding: var(--spacing);
+  border-radius: var(--border-radius);
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 CSS Variables Örneği</h4>
+      <div class="variable-card" style="background: #16161a; border: 1px solid #2a2a32; border-radius: 12px; padding: 1.5rem;">
+        <h4 style="color: #e8ff47;">Değişkenlerle Stillenmiş Kart</h4>
+        <p>Bu kartın renkleri, boşlukları ve border-radius'u <strong>CSS değişkenleri</strong> ile kontrol ediliyor.</p>
+        <button class="variable-btn" style="background: #e8ff47; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0.5rem;">Değişken Buton</button>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 CSS Variables Avantajları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>Tekrar Kullanılabilirlik</strong> — Aynı değeri bir yerde tanımla, her yerde kullan</li>
+        <li>✅ <strong>Kolay Bakım</strong> — Tema rengini değiştirmek için tek bir yeri değiştir</li>
+        <li>✅ <strong>Dinamik</strong> — JavaScript ile değiştirilebilir</li>
+        <li>✅ <strong>Scope (Kapsam)</strong> — Belirli bir elementin içinde de tanımlanabilir</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 JavaScript ile Değişken Değiştirme:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+// Tüm sayfanın ana rengini değiştir
+document.documentElement.style.setProperty('--primary-color', '#ff0000');
+
+// Belirli bir elementin değişkenini değiştir
+element.style.setProperty('--spacing', '2rem');
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 3: Background Properties -->
+  <!-- ============================================================ -->
+  <h2>🖼️ Background Properties — Arka Plan Özellikleri</h2>
+  <div class="card">
+    <p>Bir elemente <strong>background-image</strong> ekleyerek, resimleri kolayca yerleştirebilir ve <strong>boyutlandırabilirsiniz</strong>.</p>
+
+    <div class="code-block">
+      <pre>
+.hero {
+  background-image: url('background.jpg');
+  background-size: cover;      /* Resmi tam kapla, kırp */
+  background-position: center; /* Ortala */
+  background-repeat: no-repeat; /* Tekrar etme */
+  height: 400px;
+}
+      </pre>
+    </div>
+
+    <h3>📌 background-size: cover (Tam kapla, kırparak)</h3>
+    <div class="bg-demo" style="background-image: url('https://picsum.photos/id/104/400/300'); background-size: cover; background-position: center; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+      background-size: cover
+    </div>
+
+    <h3>📌 background-size: contain (Tam sığdır, boşluk bırakabilir)</h3>
+    <div class="bg-contain" style="background-image: url('https://picsum.photos/id/104/400/300'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 200px; border-radius: 8px; background-color: #2a2a32;">
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Önemli Background Özellikleri:</strong>
+      <table style="width: 100%; margin-top: 0.5rem; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #2a2a32;">
+          <td style="padding: 0.5rem;"><code>background-size: cover</code></td>
+          <td style="padding: 0.5rem;">Resmi tam kaplar, taşan kısımlar kırpılır</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #2a2a32;">
+          <td style="padding: 0.5rem;"><code>background-size: contain</code></td>
+          <td style="padding: 0.5rem;">Resmi tam sığdırır, boşluk kalabilir</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #2a2a32;">
+          <td style="padding: 0.5rem;"><code>background-position: center</code></td>
+          <td style="padding: 0.5rem;">Resmi ortalar (top, bottom, left, right da kullanılabilir)</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem;"><code>background-repeat: no-repeat</code></td>
+          <td style="padding: 0.5rem;">Resmin tekrar etmesini engeller</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 4: Web Fonts (Google Fonts) -->
+  <!-- ============================================================ -->
+  <h2>🔤 Web Fonts — Google Fonts ile Daha İyi Fontlar</h2>
+  <div class="card">
+    <p>Google Fonts, web projelerinizde kullanabileceğiniz <strong>ücretsiz ve kaliteli fontlar</strong> sunar.</p>
+
+    <div class="code-block">
+      <pre>
+&lt;!-- HTML head bölümüne ekle --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"&gt;
+
+&lt;!-- CSS'te kullan --&gt;
+body {
+  font-family: 'Inter', sans-serif;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Google Fonts Örnekleri</h4>
+      <div style="background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <p style="font-family: 'Inter', sans-serif; margin-bottom: 1rem;">
+          <strong>Inter Font:</strong> The quick brown fox jumps over the lazy dog.
+        </p>
+        <p style="font-family: 'JetBrains Mono', monospace;">
+          <strong>JetBrains Mono Font:</strong> The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+    </div>
+
+    <h3>📌 Fallback Fontlar (Yedek Fontlar)</h3>
+    <div class="info-note">
+      <p>font-family'de <strong>virgülle ayrılmış birden fazla font</strong> belirtebilirsiniz. İlk font yüklenemezse, sonraki font kullanılır.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* Önce Inter dene, yoksa Arial, o da yoksa sans-serif kullan */
+font-family: 'Inter', Arial, sans-serif;
+
+/* Generic font ailesi (sans-serif, serif, monospace, cursive) her zaman çalışır! */
+        </pre>
+      </div>
+      <div style="background: #2a2a32; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem;">
+        <p style="font-family: 'NonExistentFont', 'Arial', sans-serif;">Bu font önce NonExistentFont'u dener, bulamazsa Arial, o da yoksa sans-serif kullanır.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 5: @font-face ile Özel Font Yükleme -->
+  <!-- ============================================================ -->
+  <h2>📁 @font-face — Kendi Fontunu Yükle</h2>
+  <div class="card">
+    <p><strong>@font-face</strong> kuralı ile, kendi sunucunuzda barındırdığınız <strong>özel font dosyalarını</strong> yükleyebilirsiniz.</p>
+
+    <div class="code-block">
+      <pre>
+/* CSS dosyasında font tanımlama */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('fonts/myfont.woff2') format('woff2'),
+       url('fonts/myfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Fontu kullanma */
+.custom-text {
+  font-family: 'MyCustomFont', sans-serif;
+}
+      </pre>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 @font-face için dosya formatları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>.woff2</strong> — En iyi sıkıştırma, modern tarayıcılar (önerilen)</li>
+        <li><strong>.woff</strong> — Geniş tarayıcı desteği</li>
+        <li><strong>.ttf / .otf</strong> — TrueType/OpenType (daha büyük dosya boyutu)</li>
+        <li><strong>.eot</strong> — Eski Internet Explorer için</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Google Fonts vs @font-face:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Google Fonts</strong> → Kolay, hızlı, ücretsiz, geniş seçenek</li>
+        <li><strong>@font-face</strong> → Tam kontrol, özel/kurumsal fontlar, gizlilik</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 6: Özet Tablo -->
+  <!-- ============================================================ -->
+  <h2>📋 Özet Tablo</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Özellik</th><th>Açıklama</th><th>Örnek</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>calc()</code></td><td>Matematiksel ifadelerle değer hesaplama</td><td><code>width: calc(50% - 10px)</code></td>
+      </tr>
+      <tr><td><code>--variable</code></td><td>CSS değişkeni tanımlama</td><td><code>--primary-color: #e8ff47;</code></td>
+      </tr>
+      <tr><td><code>var()</code></td><td>CSS değişkenini kullanma</td><td><code>color: var(--primary-color);</code></td>
+      </tr>
+      <tr><td><code>background-size: cover</code></td><td>Resmi tam kapla (kırparak)</td><td><code>background-size: cover;</code></td>
+      </tr>
+      <tr><td><code>background-size: contain</code></td><td>Resmi tam sığdır (boşluk kalabilir)</td><td><code>background-size: contain;</code></td>
+      </tr>
+      <tr><td><code>@font-face</code></td><td>Özel font dosyası yükleme</td><td><code>@font-face { font-family: 'Custom'; src: url(...); }</code></td>
+      </tr>
+      <tr><td><code>font-family fallback</code></td><td>Yedek font listesi</td><td><code>font-family: 'Inter', Arial, sans-serif;</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 7: Özet -->
+  <!-- ============================================================ -->
+  <h2>📋 Genel Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>🧮 <strong>calc()</strong> → Farklı birimleri birbiriyle hesaplayarak kullan</li>
+      <li>🎨 <strong>CSS Variables</strong> → Tekrar kullanılabilir değerler, kolay tema yönetimi</li>
+      <li>🖼️ <strong>background-size: cover/contain</strong> → Resimleri kolayca boyutlandır</li>
+      <li>🔤 <strong>Google Fonts</strong> → Ücretsiz ve kaliteli fontlar, kolay entegrasyon</li>
+      <li>📁 <strong>@font-face</strong> → Kendi font dosyalarını yükle, tam kontrol</li>
+      <li>⚠️ <strong>Fallback fontlar</strong> → Her zaman bir yedek font belirt!</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Random Useful CSS | calc() · CSS Variables · Background · Web Fonts · @font-face
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-useful-features.css - Kullanışlı CSS Özellikleri */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================ */
+/* CSS VARIABLES (Değişkenler) Tanımı */
+/* ============================================ */
+:root {
+  /* Renk değişkenleri */
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  
+  /* Boyut değişkenleri */
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  
+  /* Font değişkenleri */
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* CALC DEMO */
+/* ============================================ */
+.calc-demo-container {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+}
+
+.calc-box {
+  background: var(--secondary-color);
+  color: white;
+  padding: var(--spacing-medium);
+  text-align: center;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+/* ============================================ */
+/* BACKGROUND PROPERTIES DEMO */
+/* ============================================ */
+.bg-demo {
+  background-image: url('https://picsum.photos/id/104/400/300');
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.bg-contain {
+  background-image: url('https://picsum.photos/id/104/400/300');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 200px;
+  border-radius: 8px;
+  background-color: #2a2a32;
+}
+
+/* ============================================ */
+/* VARIABLES DEMO */
+/* ============================================ */
+.variable-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-medium) 0;
+}
+
+.variable-card h4 {
+  color: var(--primary-color);
+}
+
+.variable-btn {
+  background: var(--primary-color);
+  color: #000;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: var(--spacing-small);
+}
+
+/* ============================================ */
+/* GRID DEMO (calc ile) */
+/* ============================================ */
+.calc-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.calc-grid-item {
+  background: var(--accent-color);
+  color: #000;
+  padding: var(--spacing-medium);
+  text-align: center;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  width: calc(33.333% - 13.33px);
+}
+
+/* ============================================ */
+/* Tablo */
+/* ============================================ */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .calc-grid-item {
+    width: calc(50% - 10px);
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calc-grid-item {
+    width: 100%;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=kullanisli-css-ozellikleri-calc-variables-background-web-fonts" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Kullanışlı CSS Özellikleri — calc(), Variables, Background, Web Fonts — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Kullanışlı CSS Özellikleri - HTMLBook</title>\n  <!-- Google Fonts örneği -->\n  <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-useful-features.css\">\n  <style>\n    /* Ek demo stilleri */\n    .font-demo-inter {\n      font-family: 'Inter', sans-serif;\n    }\n    .font-demo-jetbrains {\n      font-family: 'JetBrains Mono', monospace;\n    }\n  </style>\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>✨ <span class=\"highlight\">Random Useful CSS</span></h1>\n  <div class=\"subtitle\">calc() · CSS Variables · Background Properties · Web Fonts · @font-face</div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 1: calc() Fonksiyonu -->\n  <!-- ============================================================ -->\n  <h2>🧮 calc() — Dinamik Hesaplamalar</h2>\n  <div class=\"card\">\n    <p><strong>calc()</strong> fonksiyonu, CSS'de <strong>matematiksel ifadeler</strong> kullanarak değer hesaplamanızı sağlar. Farklı birimleri (px, %, em, vh, vw) birbiriyle toplayabilir, çıkarabilir, çarpabilir veya bölebilirsiniz.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* calc() kullanım örnekleri */\nwidth: calc(50% - 10px);      /* Yüzde 50 eksi 10 piksel */\nwidth: calc(100% / 3);        /* %100'ün 3'te 1'i */\nwidth: calc(100vw - 80px);    /* Tam viewport genişliği eksi 80px */\nfont-size: calc(1rem + 2vw);  /* Responsive font */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 calc() Örneği</h4>\n      <div class=\"calc-demo-container\" style=\"background: #2a2a32; border-radius: 8px; padding: 1rem;\">\n        <div class=\"calc-box\" style=\"background: #ff6464; color: white; padding: 1rem; text-align: center; border-radius: 8px; width: calc(100% - 40px); margin: 0 auto;\">\n          width: calc(100% - 40px)<br>\n          (Container genişliğinden 40px daha dar)\n        </div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 calc() ile Esnek Izgara (Grid)</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* 3 sütunlu esnek grid — her sütun eşit genişlikte */\n.grid-item {\n  width: calc(33.333% - 13.33px);  /* gap: 20px için */\n}\n        </pre>\n      </div>\n      <div class=\"calc-grid\" style=\"display: flex; flex-wrap: wrap; gap: 20px;\">\n        <div class=\"calc-grid-item\" style=\"background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);\">Item 1</div>\n        <div class=\"calc-grid-item\" style=\"background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);\">Item 2</div>\n        <div class=\"calc-grid-item\" style=\"background: #64c8ff; color: #000; padding: 1rem; text-align: center; border-radius: 8px; width: calc(33.333% - 13.33px);\">Item 3</div>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 calc() İpuçları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Toplama/çıkarma işlemlerinde <strong>boşluk bırakın</strong>: <code>calc(50% - 10px)</code> ✅</li>\n        <li>Çarpma/bölme işlemlerinde <strong>en az bir sayı birimsiz olmalı</strong>: <code>calc(100% / 3)</code> ✅</li>\n        <li>Farklı birimleri <strong>birbiriyle toplayabilirsiniz</strong>: <code>calc(100vh - 80px)</code></li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 2: CSS Variables (Değişkenler) -->\n  <!-- ============================================================ -->\n  <h2>🎨 CSS Variables (Özel Değişkenler)</h2>\n  <div class=\"card\">\n    <p><strong>CSS Variables (CSS Custom Properties)</strong>, tüm CSS dosyanızda <strong>yeniden kullanılabilir değerler</strong> tanımlamanızı sağlar. Değişkenler <code>--</code> ile başlar ve <code>var()</code> fonksiyonu ile kullanılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Değişken tanımlama — genellikle :root içinde */\n:root {\n  --primary-color: #e8ff47;\n  --spacing: 1rem;\n  --border-radius: 12px;\n}\n\n/* Değişken kullanma */\n.button {\n  background: var(--primary-color);\n  padding: var(--spacing);\n  border-radius: var(--border-radius);\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 CSS Variables Örneği</h4>\n      <div class=\"variable-card\" style=\"background: #16161a; border: 1px solid #2a2a32; border-radius: 12px; padding: 1.5rem;\">\n        <h4 style=\"color: #e8ff47;\">Değişkenlerle Stillenmiş Kart</h4>\n        <p>Bu kartın renkleri, boşlukları ve border-radius'u <strong>CSS değişkenleri</strong> ile kontrol ediliyor.</p>\n        <button class=\"variable-btn\" style=\"background: #e8ff47; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0.5rem;\">Değişken Buton</button>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 CSS Variables Avantajları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>Tekrar Kullanılabilirlik</strong> — Aynı değeri bir yerde tanımla, her yerde kullan</li>\n        <li>✅ <strong>Kolay Bakım</strong> — Tema rengini değiştirmek için tek bir yeri değiştir</li>\n        <li>✅ <strong>Dinamik</strong> — JavaScript ile değiştirilebilir</li>\n        <li>✅ <strong>Scope (Kapsam)</strong> — Belirli bir elementin içinde de tanımlanabilir</li>\n      </ul>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 JavaScript ile Değişken Değiştirme:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n// Tüm sayfanın ana rengini değiştir\ndocument.documentElement.style.setProperty('--primary-color', '#ff0000');\n\n// Belirli bir elementin değişkenini değiştir\nelement.style.setProperty('--spacing', '2rem');\n        </pre>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 3: Background Properties -->\n  <!-- ============================================================ -->\n  <h2>🖼️ Background Properties — Arka Plan Özellikleri</h2>\n  <div class=\"card\">\n    <p>Bir elemente <strong>background-image</strong> ekleyerek, resimleri kolayca yerleştirebilir ve <strong>boyutlandırabilirsiniz</strong>.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.hero {\n  background-image: url('background.jpg');\n  background-size: cover;      /* Resmi tam kapla, kırp */\n  background-position: center; /* Ortala */\n  background-repeat: no-repeat; /* Tekrar etme */\n  height: 400px;\n}\n      </pre>\n    </div>\n\n    <h3>📌 background-size: cover (Tam kapla, kırparak)</h3>\n    <div class=\"bg-demo\" style=\"background-image: url('https://picsum.photos/id/104/400/300'); background-size: cover; background-position: center; height: 200px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;\">\n      background-size: cover\n    </div>\n\n    <h3>📌 background-size: contain (Tam sığdır, boşluk bırakabilir)</h3>\n    <div class=\"bg-contain\" style=\"background-image: url('https://picsum.photos/id/104/400/300'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 200px; border-radius: 8px; background-color: #2a2a32;\">\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Önemli Background Özellikleri:</strong>\n      <table style=\"width: 100%; margin-top: 0.5rem; border-collapse: collapse;\">\n        <tr style=\"border-bottom: 1px solid #2a2a32;\">\n          <td style=\"padding: 0.5rem;\"><code>background-size: cover</code></td>\n          <td style=\"padding: 0.5rem;\">Resmi tam kaplar, taşan kısımlar kırpılır</td>\n        </tr>\n        <tr style=\"border-bottom: 1px solid #2a2a32;\">\n          <td style=\"padding: 0.5rem;\"><code>background-size: contain</code></td>\n          <td style=\"padding: 0.5rem;\">Resmi tam sığdırır, boşluk kalabilir</td>\n        </tr>\n        <tr style=\"border-bottom: 1px solid #2a2a32;\">\n          <td style=\"padding: 0.5rem;\"><code>background-position: center</code></td>\n          <td style=\"padding: 0.5rem;\">Resmi ortalar (top, bottom, left, right da kullanılabilir)</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 0.5rem;\"><code>background-repeat: no-repeat</code></td>\n          <td style=\"padding: 0.5rem;\">Resmin tekrar etmesini engeller</td>\n        </tr>\n      </table>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 4: Web Fonts (Google Fonts) -->\n  <!-- ============================================================ -->\n  <h2>🔤 Web Fonts — Google Fonts ile Daha İyi Fontlar</h2>\n  <div class=\"card\">\n    <p>Google Fonts, web projelerinizde kullanabileceğiniz <strong>ücretsiz ve kaliteli fontlar</strong> sunar.</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;!-- HTML head bölümüne ekle --&gt;\n&lt;link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap\" rel=\"stylesheet\"&gt;\n\n&lt;!-- CSS'te kullan --&gt;\nbody {\n  font-family: 'Inter', sans-serif;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Google Fonts Örnekleri</h4>\n      <div style=\"background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <p style=\"font-family: 'Inter', sans-serif; margin-bottom: 1rem;\">\n          <strong>Inter Font:</strong> The quick brown fox jumps over the lazy dog.\n        </p>\n        <p style=\"font-family: 'JetBrains Mono', monospace;\">\n          <strong>JetBrains Mono Font:</strong> The quick brown fox jumps over the lazy dog.\n        </p>\n      </div>\n    </div>\n\n    <h3>📌 Fallback Fontlar (Yedek Fontlar)</h3>\n    <div class=\"info-note\">\n      <p>font-family'de <strong>virgülle ayrılmış birden fazla font</strong> belirtebilirsiniz. İlk font yüklenemezse, sonraki font kullanılır.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* Önce Inter dene, yoksa Arial, o da yoksa sans-serif kullan */\nfont-family: 'Inter', Arial, sans-serif;\n\n/* Generic font ailesi (sans-serif, serif, monospace, cursive) her zaman çalışır! */\n        </pre>\n      </div>\n      <div style=\"background: #2a2a32; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem;\">\n        <p style=\"font-family: 'NonExistentFont', 'Arial', sans-serif;\">Bu font önce NonExistentFont'u dener, bulamazsa Arial, o da yoksa sans-serif kullanır.</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 5: @font-face ile Özel Font Yükleme -->\n  <!-- ============================================================ -->\n  <h2>📁 @font-face — Kendi Fontunu Yükle</h2>\n  <div class=\"card\">\n    <p><strong>@font-face</strong> kuralı ile, kendi sunucunuzda barındırdığınız <strong>özel font dosyalarını</strong> yükleyebilirsiniz.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* CSS dosyasında font tanımlama */\n@font-face {\n  font-family: 'MyCustomFont';\n  src: url('fonts/myfont.woff2') format('woff2'),\n       url('fonts/myfont.woff') format('woff');\n  font-weight: normal;\n  font-style: normal;\n}\n\n/* Fontu kullanma */\n.custom-text {\n  font-family: 'MyCustomFont', sans-serif;\n}\n      </pre>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 @font-face için dosya formatları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>.woff2</strong> — En iyi sıkıştırma, modern tarayıcılar (önerilen)</li>\n        <li><strong>.woff</strong> — Geniş tarayıcı desteği</li>\n        <li><strong>.ttf / .otf</strong> — TrueType/OpenType (daha büyük dosya boyutu)</li>\n        <li><strong>.eot</strong> — Eski Internet Explorer için</li>\n      </ul>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Google Fonts vs @font-face:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>Google Fonts</strong> → Kolay, hızlı, ücretsiz, geniş seçenek</li>\n        <li><strong>@font-face</strong> → Tam kontrol, özel/kurumsal fontlar, gizlilik</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 6: Özet Tablo -->\n  <!-- ============================================================ -->\n  <h2>📋 Özet Tablo</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Özellik</th><th>Açıklama</th><th>Örnek</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>calc()</code></td><td>Matematiksel ifadelerle değer hesaplama</td><td><code>width: calc(50% - 10px)</code></td>\n      </tr>\n      <tr><td><code>--variable</code></td><td>CSS değişkeni tanımlama</td><td><code>--primary-color: #e8ff47;</code></td>\n      </tr>\n      <tr><td><code>var()</code></td><td>CSS değişkenini kullanma</td><td><code>color: var(--primary-color);</code></td>\n      </tr>\n      <tr><td><code>background-size: cover</code></td><td>Resmi tam kapla (kırparak)</td><td><code>background-size: cover;</code></td>\n      </tr>\n      <tr><td><code>background-size: contain</code></td><td>Resmi tam sığdır (boşluk kalabilir)</td><td><code>background-size: contain;</code></td>\n      </tr>\n      <tr><td><code>@font-face</code></td><td>Özel font dosyası yükleme</td><td><code>@font-face { font-family: 'Custom'; src: url(...); }</code></td>\n      </tr>\n      <tr><td><code>font-family fallback</code></td><td>Yedek font listesi</td><td><code>font-family: 'Inter', Arial, sans-serif;</code></td>\n      </tr>\n    </tbody>\n  </table>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 7: Özet -->\n  <!-- ============================================================ -->\n  <h2>📋 Genel Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>🧮 <strong>calc()</strong> → Farklı birimleri birbiriyle hesaplayarak kullan</li>\n      <li>🎨 <strong>CSS Variables</strong> → Tekrar kullanılabilir değerler, kolay tema yönetimi</li>\n      <li>🖼️ <strong>background-size: cover/contain</strong> → Resimleri kolayca boyutlandır</li>\n      <li>🔤 <strong>Google Fonts</strong> → Ücretsiz ve kaliteli fontlar, kolay entegrasyon</li>\n      <li>📁 <strong>@font-face</strong> → Kendi font dosyalarını yükle, tam kontrol</li>\n      <li>⚠️ <strong>Fallback fontlar</strong> → Her zaman bir yedek font belirt!</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Random Useful CSS | calc() · CSS Variables · Background · Web Fonts · @font-face\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-useful-features.css - Kullanışlı CSS Özellikleri */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n/* ============================================ */\n/* CSS VARIABLES (Değişkenler) Tanımı */\n/* ============================================ */\n:root {\n  /* Renk değişkenleri */\n  --primary-color: #e8ff47;\n  --secondary-color: #ff6464;\n  --accent-color: #64c8ff;\n  --success-color: #6bcb77;\n  --dark-bg: #0d0d0f;\n  --card-bg: #16161a;\n  --border-color: #2a2a32;\n  --text-color: #e8e8f0;\n  --muted-color: #7a7a8c;\n  \n  /* Boyut değişkenleri */\n  --spacing-small: 0.5rem;\n  --spacing-medium: 1rem;\n  --spacing-large: 1.5rem;\n  --border-radius: 12px;\n  \n  /* Font değişkenleri */\n  --font-mono: 'Space Mono', monospace;\n  --font-sans: 'Syne', sans-serif;\n}\n\nbody {\n  background: var(--dark-bg);\n  color: var(--text-color);\n  font-family: var(--font-sans);\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: var(--spacing-large) 2rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-large);\n  flex-wrap: wrap;\n  background: var(--dark-bg);\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: var(--primary-color);\n  text-decoration: none;\n  font-family: var(--font-mono);\n  font-size: 0.78rem;\n  border: 1px solid var(--primary-color);\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: var(--primary-color);\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: var(--primary-color);\n}\n\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: var(--spacing-small);\n}\n\nh1 .highlight {\n  color: var(--primary-color);\n}\n\n.subtitle {\n  color: var(--muted-color);\n  font-family: var(--font-mono);\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid var(--primary-color);\n  padding-left: var(--spacing-medium);\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 var(--spacing-medium) 0;\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-small);\n  border-bottom: 1px solid var(--border-color);\n  padding-bottom: var(--spacing-small);\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: var(--primary-color);\n  margin: var(--spacing-large) 0 var(--spacing-small) 0;\n  font-family: var(--font-mono);\n}\n\n.card {\n  background: var(--card-bg);\n  border: 1px solid var(--border-color);\n  border-radius: var(--border-radius);\n  padding: var(--spacing-large);\n  margin: var(--spacing-large) 0;\n}\n\n.card-header {\n  font-family: var(--font-mono);\n  font-size: 0.7rem;\n  color: var(--primary-color);\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: var(--spacing-medium);\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid var(--border-color);\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: var(--spacing-medium) 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: var(--font-mono);\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n}\n\n/* ============================================ */\n/* CALC DEMO */\n/* ============================================ */\n.calc-demo-container {\n  background: #2a2a32;\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n}\n\n.calc-box {\n  background: var(--secondary-color);\n  color: white;\n  padding: var(--spacing-medium);\n  text-align: center;\n  border-radius: 8px;\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n}\n\n/* ============================================ */\n/* BACKGROUND PROPERTIES DEMO */\n/* ============================================ */\n.bg-demo {\n  background-image: url('https://picsum.photos/id/104/400/300');\n  background-size: cover;\n  background-position: center;\n  height: 200px;\n  border-radius: 8px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: white;\n  font-weight: bold;\n  text-shadow: 0 0 10px rgba(0,0,0,0.5);\n}\n\n.bg-contain {\n  background-image: url('https://picsum.photos/id/104/400/300');\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: center;\n  height: 200px;\n  border-radius: 8px;\n  background-color: #2a2a32;\n}\n\n/* ============================================ */\n/* VARIABLES DEMO */\n/* ============================================ */\n.variable-card {\n  background: var(--card-bg);\n  border: 1px solid var(--border-color);\n  border-radius: var(--border-radius);\n  padding: var(--spacing-large);\n  margin: var(--spacing-medium) 0;\n}\n\n.variable-card h4 {\n  color: var(--primary-color);\n}\n\n.variable-btn {\n  background: var(--primary-color);\n  color: #000;\n  border: none;\n  padding: var(--spacing-small) var(--spacing-medium);\n  border-radius: 8px;\n  font-family: var(--font-mono);\n  font-weight: bold;\n  cursor: pointer;\n  margin-top: var(--spacing-small);\n}\n\n/* ============================================ */\n/* GRID DEMO (calc ile) */\n/* ============================================ */\n.calc-grid {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 20px;\n}\n\n.calc-grid-item {\n  background: var(--accent-color);\n  color: #000;\n  padding: var(--spacing-medium);\n  text-align: center;\n  border-radius: 8px;\n  font-family: var(--font-mono);\n  width: calc(33.333% - 13.33px);\n}\n\n/* ============================================ */\n/* Tablo */\n/* ============================================ */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: var(--spacing-medium) 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid var(--border-color);\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: var(--primary-color);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  color: var(--primary-color);\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid var(--primary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid var(--secondary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid var(--success-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid var(--border-color);\n  color: var(--muted-color);\n  font-size: 0.8rem;\n  font-family: var(--font-mono);\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .calc-grid-item {\n    width: calc(50% - 10px);\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}\n\n@media (max-width: 480px) {\n  .calc-grid-item {\n    width: 100%;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
