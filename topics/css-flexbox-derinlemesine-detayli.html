@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Flexbox — Derinlemesine (Detaylı) - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>CSS Flexbox — Derinlemesine (Detaylı)</h1>
+    <p class="desc">Flexbox modern CSS layout modülü. Flex Container ve Flex Item yapısı, justify-content (flex-start, center, space-between, space-around), align-items (stretch, flex-start, center, flex-end), flex-direction (row, column, reverse), flex-grow/shrink/basis, inline elementlerin flex item olunca davranışı ve pratik örnekler.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;CSS Flexbox - Derinlemesine - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-flexbox-deep.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;💪 &lt;span class=&quot;highlight&quot;&gt;CSS Flexbox&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Modern web düzenlerinin vazgeçilmezi — Flex Container · Flex Items · justify-content · align-items · flex-direction&lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 1: CSS Layout'a Giriş - Bugüne Kadar Ne Öğrendik? --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📐 CSS Layout — Bugüne Kadar Ne Öğrendik?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Şimdiye kadar iki temel layout mekanizması öğrendik:&lt;/p&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;1. Block Layout (Block Düzeni)&lt;/strong&gt;
+      &lt;p&gt;Sayfanın &lt;strong&gt;büyük bölümlerini&lt;/strong&gt; yerleştirmek için kullanılır. Elementler yukarıdan aşağıya (top-to-bottom) akar.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;div&amp;gt;Block element 1&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;Block element 2&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;Block element 3&amp;lt;/div&amp;gt;
+
+/* Her div yeni satırda başlar, tam genişlik kaplar */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;2. Inline Layout (Inline Düzeni)&lt;/strong&gt;
+      &lt;p&gt;Metin ve diğer &lt;strong&gt;inline içerikleri&lt;/strong&gt; bir bölüm içinde yerleştirmek için kullanılır. Elementler soldan sağa (left-to-right) akar.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&amp;lt;span&amp;gt;Inline element 1&amp;lt;/span&amp;gt;
+&amp;lt;span&amp;gt;Inline element 2&amp;lt;/span&amp;gt;
+&amp;lt;span&amp;gt;Inline element 3&amp;lt;/span&amp;gt;
+
+/* Tüm span'ler yan yana dizilir, sadece içerik kadar yer kaplar */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Peki ya daha karmaşık düzenler?&lt;/strong&gt;
+      &lt;p&gt;Block ve inline layout ile yapması &lt;strong&gt;çok zor&lt;/strong&gt; olan bazı düzenler vardır:&lt;/p&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Elementleri &lt;strong&gt;yatayda ortalamak&lt;/strong&gt; (margin: 0 auto çalışır ama sınırlıdır)&lt;/li&gt;
+        &lt;li&gt;Elementleri &lt;strong&gt;dikeyde ortalamak&lt;/strong&gt; (block layout'ta çok zordur!)&lt;/li&gt;
+        &lt;li&gt;Elementleri &lt;strong&gt;eşit aralıklarla&lt;/strong&gt; yerleştirmek&lt;/li&gt;
+        &lt;li&gt;Elementleri &lt;strong&gt;ters sırada&lt;/strong&gt; göstermek&lt;/li&gt;
+        &lt;li&gt;Farklı boyutlardaki elementleri &lt;strong&gt;esnek şekilde&lt;/strong&gt; hizalamak&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 İşte burada FLEX LAYOUT devreye giriyor!&lt;/strong&gt;
+      &lt;p&gt;Flex layout, bu sorunları &lt;strong&gt;zarif ve kolay&lt;/strong&gt; bir şekilde çözer.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 2: Flex Layout Nedir? --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🔧 Flex Layout Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Flex layout&lt;/strong&gt;, elementleri &lt;strong&gt;satır (row)&lt;/strong&gt; veya &lt;strong&gt;sütun (column)&lt;/strong&gt; halinde düzenlemek için özel kurallar tanımlayan bir CSS layout modudur.&lt;/p&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;🎯 Flex Layout ile KOLAYCA yapılabilenler:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ Navigasyon menüleri (yan yana, eşit aralıklı)&lt;/li&gt;
+        &lt;li&gt;✅ Kart galerileri (responsive, esnek)&lt;/li&gt;
+        &lt;li&gt;✅ Sayfa içeriğini yatayda ve dikeyde ortalamak&lt;/li&gt;
+        &lt;li&gt;✅ Footer'ı sayfanın altına yapıştırmak&lt;/li&gt;
+        &lt;li&gt;✅ Elementleri ters sırada göstermek&lt;/li&gt;
+        &lt;li&gt;✅ Farklı boyutlardaki elementleri hizalamak&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;📌 Flex Layout'un Temel Yapısı:&lt;/strong&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+┌─────────────────────────────────────────────────────────┐
+│                   FLEX CONTAINER                         │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐        │
+│  │ FLEX ITEM 1 │ │ FLEX ITEM 2 │ │ FLEX ITEM 3 │        │
+│  └─────────────┘ └─────────────┘ └─────────────┘        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+- Flex Container: display: flex veya inline-flex ile oluşturulur
+- Flex Item: Container'ın direkt çocuk elementleri
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 3: Flex Container Oluşturma --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📦 Flex Container Oluşturma&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Bir elementi &lt;strong&gt;flex container&lt;/strong&gt; yapmak için &lt;code&gt;display: flex;&lt;/code&gt; veya &lt;code&gt;display: inline-flex;&lt;/code&gt; kullanılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Block-level flex container (tam genişlik) */
+.container {
+  display: flex;
+}
+
+/* Inline-level flex container (içerik kadar genişlik) */
+.container {
+  display: inline-flex;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 display: flex; örneği&lt;/h4&gt;
+      &lt;div class=&quot;flex-container&quot; style=&quot;display: flex;&quot;&gt;
+        &lt;div class=&quot;flex-item&quot;&gt;Item 1&lt;/div&gt;
+        &lt;div class=&quot;flex-item&quot;&gt;Item 2&lt;/div&gt;
+        &lt;div class=&quot;flex-item&quot;&gt;Item 3&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Varsayılan olarak flex item'ler &lt;strong&gt;yan yana (row)&lt;/strong&gt; dizilir!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Önemli:&lt;/strong&gt; Sadece &lt;strong&gt;direkt çocuk elementler&lt;/strong&gt; flex item olur. Torun elementler flex item DEĞİLDİR!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 4: justify-content (Yatay Hizalama) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;↔️ justify-content — Yatay Hizalama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;justify-content&lt;/strong&gt;, flex item'lerin &lt;strong&gt;ana eksen (main axis)&lt;/strong&gt; üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction &lt;strong&gt;row&lt;/strong&gt; iken, ana eksen &lt;strong&gt;yatay&lt;/strong&gt;'dır.&lt;/p&gt;
+
+    &lt;h3&gt;📌 flex-start (Varsayılan)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: flex-start;  /* Soldan hizalı */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: flex-start;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 flex-end&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: flex-end;    /* Sağdan hizalı */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: flex-end;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 center&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: center;      /* Ortalanmış */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: center;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 space-between&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: space-between; /* İki uca yasla, aradaki boşluk eşit */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: space-between;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 space-around&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: space-around;  /* Her item'ın etrafında eşit boşluk */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: space-around;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 space-evenly&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;justify-content: space-evenly;  /* Tüm boşluklar eşit */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: space-evenly;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 5: align-items (Dikey Hizalama) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;↕️ align-items — Dikey Hizalama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;align-items&lt;/strong&gt;, flex item'lerin &lt;strong&gt;çapraz eksen (cross axis)&lt;/strong&gt; üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction &lt;strong&gt;row&lt;/strong&gt; iken, çapraz eksen &lt;strong&gt;dikey&lt;/strong&gt;'dir.&lt;/p&gt;
+
+    &lt;h3&gt;📌 stretch (Varsayılan)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;align-items: stretch;  /* Container'ın yüksekliğine gerilir */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; align-items: stretch; height: 150px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;height: auto;&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;height: auto;&quot;&gt;2&lt;br&gt;İki satır&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;height: auto;&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 flex-start&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;align-items: flex-start;  /* Üste hizalı */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; align-items: flex-start; height: 150px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 flex-end&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;align-items: flex-end;    /* Alta hizalı */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; align-items: flex-end; height: 150px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 center&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;align-items: center;      /* Dikeyde ortalanmış */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; align-items: center; height: 150px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 6: justify-content + align-items Birlikte --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🎯 justify-content + align-items — Mükemmel Ortalama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;İki özelliği birlikte kullanarak elementleri &lt;strong&gt;tam ortada&lt;/strong&gt; hizalayabiliriz!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.container {
+  display: flex;
+  justify-content: center;  /* Yatayda ortalama */
+  align-items: center;      /* Dikeyde ortalama */
+  height: 300px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; justify-content: center; align-items: center; height: 200px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;🎯 Tam Ortada!&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✨ Bu, Flexbox'ın en güçlü özelliklerinden biridir!&lt;/strong&gt; Geleneksel CSS ile bir elementi hem yatayda hem dikeyde ortalamak çok zorken, Flexbox ile &lt;strong&gt;tek satır kod&lt;/strong&gt; ile yapılabilir.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 7: flex-direction (Yön Değiştirme) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🔄 flex-direction — Yön Değiştirme&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;flex-direction&lt;/strong&gt;, flex item'lerin hangi yönde dizileceğini belirler. Varsayılan değer &lt;strong&gt;row&lt;/strong&gt;'dur.&lt;/p&gt;
+
+    &lt;h3&gt;📌 row (Varsayılan)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;flex-direction: row;  /* Soldan sağa yatay */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: row;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 row-reverse&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;flex-direction: row-reverse;  /* Sağdan sola yatay (ters) */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: row-reverse;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 column&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;flex-direction: column;  /* Yukarıdan aşağıya dikey */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: column; height: 250px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 column-reverse&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;flex-direction: column-reverse;  /* Aşağıdan yukarıya dikey (ters) */&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: column-reverse; height: 250px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Önemli:&lt;/strong&gt; flex-direction değiştiğinde, &lt;strong&gt;justify-content ve align-items'in görevi de değişir!&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;code&gt;flex-direction: row&lt;/code&gt; → justify-content: &lt;strong&gt;YATAY&lt;/strong&gt;, align-items: &lt;strong&gt;DİKEY&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;flex-direction: column&lt;/code&gt; → justify-content: &lt;strong&gt;DİKEY&lt;/strong&gt;, align-items: &lt;strong&gt;YATAY&lt;/strong&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 8: flex-direction: column ile Hizalama --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📐 flex-direction: column — Dikey Düzende Hizalama&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;flex-direction &lt;strong&gt;column&lt;/strong&gt; iken, justify-content &lt;strong&gt;dikey&lt;/strong&gt; hizalamayı, align-items ise &lt;strong&gt;yatay&lt;/strong&gt; hizalamayı kontrol eder.&lt;/p&gt;
+
+    &lt;h3&gt;📌 justify-content: center (Dikeyde ortalama)&lt;/h3&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: column; justify-content: center; height: 250px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 align-items: center (Yatayda ortalama)&lt;/h3&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: column; align-items: center; height: 250px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;width: 80px;&quot;&gt;1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;width: 120px;&quot;&gt;2&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;width: 60px;&quot;&gt;3&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 justify-content + align-items (Tam ortada)&lt;/h3&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;🎯 Tam Ortada (column)&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 9: Peki Ya Inline Elementler? --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🤔 Peki Ya Inline Elementler?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Hatırlayalım: Normalde &lt;code&gt;&amp;lt;span&amp;gt;&lt;/code&gt; gibi inline elementler &lt;strong&gt;width ve height&lt;/strong&gt; özelliklerine sahip değildir.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;span&amp;gt;Bu bir inline element&amp;lt;/span&amp;gt;
+&amp;lt;span&amp;gt;width ve height çalışmaz!&amp;lt;/span&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Normal block layout'ta:&lt;/strong&gt;
+      &lt;div class=&quot;demo-box&quot;&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 0.5rem;&quot;&gt;
+          &lt;span class=&quot;inline-item&quot;&gt;Span 1&lt;/span&gt;
+          &lt;span class=&quot;inline-item&quot;&gt;Span 2&lt;/span&gt;
+          &lt;span class=&quot;inline-item&quot;&gt;Span 3&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Bu span'ler inline olduğu için width/height ayarlanamaz, yan yana dizilirler.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Flex container içinde:&lt;/strong&gt;
+      &lt;p&gt;Bir elementi &lt;code&gt;display: flex&lt;/code&gt; yaptığınızda, &lt;strong&gt;direkt çocuk elementler&lt;/strong&gt; artık inline veya block değil, &lt;strong&gt;FLEX ITEM&lt;/strong&gt; olurlar. Flex item'ler farklı kurallara sahiptir!&lt;/p&gt;
+      
+      &lt;div class=&quot;demo-box&quot;&gt;
+        &lt;div style=&quot;display: flex; background: #3a3a4a; padding: 0.5rem;&quot;&gt;
+          &lt;span class=&quot;inline-item&quot; style=&quot;flex: 1;&quot;&gt;Span 1 (flex item)&lt;/span&gt;
+          &lt;span class=&quot;inline-item&quot; style=&quot;flex: 1;&quot;&gt;Span 2 (flex item)&lt;/span&gt;
+          &lt;span class=&quot;inline-item&quot; style=&quot;flex: 1;&quot;&gt;Span 3 (flex item)&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Aynı span elementleri, ama flex container içinde oldukları için &lt;strong&gt;genişlikleri ayarlanabilir&lt;/strong&gt; ve esnek davranırlar!&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Neden böyle?&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;Flex container, direkt çocuklarını &lt;strong&gt;flex item&lt;/strong&gt; haline getirir&lt;/li&gt;
+        &lt;li&gt;Flex item'ler, &lt;strong&gt;block veya inline değildir&lt;/strong&gt;; farklı kuralları vardır&lt;/li&gt;
+        &lt;li&gt;Flex item'lerin &lt;strong&gt;height ve width&lt;/strong&gt; özellikleri çalışır&lt;/li&gt;
+        &lt;li&gt;Flex item'lerin içindeki içerikler, flex item'ın sınırlarına göre normal block/inline kurallarını takip eder&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 10: Flex Item Özellikleri --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📦 Flex Item Özellikleri&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;📌 flex-grow — Büyüme Oranı&lt;/h3&gt;
+    &lt;p&gt;Bir flex item'in, kalan boş alanı ne kadar alacağını belirler.&lt;/p&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.item1 { flex-grow: 1; }
+.item2 { flex-grow: 2; }  /* item1'den 2 kat fazla büyür */
+.item3 { flex-grow: 1; }
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;flex-grow: 1;&quot;&gt;flex-grow: 1&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;flex-grow: 2;&quot;&gt;flex-grow: 2&lt;br&gt;(2 kat büyük)&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;flex-grow: 1;&quot;&gt;flex-grow: 1&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 flex-shrink — Küçülme Oranı&lt;/h3&gt;
+    &lt;p&gt;Bir flex item'in, alan daraldığında ne kadar küçüleceğini belirler.&lt;/p&gt;
+
+    &lt;h3&gt;📌 flex-basis — Başlangıç Boyutu&lt;/h3&gt;
+    &lt;p&gt;Bir flex item'in, büyüme/küçülme uygulanmadan önceki varsayılan boyutu.&lt;/p&gt;
+
+    &lt;h3&gt;📌 flex (Kısayol)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+flex: 1;           /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */
+flex: 2 1 100px;   /* grow, shrink, basis */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 align-self — Bireysel Hizalama&lt;/h3&gt;
+    &lt;p&gt;Bir flex item'in, container'daki align-items ayarını &lt;strong&gt;ezmesini&lt;/strong&gt; sağlar.&lt;/p&gt;
+    &lt;div class=&quot;flex-container&quot; style=&quot;display: flex; align-items: center; height: 150px;&quot;&gt;
+      &lt;div class=&quot;flex-item&quot;&gt;align-items: center&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;align-self: flex-start;&quot;&gt;align-self: flex-start&lt;/div&gt;
+      &lt;div class=&quot;flex-item&quot; style=&quot;align-self: flex-end;&quot;&gt;align-self: flex-end&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 11: Flex Özellikleri Tablosu --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📊 Flexbox Özellikleri Özet Tablosu&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Özellik&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Olası Değerler&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;background: #1a1a20; color: #e8ff47;&quot;&gt;&lt;strong&gt;FLEX CONTAINER ÖZELLİKLERİ&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;display&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Flex container yapar&lt;/td&gt;&lt;td&gt;&lt;code&gt;flex, inline-flex&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex-direction&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Ana eksen yönü&lt;/td&gt;&lt;td&gt;&lt;code&gt;row, row-reverse, column, column-reverse&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;justify-content&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Ana eksende hizalama&lt;/td&gt;&lt;td&gt;&lt;code&gt;flex-start, flex-end, center, space-between, space-around, space-evenly&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;align-items&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Çapraz eksende hizalama&lt;/td&gt;&lt;td&gt;&lt;code&gt;stretch, flex-start, flex-end, center, baseline&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex-wrap&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Taşan item'leri sarma&lt;/td&gt;&lt;td&gt;&lt;code&gt;nowrap, wrap, wrap-reverse&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;gap&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Item'ler arası boşluk&lt;/td&gt;&lt;td&gt;&lt;code&gt;10px, 1rem, 20px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;background: #1a1a20; color: #e8ff47;&quot;&gt;&lt;strong&gt;FLEX ITEM ÖZELLİKLERİ&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex-grow&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Büyüme oranı&lt;/td&gt;&lt;td&gt;&lt;code&gt;0, 1, 2, 3...&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex-shrink&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Küçülme oranı&lt;/td&gt;&lt;td&gt;&lt;code&gt;0, 1, 2, 3...&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex-basis&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Başlangıç boyutu&lt;/td&gt;&lt;td&gt;&lt;code&gt;auto, 100px, 50%&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;flex&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Kısayol (grow shrink basis)&lt;/td&gt;&lt;td&gt;&lt;code&gt;1, auto, 2 1 100px&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;align-self&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Bireysel hizalama&lt;/td&gt;&lt;td&gt;&lt;code&gt;auto, stretch, flex-start, flex-end, center&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;order&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Sıralama&lt;/td&gt;&lt;td&gt;&lt;code&gt;0, 1, 2, -1...&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 12: Pratik Örnekler --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;💡 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;h3&gt;📌 Örnek 1: Navigasyon Menüsü&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;display: flex; justify-content: space-between; align-items: center; background: #333; padding: 1rem 2rem; border-radius: 8px;&quot;&gt;
+        &lt;div style=&quot;font-weight: bold; color: #e8ff47;&quot;&gt;✨ Logo&lt;/div&gt;
+        &lt;div style=&quot;display: flex; gap: 2rem;&quot;&gt;
+          &lt;span&gt;Anasayfa&lt;/span&gt;
+          &lt;span&gt;Hakkımızda&lt;/span&gt;
+          &lt;span&gt;Ürünler&lt;/span&gt;
+          &lt;span&gt;İletişim&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 2: Kart Galerisi&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  flex: 1 1 250px;  /* Büyüyebilir, küçülebilir, baz genişlik 250px */
+  padding: 1rem;
+  border-radius: 8px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;&quot;&gt;
+        &lt;div style=&quot;flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;&quot;&gt;Kart 1&lt;/div&gt;
+        &lt;div style=&quot;flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;&quot;&gt;Kart 2&lt;/div&gt;
+        &lt;div style=&quot;flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;&quot;&gt;Kart 3&lt;/div&gt;
+        &lt;div style=&quot;flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;&quot;&gt;Kart 4&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 3: Footer'ı Alta Yapıştırma&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;  /* Kalan tüm alanı kaplar */
+}
+
+footer {
+  margin-top: auto;  /* Footer'ı alta iter */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 13: Özet --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Flexbox Özeti&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;Flexbox&lt;/strong&gt;, karmaşık düzenleri kolayca oluşturmak için bir CSS layout modudur&lt;/li&gt;
+      &lt;li&gt;📦 &lt;strong&gt;Flex Container&lt;/strong&gt; → &lt;code&gt;display: flex&lt;/code&gt; veya &lt;code&gt;inline-flex&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;📄 &lt;strong&gt;Flex Item&lt;/strong&gt; → Container'ın direkt çocukları&lt;/li&gt;
+      &lt;li&gt;↔️ &lt;strong&gt;justify-content&lt;/strong&gt; → Ana eksende hizalama (row: yatay, column: dikey)&lt;/li&gt;
+      &lt;li&gt;↕️ &lt;strong&gt;align-items&lt;/strong&gt; → Çapraz eksende hizalama (row: dikey, column: yatay)&lt;/li&gt;
+      &lt;li&gt;🔄 &lt;strong&gt;flex-direction&lt;/strong&gt; → Yön değiştirme (row, column, row-reverse, column-reverse)&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;flex-grow / shrink / basis&lt;/strong&gt; → Flex item'lerin boyut davranışı&lt;/li&gt;
+      &lt;li&gt;✨ &lt;strong&gt;Flex item'ler&lt;/strong&gt; inline olsalar bile width/height alabilir!&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;justify-content + align-items: center&lt;/strong&gt; → Mükemmel ortalama!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — CSS Flexbox Derinlemesine | Flex Container · Flex Items · justify-content · align-items · flex-direction
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-flexbox-deep.css - Flexbox Derinlemesine Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* FLEXBOX DEMO KUTULARI */
+.flex-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.flex-container {
+  background: #2a2a32;
+  border: 2px solid #e8ff47;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  min-height: 200px;
+}
+
+.flex-item {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.8rem;
+  margin: 0.3rem;
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Farklı renkler için */
+.flex-item:nth-child(1) { background: #ff6464; color: white; }
+.flex-item:nth-child(2) { background: #64c8ff; color: white; }
+.flex-item:nth-child(3) { background: #6bcb77; color: white; }
+.flex-item:nth-child(4) { background: #ffaa44; color: white; }
+
+/* Inline element flex item demo */
+.inline-item {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem;
+  margin: 0.2rem;
+  border-radius: 4px;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Flexbox - Derinlemesine - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-flexbox-deep.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>💪 <span class="highlight">CSS Flexbox</span></h1>
+  <div class="subtitle">Modern web düzenlerinin vazgeçilmezi — Flex Container · Flex Items · justify-content · align-items · flex-direction</div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 1: CSS Layout'a Giriş - Bugüne Kadar Ne Öğrendik? -->
+  <!-- ============================================================ -->
+  <h2>📐 CSS Layout — Bugüne Kadar Ne Öğrendik?</h2>
+  <div class="card">
+    <p>Şimdiye kadar iki temel layout mekanizması öğrendik:</p>
+
+    <div class="success-note">
+      <strong>1. Block Layout (Block Düzeni)</strong>
+      <p>Sayfanın <strong>büyük bölümlerini</strong> yerleştirmek için kullanılır. Elementler yukarıdan aşağıya (top-to-bottom) akar.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;div&gt;Block element 1&lt;/div&gt;
+&lt;div&gt;Block element 2&lt;/div&gt;
+&lt;div&gt;Block element 3&lt;/div&gt;
+
+/* Her div yeni satırda başlar, tam genişlik kaplar */
+        </pre>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>2. Inline Layout (Inline Düzeni)</strong>
+      <p>Metin ve diğer <strong>inline içerikleri</strong> bir bölüm içinde yerleştirmek için kullanılır. Elementler soldan sağa (left-to-right) akar.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+&lt;span&gt;Inline element 1&lt;/span&gt;
+&lt;span&gt;Inline element 2&lt;/span&gt;
+&lt;span&gt;Inline element 3&lt;/span&gt;
+
+/* Tüm span'ler yan yana dizilir, sadece içerik kadar yer kaplar */
+        </pre>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Peki ya daha karmaşık düzenler?</strong>
+      <p>Block ve inline layout ile yapması <strong>çok zor</strong> olan bazı düzenler vardır:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Elementleri <strong>yatayda ortalamak</strong> (margin: 0 auto çalışır ama sınırlıdır)</li>
+        <li>Elementleri <strong>dikeyde ortalamak</strong> (block layout'ta çok zordur!)</li>
+        <li>Elementleri <strong>eşit aralıklarla</strong> yerleştirmek</li>
+        <li>Elementleri <strong>ters sırada</strong> göstermek</li>
+        <li>Farklı boyutlardaki elementleri <strong>esnek şekilde</strong> hizalamak</li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 İşte burada FLEX LAYOUT devreye giriyor!</strong>
+      <p>Flex layout, bu sorunları <strong>zarif ve kolay</strong> bir şekilde çözer.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 2: Flex Layout Nedir? -->
+  <!-- ============================================================ -->
+  <h2>🔧 Flex Layout Nedir?</h2>
+  <div class="card">
+    <p><strong>Flex layout</strong>, elementleri <strong>satır (row)</strong> veya <strong>sütun (column)</strong> halinde düzenlemek için özel kurallar tanımlayan bir CSS layout modudur.</p>
+
+    <div class="info-note">
+      <strong>🎯 Flex Layout ile KOLAYCA yapılabilenler:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ Navigasyon menüleri (yan yana, eşit aralıklı)</li>
+        <li>✅ Kart galerileri (responsive, esnek)</li>
+        <li>✅ Sayfa içeriğini yatayda ve dikeyde ortalamak</li>
+        <li>✅ Footer'ı sayfanın altına yapıştırmak</li>
+        <li>✅ Elementleri ters sırada göstermek</li>
+        <li>✅ Farklı boyutlardaki elementleri hizalamak</li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>📌 Flex Layout'un Temel Yapısı:</strong>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+┌─────────────────────────────────────────────────────────┐
+│                   FLEX CONTAINER                         │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐        │
+│  │ FLEX ITEM 1 │ │ FLEX ITEM 2 │ │ FLEX ITEM 3 │        │
+│  └─────────────┘ └─────────────┘ └─────────────┘        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+- Flex Container: display: flex veya inline-flex ile oluşturulur
+- Flex Item: Container'ın direkt çocuk elementleri
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 3: Flex Container Oluşturma -->
+  <!-- ============================================================ -->
+  <h2>📦 Flex Container Oluşturma</h2>
+  <div class="card">
+    <p>Bir elementi <strong>flex container</strong> yapmak için <code>display: flex;</code> veya <code>display: inline-flex;</code> kullanılır.</p>
+
+    <div class="code-block">
+      <pre>
+/* Block-level flex container (tam genişlik) */
+.container {
+  display: flex;
+}
+
+/* Inline-level flex container (içerik kadar genişlik) */
+.container {
+  display: inline-flex;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 display: flex; örneği</h4>
+      <div class="flex-container" style="display: flex;">
+        <div class="flex-item">Item 1</div>
+        <div class="flex-item">Item 2</div>
+        <div class="flex-item">Item 3</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Varsayılan olarak flex item'ler <strong>yan yana (row)</strong> dizilir!</p>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Önemli:</strong> Sadece <strong>direkt çocuk elementler</strong> flex item olur. Torun elementler flex item DEĞİLDİR!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 4: justify-content (Yatay Hizalama) -->
+  <!-- ============================================================ -->
+  <h2>↔️ justify-content — Yatay Hizalama</h2>
+  <div class="card">
+    <p><strong>justify-content</strong>, flex item'lerin <strong>ana eksen (main axis)</strong> üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction <strong>row</strong> iken, ana eksen <strong>yatay</strong>'dır.</p>
+
+    <h3>📌 flex-start (Varsayılan)</h3>
+    <div class="code-block">
+      <pre>justify-content: flex-start;  /* Soldan hizalı */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: flex-start;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 flex-end</h3>
+    <div class="code-block">
+      <pre>justify-content: flex-end;    /* Sağdan hizalı */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: flex-end;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 center</h3>
+    <div class="code-block">
+      <pre>justify-content: center;      /* Ortalanmış */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: center;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 space-between</h3>
+    <div class="code-block">
+      <pre>justify-content: space-between; /* İki uca yasla, aradaki boşluk eşit */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: space-between;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 space-around</h3>
+    <div class="code-block">
+      <pre>justify-content: space-around;  /* Her item'ın etrafında eşit boşluk */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: space-around;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 space-evenly</h3>
+    <div class="code-block">
+      <pre>justify-content: space-evenly;  /* Tüm boşluklar eşit */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; justify-content: space-evenly;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 5: align-items (Dikey Hizalama) -->
+  <!-- ============================================================ -->
+  <h2>↕️ align-items — Dikey Hizalama</h2>
+  <div class="card">
+    <p><strong>align-items</strong>, flex item'lerin <strong>çapraz eksen (cross axis)</strong> üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction <strong>row</strong> iken, çapraz eksen <strong>dikey</strong>'dir.</p>
+
+    <h3>📌 stretch (Varsayılan)</h3>
+    <div class="code-block">
+      <pre>align-items: stretch;  /* Container'ın yüksekliğine gerilir */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; align-items: stretch; height: 150px;">
+      <div class="flex-item" style="height: auto;">1</div>
+      <div class="flex-item" style="height: auto;">2<br>İki satır</div>
+      <div class="flex-item" style="height: auto;">3</div>
+    </div>
+
+    <h3>📌 flex-start</h3>
+    <div class="code-block">
+      <pre>align-items: flex-start;  /* Üste hizalı */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; align-items: flex-start; height: 150px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 flex-end</h3>
+    <div class="code-block">
+      <pre>align-items: flex-end;    /* Alta hizalı */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; align-items: flex-end; height: 150px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 center</h3>
+    <div class="code-block">
+      <pre>align-items: center;      /* Dikeyde ortalanmış */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; align-items: center; height: 150px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 6: justify-content + align-items Birlikte -->
+  <!-- ============================================================ -->
+  <h2>🎯 justify-content + align-items — Mükemmel Ortalama</h2>
+  <div class="card">
+    <p>İki özelliği birlikte kullanarak elementleri <strong>tam ortada</strong> hizalayabiliriz!</p>
+
+    <div class="code-block">
+      <pre>
+.container {
+  display: flex;
+  justify-content: center;  /* Yatayda ortalama */
+  align-items: center;      /* Dikeyde ortalama */
+  height: 300px;
+}
+      </pre>
+    </div>
+
+    <div class="flex-container" style="display: flex; justify-content: center; align-items: center; height: 200px;">
+      <div class="flex-item">🎯 Tam Ortada!</div>
+    </div>
+
+    <div class="success-note">
+      <strong>✨ Bu, Flexbox'ın en güçlü özelliklerinden biridir!</strong> Geleneksel CSS ile bir elementi hem yatayda hem dikeyde ortalamak çok zorken, Flexbox ile <strong>tek satır kod</strong> ile yapılabilir.
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 7: flex-direction (Yön Değiştirme) -->
+  <!-- ============================================================ -->
+  <h2>🔄 flex-direction — Yön Değiştirme</h2>
+  <div class="card">
+    <p><strong>flex-direction</strong>, flex item'lerin hangi yönde dizileceğini belirler. Varsayılan değer <strong>row</strong>'dur.</p>
+
+    <h3>📌 row (Varsayılan)</h3>
+    <div class="code-block">
+      <pre>flex-direction: row;  /* Soldan sağa yatay */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; flex-direction: row;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 row-reverse</h3>
+    <div class="code-block">
+      <pre>flex-direction: row-reverse;  /* Sağdan sola yatay (ters) */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; flex-direction: row-reverse;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 column</h3>
+    <div class="code-block">
+      <pre>flex-direction: column;  /* Yukarıdan aşağıya dikey */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; flex-direction: column; height: 250px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 column-reverse</h3>
+    <div class="code-block">
+      <pre>flex-direction: column-reverse;  /* Aşağıdan yukarıya dikey (ters) */</pre>
+    </div>
+    <div class="flex-container" style="display: flex; flex-direction: column-reverse; height: 250px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Önemli:</strong> flex-direction değiştiğinde, <strong>justify-content ve align-items'in görevi de değişir!</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><code>flex-direction: row</code> → justify-content: <strong>YATAY</strong>, align-items: <strong>DİKEY</strong></li>
+        <li><code>flex-direction: column</code> → justify-content: <strong>DİKEY</strong>, align-items: <strong>YATAY</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 8: flex-direction: column ile Hizalama -->
+  <!-- ============================================================ -->
+  <h2>📐 flex-direction: column — Dikey Düzende Hizalama</h2>
+  <div class="card">
+    <p>flex-direction <strong>column</strong> iken, justify-content <strong>dikey</strong> hizalamayı, align-items ise <strong>yatay</strong> hizalamayı kontrol eder.</p>
+
+    <h3>📌 justify-content: center (Dikeyde ortalama)</h3>
+    <div class="flex-container" style="display: flex; flex-direction: column; justify-content: center; height: 250px;">
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+
+    <h3>📌 align-items: center (Yatayda ortalama)</h3>
+    <div class="flex-container" style="display: flex; flex-direction: column; align-items: center; height: 250px;">
+      <div class="flex-item" style="width: 80px;">1</div>
+      <div class="flex-item" style="width: 120px;">2</div>
+      <div class="flex-item" style="width: 60px;">3</div>
+    </div>
+
+    <h3>📌 justify-content + align-items (Tam ortada)</h3>
+    <div class="flex-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250px;">
+      <div class="flex-item">🎯 Tam Ortada (column)</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 9: Peki Ya Inline Elementler? -->
+  <!-- ============================================================ -->
+  <h2>🤔 Peki Ya Inline Elementler?</h2>
+  <div class="card">
+    <p>Hatırlayalım: Normalde <code>&lt;span&gt;</code> gibi inline elementler <strong>width ve height</strong> özelliklerine sahip değildir.</p>
+
+    <div class="code-block">
+      <pre>
+&lt;span&gt;Bu bir inline element&lt;/span&gt;
+&lt;span&gt;width ve height çalışmaz!&lt;/span&gt;
+      </pre>
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Normal block layout'ta:</strong>
+      <div class="demo-box">
+        <div style="background: #3a3a4a; padding: 0.5rem;">
+          <span class="inline-item">Span 1</span>
+          <span class="inline-item">Span 2</span>
+          <span class="inline-item">Span 3</span>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Bu span'ler inline olduğu için width/height ayarlanamaz, yan yana dizilirler.</p>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Flex container içinde:</strong>
+      <p>Bir elementi <code>display: flex</code> yaptığınızda, <strong>direkt çocuk elementler</strong> artık inline veya block değil, <strong>FLEX ITEM</strong> olurlar. Flex item'ler farklı kurallara sahiptir!</p>
+      
+      <div class="demo-box">
+        <div style="display: flex; background: #3a3a4a; padding: 0.5rem;">
+          <span class="inline-item" style="flex: 1;">Span 1 (flex item)</span>
+          <span class="inline-item" style="flex: 1;">Span 2 (flex item)</span>
+          <span class="inline-item" style="flex: 1;">Span 3 (flex item)</span>
+        </div>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Aynı span elementleri, ama flex container içinde oldukları için <strong>genişlikleri ayarlanabilir</strong> ve esnek davranırlar!</p>
+      </div>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Neden böyle?</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>Flex container, direkt çocuklarını <strong>flex item</strong> haline getirir</li>
+        <li>Flex item'ler, <strong>block veya inline değildir</strong>; farklı kuralları vardır</li>
+        <li>Flex item'lerin <strong>height ve width</strong> özellikleri çalışır</li>
+        <li>Flex item'lerin içindeki içerikler, flex item'ın sınırlarına göre normal block/inline kurallarını takip eder</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 10: Flex Item Özellikleri -->
+  <!-- ============================================================ -->
+  <h2>📦 Flex Item Özellikleri</h2>
+  <div class="card">
+    <h3>📌 flex-grow — Büyüme Oranı</h3>
+    <p>Bir flex item'in, kalan boş alanı ne kadar alacağını belirler.</p>
+    <div class="code-block">
+      <pre>
+.item1 { flex-grow: 1; }
+.item2 { flex-grow: 2; }  /* item1'den 2 kat fazla büyür */
+.item3 { flex-grow: 1; }
+      </pre>
+    </div>
+    <div class="flex-container" style="display: flex;">
+      <div class="flex-item" style="flex-grow: 1;">flex-grow: 1</div>
+      <div class="flex-item" style="flex-grow: 2;">flex-grow: 2<br>(2 kat büyük)</div>
+      <div class="flex-item" style="flex-grow: 1;">flex-grow: 1</div>
+    </div>
+
+    <h3>📌 flex-shrink — Küçülme Oranı</h3>
+    <p>Bir flex item'in, alan daraldığında ne kadar küçüleceğini belirler.</p>
+
+    <h3>📌 flex-basis — Başlangıç Boyutu</h3>
+    <p>Bir flex item'in, büyüme/küçülme uygulanmadan önceki varsayılan boyutu.</p>
+
+    <h3>📌 flex (Kısayol)</h3>
+    <div class="code-block">
+      <pre>
+flex: 1;           /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */
+flex: 2 1 100px;   /* grow, shrink, basis */
+      </pre>
+    </div>
+
+    <h3>📌 align-self — Bireysel Hizalama</h3>
+    <p>Bir flex item'in, container'daki align-items ayarını <strong>ezmesini</strong> sağlar.</p>
+    <div class="flex-container" style="display: flex; align-items: center; height: 150px;">
+      <div class="flex-item">align-items: center</div>
+      <div class="flex-item" style="align-self: flex-start;">align-self: flex-start</div>
+      <div class="flex-item" style="align-self: flex-end;">align-self: flex-end</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 11: Flex Özellikleri Tablosu -->
+  <!-- ============================================================ -->
+  <h2>📊 Flexbox Özellikleri Özet Tablosu</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Özellik</th><th>Açıklama</th><th>Olası Değerler</th></tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="3" style="background: #1a1a20; color: #e8ff47;"><strong>FLEX CONTAINER ÖZELLİKLERİ</strong></td></tr>
+      <tr><td><code>display</code></td><td>Flex container yapar</td><td><code>flex, inline-flex</code></td></tr>
+      <tr><td><code>flex-direction</code></td><td>Ana eksen yönü</td><td><code>row, row-reverse, column, column-reverse</code></td></tr>
+      <tr><td><code>justify-content</code></td><td>Ana eksende hizalama</td><td><code>flex-start, flex-end, center, space-between, space-around, space-evenly</code></td></tr>
+      <tr><td><code>align-items</code></td><td>Çapraz eksende hizalama</td><td><code>stretch, flex-start, flex-end, center, baseline</code></td></tr>
+      <tr><td><code>flex-wrap</code></td><td>Taşan item'leri sarma</td><td><code>nowrap, wrap, wrap-reverse</code></td></tr>
+      <tr><td><code>gap</code></td><td>Item'ler arası boşluk</td><td><code>10px, 1rem, 20px</code></td></tr>
+      <tr><td colspan="3" style="background: #1a1a20; color: #e8ff47;"><strong>FLEX ITEM ÖZELLİKLERİ</strong></td></tr>
+      <tr><td><code>flex-grow</code></td><td>Büyüme oranı</td><td><code>0, 1, 2, 3...</code></td></tr>
+      <tr><td><code>flex-shrink</code></td><td>Küçülme oranı</td><td><code>0, 1, 2, 3...</code></td></tr>
+      <tr><td><code>flex-basis</code></td><td>Başlangıç boyutu</td><td><code>auto, 100px, 50%</code></td></tr>
+      <tr><td><code>flex</code></td><td>Kısayol (grow shrink basis)</td><td><code>1, auto, 2 1 100px</code></td></tr>
+      <tr><td><code>align-self</code></td><td>Bireysel hizalama</td><td><code>auto, stretch, flex-start, flex-end, center</code></td></tr>
+      <tr><td><code>order</code></td><td>Sıralama</td><td><code>0, 1, 2, -1...</code></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 12: Pratik Örnekler -->
+  <!-- ============================================================ -->
+  <h2>💡 Pratik Örnekler</h2>
+
+  <h3>📌 Örnek 1: Navigasyon Menüsü</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #333;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; background: #333; padding: 1rem 2rem; border-radius: 8px;">
+        <div style="font-weight: bold; color: #e8ff47;">✨ Logo</div>
+        <div style="display: flex; gap: 2rem;">
+          <span>Anasayfa</span>
+          <span>Hakkımızda</span>
+          <span>Ürünler</span>
+          <span>İletişim</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 2: Kart Galerisi</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  flex: 1 1 250px;  /* Büyüyebilir, küçülebilir, baz genişlik 250px */
+  padding: 1rem;
+  border-radius: 8px;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        <div style="flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;">Kart 1</div>
+        <div style="flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;">Kart 2</div>
+        <div style="flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;">Kart 3</div>
+        <div style="flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;">Kart 4</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 3: Footer'ı Alta Yapıştırma</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;  /* Kalan tüm alanı kaplar */
+}
+
+footer {
+  margin-top: auto;  /* Footer'ı alta iter */
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 13: Özet -->
+  <!-- ============================================================ -->
+  <h2>📋 Flexbox Özeti</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>🎯 <strong>Flexbox</strong>, karmaşık düzenleri kolayca oluşturmak için bir CSS layout modudur</li>
+      <li>📦 <strong>Flex Container</strong> → <code>display: flex</code> veya <code>inline-flex</code></li>
+      <li>📄 <strong>Flex Item</strong> → Container'ın direkt çocukları</li>
+      <li>↔️ <strong>justify-content</strong> → Ana eksende hizalama (row: yatay, column: dikey)</li>
+      <li>↕️ <strong>align-items</strong> → Çapraz eksende hizalama (row: dikey, column: yatay)</li>
+      <li>🔄 <strong>flex-direction</strong> → Yön değiştirme (row, column, row-reverse, column-reverse)</li>
+      <li>📏 <strong>flex-grow / shrink / basis</strong> → Flex item'lerin boyut davranışı</li>
+      <li>✨ <strong>Flex item'ler</strong> inline olsalar bile width/height alabilir!</li>
+      <li>🎯 <strong>justify-content + align-items: center</strong> → Mükemmel ortalama!</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — CSS Flexbox Derinlemesine | Flex Container · Flex Items · justify-content · align-items · flex-direction
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-flexbox-deep.css - Flexbox Derinlemesine Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* FLEXBOX DEMO KUTULARI */
+.flex-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.flex-container {
+  background: #2a2a32;
+  border: 2px solid #e8ff47;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  min-height: 200px;
+}
+
+.flex-item {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.8rem;
+  margin: 0.3rem;
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Farklı renkler için */
+.flex-item:nth-child(1) { background: #ff6464; color: white; }
+.flex-item:nth-child(2) { background: #64c8ff; color: white; }
+.flex-item:nth-child(3) { background: #6bcb77; color: white; }
+.flex-item:nth-child(4) { background: #ffaa44; color: white; }
+
+/* Inline element flex item demo */
+.inline-item {
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem;
+  margin: 0.2rem;
+  border-radius: 4px;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=css-flexbox-derinlemesine-detayli" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>CSS Flexbox — Derinlemesine (Detaylı) — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>CSS Flexbox - Derinlemesine - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-flexbox-deep.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>💪 <span class=\"highlight\">CSS Flexbox</span></h1>\n  <div class=\"subtitle\">Modern web düzenlerinin vazgeçilmezi — Flex Container · Flex Items · justify-content · align-items · flex-direction</div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 1: CSS Layout'a Giriş - Bugüne Kadar Ne Öğrendik? -->\n  <!-- ============================================================ -->\n  <h2>📐 CSS Layout — Bugüne Kadar Ne Öğrendik?</h2>\n  <div class=\"card\">\n    <p>Şimdiye kadar iki temel layout mekanizması öğrendik:</p>\n\n    <div class=\"success-note\">\n      <strong>1. Block Layout (Block Düzeni)</strong>\n      <p>Sayfanın <strong>büyük bölümlerini</strong> yerleştirmek için kullanılır. Elementler yukarıdan aşağıya (top-to-bottom) akar.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;div&gt;Block element 1&lt;/div&gt;\n&lt;div&gt;Block element 2&lt;/div&gt;\n&lt;div&gt;Block element 3&lt;/div&gt;\n\n/* Her div yeni satırda başlar, tam genişlik kaplar */\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>2. Inline Layout (Inline Düzeni)</strong>\n      <p>Metin ve diğer <strong>inline içerikleri</strong> bir bölüm içinde yerleştirmek için kullanılır. Elementler soldan sağa (left-to-right) akar.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n&lt;span&gt;Inline element 1&lt;/span&gt;\n&lt;span&gt;Inline element 2&lt;/span&gt;\n&lt;span&gt;Inline element 3&lt;/span&gt;\n\n/* Tüm span'ler yan yana dizilir, sadece içerik kadar yer kaplar */\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Peki ya daha karmaşık düzenler?</strong>\n      <p>Block ve inline layout ile yapması <strong>çok zor</strong> olan bazı düzenler vardır:</p>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Elementleri <strong>yatayda ortalamak</strong> (margin: 0 auto çalışır ama sınırlıdır)</li>\n        <li>Elementleri <strong>dikeyde ortalamak</strong> (block layout'ta çok zordur!)</li>\n        <li>Elementleri <strong>eşit aralıklarla</strong> yerleştirmek</li>\n        <li>Elementleri <strong>ters sırada</strong> göstermek</li>\n        <li>Farklı boyutlardaki elementleri <strong>esnek şekilde</strong> hizalamak</li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 İşte burada FLEX LAYOUT devreye giriyor!</strong>\n      <p>Flex layout, bu sorunları <strong>zarif ve kolay</strong> bir şekilde çözer.</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 2: Flex Layout Nedir? -->\n  <!-- ============================================================ -->\n  <h2>🔧 Flex Layout Nedir?</h2>\n  <div class=\"card\">\n    <p><strong>Flex layout</strong>, elementleri <strong>satır (row)</strong> veya <strong>sütun (column)</strong> halinde düzenlemek için özel kurallar tanımlayan bir CSS layout modudur.</p>\n\n    <div class=\"info-note\">\n      <strong>🎯 Flex Layout ile KOLAYCA yapılabilenler:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ Navigasyon menüleri (yan yana, eşit aralıklı)</li>\n        <li>✅ Kart galerileri (responsive, esnek)</li>\n        <li>✅ Sayfa içeriğini yatayda ve dikeyde ortalamak</li>\n        <li>✅ Footer'ı sayfanın altına yapıştırmak</li>\n        <li>✅ Elementleri ters sırada göstermek</li>\n        <li>✅ Farklı boyutlardaki elementleri hizalamak</li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>📌 Flex Layout'un Temel Yapısı:</strong>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n┌─────────────────────────────────────────────────────────┐\n│                   FLEX CONTAINER                         │\n│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐        │\n│  │ FLEX ITEM 1 │ │ FLEX ITEM 2 │ │ FLEX ITEM 3 │        │\n│  └─────────────┘ └─────────────┘ └─────────────┘        │\n│                                                         │\n└─────────────────────────────────────────────────────────┘\n\n- Flex Container: display: flex veya inline-flex ile oluşturulur\n- Flex Item: Container'ın direkt çocuk elementleri\n        </pre>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 3: Flex Container Oluşturma -->\n  <!-- ============================================================ -->\n  <h2>📦 Flex Container Oluşturma</h2>\n  <div class=\"card\">\n    <p>Bir elementi <strong>flex container</strong> yapmak için <code>display: flex;</code> veya <code>display: inline-flex;</code> kullanılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Block-level flex container (tam genişlik) */\n.container {\n  display: flex;\n}\n\n/* Inline-level flex container (içerik kadar genişlik) */\n.container {\n  display: inline-flex;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 display: flex; örneği</h4>\n      <div class=\"flex-container\" style=\"display: flex;\">\n        <div class=\"flex-item\">Item 1</div>\n        <div class=\"flex-item\">Item 2</div>\n        <div class=\"flex-item\">Item 3</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Varsayılan olarak flex item'ler <strong>yan yana (row)</strong> dizilir!</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Önemli:</strong> Sadece <strong>direkt çocuk elementler</strong> flex item olur. Torun elementler flex item DEĞİLDİR!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 4: justify-content (Yatay Hizalama) -->\n  <!-- ============================================================ -->\n  <h2>↔️ justify-content — Yatay Hizalama</h2>\n  <div class=\"card\">\n    <p><strong>justify-content</strong>, flex item'lerin <strong>ana eksen (main axis)</strong> üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction <strong>row</strong> iken, ana eksen <strong>yatay</strong>'dır.</p>\n\n    <h3>📌 flex-start (Varsayılan)</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: flex-start;  /* Soldan hizalı */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: flex-start;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 flex-end</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: flex-end;    /* Sağdan hizalı */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: flex-end;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 center</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: center;      /* Ortalanmış */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: center;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 space-between</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: space-between; /* İki uca yasla, aradaki boşluk eşit */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: space-between;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 space-around</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: space-around;  /* Her item'ın etrafında eşit boşluk */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: space-around;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 space-evenly</h3>\n    <div class=\"code-block\">\n      <pre>justify-content: space-evenly;  /* Tüm boşluklar eşit */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; justify-content: space-evenly;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 5: align-items (Dikey Hizalama) -->\n  <!-- ============================================================ -->\n  <h2>↕️ align-items — Dikey Hizalama</h2>\n  <div class=\"card\">\n    <p><strong>align-items</strong>, flex item'lerin <strong>çapraz eksen (cross axis)</strong> üzerinde nasıl hizalanacağını belirler. Varsayılan flex-direction <strong>row</strong> iken, çapraz eksen <strong>dikey</strong>'dir.</p>\n\n    <h3>📌 stretch (Varsayılan)</h3>\n    <div class=\"code-block\">\n      <pre>align-items: stretch;  /* Container'ın yüksekliğine gerilir */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; align-items: stretch; height: 150px;\">\n      <div class=\"flex-item\" style=\"height: auto;\">1</div>\n      <div class=\"flex-item\" style=\"height: auto;\">2<br>İki satır</div>\n      <div class=\"flex-item\" style=\"height: auto;\">3</div>\n    </div>\n\n    <h3>📌 flex-start</h3>\n    <div class=\"code-block\">\n      <pre>align-items: flex-start;  /* Üste hizalı */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; align-items: flex-start; height: 150px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 flex-end</h3>\n    <div class=\"code-block\">\n      <pre>align-items: flex-end;    /* Alta hizalı */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; align-items: flex-end; height: 150px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 center</h3>\n    <div class=\"code-block\">\n      <pre>align-items: center;      /* Dikeyde ortalanmış */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; align-items: center; height: 150px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 6: justify-content + align-items Birlikte -->\n  <!-- ============================================================ -->\n  <h2>🎯 justify-content + align-items — Mükemmel Ortalama</h2>\n  <div class=\"card\">\n    <p>İki özelliği birlikte kullanarak elementleri <strong>tam ortada</strong> hizalayabiliriz!</p>\n\n    <div class=\"code-block\">\n      <pre>\n.container {\n  display: flex;\n  justify-content: center;  /* Yatayda ortalama */\n  align-items: center;      /* Dikeyde ortalama */\n  height: 300px;\n}\n      </pre>\n    </div>\n\n    <div class=\"flex-container\" style=\"display: flex; justify-content: center; align-items: center; height: 200px;\">\n      <div class=\"flex-item\">🎯 Tam Ortada!</div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✨ Bu, Flexbox'ın en güçlü özelliklerinden biridir!</strong> Geleneksel CSS ile bir elementi hem yatayda hem dikeyde ortalamak çok zorken, Flexbox ile <strong>tek satır kod</strong> ile yapılabilir.\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 7: flex-direction (Yön Değiştirme) -->\n  <!-- ============================================================ -->\n  <h2>🔄 flex-direction — Yön Değiştirme</h2>\n  <div class=\"card\">\n    <p><strong>flex-direction</strong>, flex item'lerin hangi yönde dizileceğini belirler. Varsayılan değer <strong>row</strong>'dur.</p>\n\n    <h3>📌 row (Varsayılan)</h3>\n    <div class=\"code-block\">\n      <pre>flex-direction: row;  /* Soldan sağa yatay */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: row;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 row-reverse</h3>\n    <div class=\"code-block\">\n      <pre>flex-direction: row-reverse;  /* Sağdan sola yatay (ters) */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: row-reverse;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 column</h3>\n    <div class=\"code-block\">\n      <pre>flex-direction: column;  /* Yukarıdan aşağıya dikey */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: column; height: 250px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 column-reverse</h3>\n    <div class=\"code-block\">\n      <pre>flex-direction: column-reverse;  /* Aşağıdan yukarıya dikey (ters) */</pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: column-reverse; height: 250px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Önemli:</strong> flex-direction değiştiğinde, <strong>justify-content ve align-items'in görevi de değişir!</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><code>flex-direction: row</code> → justify-content: <strong>YATAY</strong>, align-items: <strong>DİKEY</strong></li>\n        <li><code>flex-direction: column</code> → justify-content: <strong>DİKEY</strong>, align-items: <strong>YATAY</strong></li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 8: flex-direction: column ile Hizalama -->\n  <!-- ============================================================ -->\n  <h2>📐 flex-direction: column — Dikey Düzende Hizalama</h2>\n  <div class=\"card\">\n    <p>flex-direction <strong>column</strong> iken, justify-content <strong>dikey</strong> hizalamayı, align-items ise <strong>yatay</strong> hizalamayı kontrol eder.</p>\n\n    <h3>📌 justify-content: center (Dikeyde ortalama)</h3>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: column; justify-content: center; height: 250px;\">\n      <div class=\"flex-item\">1</div>\n      <div class=\"flex-item\">2</div>\n      <div class=\"flex-item\">3</div>\n    </div>\n\n    <h3>📌 align-items: center (Yatayda ortalama)</h3>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: column; align-items: center; height: 250px;\">\n      <div class=\"flex-item\" style=\"width: 80px;\">1</div>\n      <div class=\"flex-item\" style=\"width: 120px;\">2</div>\n      <div class=\"flex-item\" style=\"width: 60px;\">3</div>\n    </div>\n\n    <h3>📌 justify-content + align-items (Tam ortada)</h3>\n    <div class=\"flex-container\" style=\"display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250px;\">\n      <div class=\"flex-item\">🎯 Tam Ortada (column)</div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 9: Peki Ya Inline Elementler? -->\n  <!-- ============================================================ -->\n  <h2>🤔 Peki Ya Inline Elementler?</h2>\n  <div class=\"card\">\n    <p>Hatırlayalım: Normalde <code>&lt;span&gt;</code> gibi inline elementler <strong>width ve height</strong> özelliklerine sahip değildir.</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;span&gt;Bu bir inline element&lt;/span&gt;\n&lt;span&gt;width ve height çalışmaz!&lt;/span&gt;\n      </pre>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Normal block layout'ta:</strong>\n      <div class=\"demo-box\">\n        <div style=\"background: #3a3a4a; padding: 0.5rem;\">\n          <span class=\"inline-item\">Span 1</span>\n          <span class=\"inline-item\">Span 2</span>\n          <span class=\"inline-item\">Span 3</span>\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Bu span'ler inline olduğu için width/height ayarlanamaz, yan yana dizilirler.</p>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Flex container içinde:</strong>\n      <p>Bir elementi <code>display: flex</code> yaptığınızda, <strong>direkt çocuk elementler</strong> artık inline veya block değil, <strong>FLEX ITEM</strong> olurlar. Flex item'ler farklı kurallara sahiptir!</p>\n      \n      <div class=\"demo-box\">\n        <div style=\"display: flex; background: #3a3a4a; padding: 0.5rem;\">\n          <span class=\"inline-item\" style=\"flex: 1;\">Span 1 (flex item)</span>\n          <span class=\"inline-item\" style=\"flex: 1;\">Span 2 (flex item)</span>\n          <span class=\"inline-item\" style=\"flex: 1;\">Span 3 (flex item)</span>\n        </div>\n        <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Aynı span elementleri, ama flex container içinde oldukları için <strong>genişlikleri ayarlanabilir</strong> ve esnek davranırlar!</p>\n      </div>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Neden böyle?</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>Flex container, direkt çocuklarını <strong>flex item</strong> haline getirir</li>\n        <li>Flex item'ler, <strong>block veya inline değildir</strong>; farklı kuralları vardır</li>\n        <li>Flex item'lerin <strong>height ve width</strong> özellikleri çalışır</li>\n        <li>Flex item'lerin içindeki içerikler, flex item'ın sınırlarına göre normal block/inline kurallarını takip eder</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 10: Flex Item Özellikleri -->\n  <!-- ============================================================ -->\n  <h2>📦 Flex Item Özellikleri</h2>\n  <div class=\"card\">\n    <h3>📌 flex-grow — Büyüme Oranı</h3>\n    <p>Bir flex item'in, kalan boş alanı ne kadar alacağını belirler.</p>\n    <div class=\"code-block\">\n      <pre>\n.item1 { flex-grow: 1; }\n.item2 { flex-grow: 2; }  /* item1'den 2 kat fazla büyür */\n.item3 { flex-grow: 1; }\n      </pre>\n    </div>\n    <div class=\"flex-container\" style=\"display: flex;\">\n      <div class=\"flex-item\" style=\"flex-grow: 1;\">flex-grow: 1</div>\n      <div class=\"flex-item\" style=\"flex-grow: 2;\">flex-grow: 2<br>(2 kat büyük)</div>\n      <div class=\"flex-item\" style=\"flex-grow: 1;\">flex-grow: 1</div>\n    </div>\n\n    <h3>📌 flex-shrink — Küçülme Oranı</h3>\n    <p>Bir flex item'in, alan daraldığında ne kadar küçüleceğini belirler.</p>\n\n    <h3>📌 flex-basis — Başlangıç Boyutu</h3>\n    <p>Bir flex item'in, büyüme/küçülme uygulanmadan önceki varsayılan boyutu.</p>\n\n    <h3>📌 flex (Kısayol)</h3>\n    <div class=\"code-block\">\n      <pre>\nflex: 1;           /* flex-grow: 1, flex-shrink: 1, flex-basis: 0 */\nflex: 2 1 100px;   /* grow, shrink, basis */\n      </pre>\n    </div>\n\n    <h3>📌 align-self — Bireysel Hizalama</h3>\n    <p>Bir flex item'in, container'daki align-items ayarını <strong>ezmesini</strong> sağlar.</p>\n    <div class=\"flex-container\" style=\"display: flex; align-items: center; height: 150px;\">\n      <div class=\"flex-item\">align-items: center</div>\n      <div class=\"flex-item\" style=\"align-self: flex-start;\">align-self: flex-start</div>\n      <div class=\"flex-item\" style=\"align-self: flex-end;\">align-self: flex-end</div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 11: Flex Özellikleri Tablosu -->\n  <!-- ============================================================ -->\n  <h2>📊 Flexbox Özellikleri Özet Tablosu</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Özellik</th><th>Açıklama</th><th>Olası Değerler</th></tr>\n    </thead>\n    <tbody>\n      <tr><td colspan=\"3\" style=\"background: #1a1a20; color: #e8ff47;\"><strong>FLEX CONTAINER ÖZELLİKLERİ</strong></td></tr>\n      <tr><td><code>display</code></td><td>Flex container yapar</td><td><code>flex, inline-flex</code></td></tr>\n      <tr><td><code>flex-direction</code></td><td>Ana eksen yönü</td><td><code>row, row-reverse, column, column-reverse</code></td></tr>\n      <tr><td><code>justify-content</code></td><td>Ana eksende hizalama</td><td><code>flex-start, flex-end, center, space-between, space-around, space-evenly</code></td></tr>\n      <tr><td><code>align-items</code></td><td>Çapraz eksende hizalama</td><td><code>stretch, flex-start, flex-end, center, baseline</code></td></tr>\n      <tr><td><code>flex-wrap</code></td><td>Taşan item'leri sarma</td><td><code>nowrap, wrap, wrap-reverse</code></td></tr>\n      <tr><td><code>gap</code></td><td>Item'ler arası boşluk</td><td><code>10px, 1rem, 20px</code></td></tr>\n      <tr><td colspan=\"3\" style=\"background: #1a1a20; color: #e8ff47;\"><strong>FLEX ITEM ÖZELLİKLERİ</strong></td></tr>\n      <tr><td><code>flex-grow</code></td><td>Büyüme oranı</td><td><code>0, 1, 2, 3...</code></td></tr>\n      <tr><td><code>flex-shrink</code></td><td>Küçülme oranı</td><td><code>0, 1, 2, 3...</code></td></tr>\n      <tr><td><code>flex-basis</code></td><td>Başlangıç boyutu</td><td><code>auto, 100px, 50%</code></td></tr>\n      <tr><td><code>flex</code></td><td>Kısayol (grow shrink basis)</td><td><code>1, auto, 2 1 100px</code></td></tr>\n      <tr><td><code>align-self</code></td><td>Bireysel hizalama</td><td><code>auto, stretch, flex-start, flex-end, center</code></td></tr>\n      <tr><td><code>order</code></td><td>Sıralama</td><td><code>0, 1, 2, -1...</code></td></tr>\n    </tbody>\n  </table>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 12: Pratik Örnekler -->\n  <!-- ============================================================ -->\n  <h2>💡 Pratik Örnekler</h2>\n\n  <h3>📌 Örnek 1: Navigasyon Menüsü</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: #333;\n  padding: 1rem 2rem;\n}\n\n.nav-links {\n  display: flex;\n  gap: 2rem;\n  list-style: none;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; background: #333; padding: 1rem 2rem; border-radius: 8px;\">\n        <div style=\"font-weight: bold; color: #e8ff47;\">✨ Logo</div>\n        <div style=\"display: flex; gap: 2rem;\">\n          <span>Anasayfa</span>\n          <span>Hakkımızda</span>\n          <span>Ürünler</span>\n          <span>İletişim</span>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 2: Kart Galerisi</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.gallery {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 20px;\n  justify-content: center;\n}\n\n.card {\n  flex: 1 1 250px;  /* Büyüyebilir, küçülebilir, baz genişlik 250px */\n  padding: 1rem;\n  border-radius: 8px;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;\">\n        <div style=\"flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;\">Kart 1</div>\n        <div style=\"flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;\">Kart 2</div>\n        <div style=\"flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;\">Kart 3</div>\n        <div style=\"flex: 1 1 200px; background: #3a3a4a; padding: 1rem; border-radius: 8px; text-align: center;\">Kart 4</div>\n      </div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 3: Footer'ı Alta Yapıştırma</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\nbody {\n  display: flex;\n  flex-direction: column;\n  min-height: 100vh;\n}\n\nmain {\n  flex: 1;  /* Kalan tüm alanı kaplar */\n}\n\nfooter {\n  margin-top: auto;  /* Footer'ı alta iter */\n}\n      </pre>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 13: Özet -->\n  <!-- ============================================================ -->\n  <h2>📋 Flexbox Özeti</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>🎯 <strong>Flexbox</strong>, karmaşık düzenleri kolayca oluşturmak için bir CSS layout modudur</li>\n      <li>📦 <strong>Flex Container</strong> → <code>display: flex</code> veya <code>inline-flex</code></li>\n      <li>📄 <strong>Flex Item</strong> → Container'ın direkt çocukları</li>\n      <li>↔️ <strong>justify-content</strong> → Ana eksende hizalama (row: yatay, column: dikey)</li>\n      <li>↕️ <strong>align-items</strong> → Çapraz eksende hizalama (row: dikey, column: yatay)</li>\n      <li>🔄 <strong>flex-direction</strong> → Yön değiştirme (row, column, row-reverse, column-reverse)</li>\n      <li>📏 <strong>flex-grow / shrink / basis</strong> → Flex item'lerin boyut davranışı</li>\n      <li>✨ <strong>Flex item'ler</strong> inline olsalar bile width/height alabilir!</li>\n      <li>🎯 <strong>justify-content + align-items: center</strong> → Mükemmel ortalama!</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — CSS Flexbox Derinlemesine | Flex Container · Flex Items · justify-content · align-items · flex-direction\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-flexbox-deep.css - Flexbox Derinlemesine Ders Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\nh4 {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #aaa;\n  margin: 1rem 0 0.5rem 0;\n}\n\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* FLEXBOX DEMO KUTULARI */\n.flex-demo {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n}\n\n.flex-container {\n  background: #2a2a32;\n  border: 2px solid #e8ff47;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 0.5rem 0;\n  min-height: 200px;\n}\n\n.flex-item {\n  background: #e8ff47;\n  color: #000;\n  padding: 0.8rem;\n  margin: 0.3rem;\n  border-radius: 6px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  font-weight: bold;\n  text-align: center;\n}\n\n/* Farklı renkler için */\n.flex-item:nth-child(1) { background: #ff6464; color: white; }\n.flex-item:nth-child(2) { background: #64c8ff; color: white; }\n.flex-item:nth-child(3) { background: #6bcb77; color: white; }\n.flex-item:nth-child(4) { background: #ffaa44; color: white; }\n\n/* Inline element flex item demo */\n.inline-item {\n  background: #e8ff47;\n  color: #000;\n  padding: 0.5rem;\n  margin: 0.2rem;\n  border-radius: 4px;\n}\n\n/* Tablo */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
