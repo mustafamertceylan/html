@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Position — Static, Fixed, Absolute, Relative (Detaylı) - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>CSS Position — Static, Fixed, Absolute, Relative (Detaylı)</h1>
+    <p class="desc">CSS position özelliği ile elementleri tam istediğin yere konumlandır. Static (varsayılan), Fixed (viewport'a sabit), Absolute (ebeveyne göre mutlak), Relative (normal konumundan kaydırma), z-index ile katman sıralaması. Overlay, sabit navbar, kart üzeri etiket, modal gibi pratik örnekler ve sık yapılan hatalar.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;CSS Position - Derinlemesine - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-position-deep.css&quot;&gt;
+  &lt;style&gt;
+    /* Fixed buton için sayfa bazında stil */
+    .fixed-demo-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #e8ff47;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Space Mono', monospace;
+      font-weight: bold;
+      text-decoration: none;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .fixed-demo-btn:hover {
+      transform: scale(1.05);
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;!-- Fixed Demo Buton - Sayfada aşağı kaydırınca görün! --&gt;
+&lt;a href=&quot;#&quot; class=&quot;fixed-demo-btn&quot; style=&quot;position: fixed; bottom: 30px; right: 30px; background: #e8ff47; color: #000; padding: 12px 20px; border-radius: 50px; font-family: 'Space Mono', monospace; font-weight: bold; text-decoration: none; z-index: 1000;&quot;&gt;📌 Fixed! (Kaydırınca sabit)&lt;/a&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📍 &lt;span class=&quot;highlight&quot;&gt;CSS Position&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;static · fixed · absolute · relative · z-index — Elementleri tam istediğin yere koy!&lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 1: Position Nedir? --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🎯 Position Nedir?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Positioned layout&lt;/strong&gt;, bir elementin sayfada &lt;strong&gt;tam olarak nerede olacağını&lt;/strong&gt; belirlemenizi sağlar.&lt;/p&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Position Kullanmak İçin 3 Adım:&lt;/strong&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Position method&lt;/strong&gt; belirle: &lt;code&gt;static&lt;/code&gt;, &lt;code&gt;fixed&lt;/code&gt;, &lt;code&gt;absolute&lt;/code&gt;, &lt;code&gt;relative&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Offset&lt;/strong&gt; (uzaklık) belirle: &lt;code&gt;top&lt;/code&gt;, &lt;code&gt;left&lt;/code&gt;, &lt;code&gt;bottom&lt;/code&gt;, &lt;code&gt;right&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;z-index&lt;/strong&gt; (isteğe bağlı) → Katman sıralaması&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Position örnek yapısı */
+.element {
+  position: fixed;     /* 1. Position method */
+  top: 50px;           /* 2. Offset (uzaklık) */
+  left: 100px;
+  z-index: 10;         /* 3. Katman sırası (isteğe bağlı) */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 2: position: static (Varsayılan) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📌 position: static — Varsayılan Değer (Hiçbir Şey Olmaz!)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;code&gt;position: static&lt;/code&gt;, tüm elementlerin &lt;strong&gt;varsayılan değeridir&lt;/strong&gt;. Bu modda elementler normal belge akışında (normal flow) kalır ve &lt;code&gt;top/left/bottom/right&lt;/code&gt; özellikleri &lt;strong&gt;ÇALIŞMAZ&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.static-box {
+  position: static;    /* Varsayılan - zaten gerekmez */
+  top: 50px;           /* ❌ ÇALIŞMAZ! */
+  left: 100px;         /* ❌ ÇALIŞMAZ! */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #3a3a4a; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; margin: 0.3rem;&quot;&gt;Normal div (static)&lt;/div&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; margin: 0.3rem;&quot;&gt;Normal div (static)&lt;/div&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; margin: 0.3rem;&quot;&gt;Normal div (static)&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Static elementler &lt;strong&gt;normal akışta&lt;/strong&gt; kalır, yukarıdan aşağıya dizilir.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Önemli:&lt;/strong&gt; &lt;code&gt;top/left/bottom/right&lt;/code&gt; kullanabilmek için &lt;strong&gt;position static OLMAMALI&lt;/strong&gt;!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 3: position: fixed (Viewport'a Sabit) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📌 position: fixed — Viewport'a Sabit&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;code&gt;position: fixed&lt;/code&gt; ile bir element, &lt;strong&gt;viewport'a göre sabitlenir&lt;/strong&gt; ve &lt;strong&gt;sayfa kaydırıldığında hareket etmez&lt;/strong&gt;. Element normal akıştan &lt;strong&gt;çıkarılır&lt;/strong&gt; ve kendi katmanında konumlandırılır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.fixed-menu {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #e8ff47;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Fixed Demo (Aşağı kaydırın!)&lt;/h4&gt;
+      &lt;div class=&quot;fixed-demo-container&quot; style=&quot;background: #2a2a32; border-radius: 8px; padding: 1rem; height: 250px; overflow-y: scroll;&quot;&gt;
+        &lt;div style=&quot;height: 400px; position: relative;&quot;&gt;
+          &lt;p&gt;Bu alanı &lt;strong&gt;kaydırın&lt;/strong&gt; → Sağ alt köşedeki buton &lt;strong&gt;sabit kalır&lt;/strong&gt;!&lt;/p&gt;
+          &lt;p&gt;↓ Kaydırmaya devam...&lt;/p&gt;
+          &lt;p&gt;↓ Kaydırmaya devam...&lt;/p&gt;
+          &lt;p&gt;↓ Kaydırmaya devam...&lt;/p&gt;
+          &lt;p style=&quot;position: fixed; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem;&quot;&gt;📌 Fixed! (kaymaz)&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✨ Fixed Kullanım Alanları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Navigasyon çubukları&lt;/strong&gt; (navbar) — her zaman üstte kalır&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Chat butonu&lt;/strong&gt; / &quot;Yukarı çık&quot; butonu&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Bildirim toast'ları&lt;/strong&gt; (sağ alt köşede sabit)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Reklam banner'ları&lt;/strong&gt; (sayfa kaydırılsa da görünür)&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Fixed Özellikleri:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;🎯 Referans noktası → &lt;strong&gt;Viewport&lt;/strong&gt; (tarayıcı görüntü alanı)&lt;/li&gt;
+        &lt;li&gt;📦 Normal akıştan &lt;strong&gt;tamamen çıkarılır&lt;/strong&gt; (diğer elementler onun yerine kayar)&lt;/li&gt;
+        &lt;li&gt;🔄 &lt;strong&gt;Scroll yapınca sabit kalır&lt;/strong&gt; — hareket etmez!&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 4: position: absolute --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📌 position: absolute — Kapsayıcı Elemente Göre Mutlak&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;code&gt;position: absolute&lt;/code&gt; ile bir element, &lt;strong&gt;en yakın positioned (relative/absolute/fixed) ebeveynine&lt;/strong&gt; göre konumlanır. Eğer böyle bir ebeveyn yoksa, &lt;strong&gt;viewport'a&lt;/strong&gt; göre konumlanır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.absolute-box {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Absolute Demo (Ebeveyn relative değil → viewport'a göre)&lt;/h4&gt;
+      &lt;div class=&quot;demo-area&quot; style=&quot;background: #2a2a32; border: 1px solid #e8ff47; border-radius: 8px; padding: 1rem; min-height: 200px; position: relative;&quot;&gt;
+        &lt;p&gt;Bu alan bir container.&lt;/p&gt;
+        &lt;p&gt;Absolute element, &lt;strong&gt;relative ebeveyni&lt;/strong&gt; olmadığı için viewport'a göre konumlanır.&lt;/p&gt;
+        &lt;div style=&quot;position: absolute; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 0.5rem; border-radius: 8px;&quot;&gt;
+          📌 absolute (viewport'a göre)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 Absolute + Relative — Mükemmel İkili!&lt;/strong&gt;
+      &lt;p&gt;Absolute bir elementi, belirli bir ebeveynin &lt;strong&gt;içinde konumlandırmak&lt;/strong&gt; için, o ebeveyni &lt;code&gt;position: relative&lt;/code&gt; yapın!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Absolute + Relative Birlikte&lt;/h4&gt;
+      &lt;div class=&quot;parent-box&quot; style=&quot;background: #3a3a4a; padding: 2rem; border-radius: 8px; position: relative; min-height: 200px;&quot;&gt;
+        &lt;p&gt;&lt;strong&gt;Parent (position: relative)&lt;/strong&gt;&lt;/p&gt;
+        &lt;p&gt;Bu kutu, absolute element için &lt;strong&gt;referans noktası&lt;/strong&gt; oldu.&lt;/p&gt;
+        &lt;div class=&quot;child-absolute&quot; style=&quot;position: absolute; bottom: 20px; right: 20px; background: #e8ff47; color: #000; padding: 0.5rem 1rem; border-radius: 8px;&quot;&gt;
+          📌 absolute (parent'a göre)
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Absolute element, &lt;strong&gt;parent'ın sağ alt köşesine&lt;/strong&gt; konumlandı!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 5: position: relative --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📌 position: relative — Normal Konumundan Kaydırma&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;code&gt;position: relative&lt;/code&gt; ile bir element, &lt;strong&gt;normalde olacağı yerden&lt;/strong&gt; kaydırılır. Element &lt;strong&gt;normal akışta kendi yerini korur&lt;/strong&gt; (boşluk bırakır), sadece görsel olarak taşınır.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.relative-box {
+  position: relative;
+  top: 20px;      /* Normal konumundan 20px aşağı */
+  left: 30px;     /* Normal konumundan 30px sağa */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Relative Örneği&lt;/h4&gt;
+      &lt;div style=&quot;background: #3a3a4a; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; margin: 0.3rem;&quot;&gt;Normal div 1&lt;/div&gt;
+        &lt;div style=&quot;background: #e8ff47; color: #000; padding: 0.5rem; margin: 0.3rem; position: relative; top: 15px; left: 20px;&quot;&gt;
+          📍 relative (top:15px, left:20px) — kendi yerinden kaydı!
+        &lt;/div&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; margin: 0.3rem;&quot;&gt;Normal div 3&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Relative element &lt;strong&gt;kendi normal konumundan kaydı&lt;/strong&gt;, ama &lt;strong&gt;orijinal yeri boş kaldı&lt;/strong&gt;!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Relative'in En Önemli Kullanımı:&lt;/strong&gt;
+      &lt;p&gt;Relative, genellikle &lt;strong&gt;absolute elementler için referans noktası&lt;/strong&gt; oluşturmak amacıyla kullanılır.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.parent {
+  position: relative;  /* Absolute çocuklar için referans */
+}
+
+.child {
+  position: absolute;  /* Parent'a göre konumlanır */
+  top: 0;
+  right: 0;
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 6: Overlay (Absolute + Relative ile) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🎨 Overlay — Popüler Kullanım Alanı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Absolute + Relative kullanarak, bir resim veya kart üzerine &lt;strong&gt;hover'da görünen overlay&lt;/strong&gt; (üst katman) yapabilirsiniz.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.image-container {
+  position: relative;   /* Referans noktası */
+  display: inline-block;
+}
+
+.overlay {
+  position: absolute;   /* Container'a göre konumlanır */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;  /* Hover'da görünür */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;image-container&quot; style=&quot;position: relative; display: inline-block; border-radius: 8px; overflow: hidden;&quot;&gt;
+        &lt;div style=&quot;width: 300px; height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white;&quot;&gt;🖼️ Resim&lt;/div&gt;
+        &lt;div class=&quot;overlay&quot; style=&quot;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white; font-weight: bold; border-radius: 8px;&quot;&gt;
+          ✨ Hover'da görünen overlay!
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ Resmin üzerine &lt;strong&gt;hover yapın&lt;/strong&gt; → Overlay görünür!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 7: z-index — Katman Sıralaması --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📚 z-index — Katman Sıralaması&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;code&gt;z-index&lt;/code&gt;, üst üste binen positioned elementlerin &lt;strong&gt;hangisinin önde olacağını&lt;/strong&gt; belirler. Büyük değer &lt;strong&gt;önde&lt;/strong&gt; gösterilir.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.box1 {
+  position: absolute;
+  z-index: 1;  /* Düşük → arkada */
+}
+
+.box2 {
+  position: absolute;
+  z-index: 2;  /* Yüksek → önde */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;z-index-container&quot; style=&quot;position: relative; height: 180px; margin: 2rem 0;&quot;&gt;
+        &lt;div class=&quot;z-box-1&quot; style=&quot;position: absolute; width: 120px; height: 80px; background: #ff6464; top: 20px; left: 20px; z-index: 1; display: flex; align-items: center; justify-content: center;&quot;&gt;z-index:1&lt;/div&gt;
+        &lt;div class=&quot;z-box-2&quot; style=&quot;position: absolute; width: 120px; height: 80px; background: #64c8ff; top: 60px; left: 60px; z-index: 2; display: flex; align-items: center; justify-content: center;&quot;&gt;z-index:2&lt;/div&gt;
+        &lt;div class=&quot;z-box-3&quot; style=&quot;position: absolute; width: 120px; height: 80px; background: #6bcb77; top: 100px; left: 100px; z-index: 3; display: flex; align-items: center; justify-content: center;&quot;&gt;z-index:3&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;strong&gt;z-index değeri büyük olan önde!&lt;/strong&gt; (3 &gt; 2 &gt; 1)&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Önemli:&lt;/strong&gt; z-index &lt;strong&gt;sadece positioned elementlerde&lt;/strong&gt; (position: relative/absolute/fixed) çalışır! Static elementlerde çalışmaz.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 8: Tüm Position Değerleri Karşılaştırması --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📊 Position Değerleri Karşılaştırması&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Değer&lt;/th&gt;&lt;th&gt;Referans Noktası&lt;/th&gt;&lt;th&gt;Normal Akıştan Çıkar mı?&lt;/th&gt;&lt;th&gt;top/left/right/bottom&lt;/th&gt;&lt;th&gt;Kullanım Alanı&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;static&lt;/code&gt;&lt;/td&gt;&lt;td&gt;—&lt;/td&gt;&lt;td&gt;❌ Hayır&lt;/td&gt;&lt;td&gt;❌ Çalışmaz&lt;/td&gt;&lt;td&gt;Varsayılan&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;relative&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Normal konumu&lt;/td&gt;&lt;td&gt;❌ Hayır (yer korunur)&lt;/td&gt;&lt;td&gt;✅ Çalışır (kaydırır)&lt;/td&gt;&lt;td&gt;Absolute için referans, hafif kaydırma&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;absolute&lt;/code&gt;&lt;/td&gt;&lt;td&gt;En yakın positioned ebeveyn (yoksa viewport)&lt;/td&gt;&lt;td&gt;✅ Evet&lt;/td&gt;&lt;td&gt;✅ Çalışır&lt;/td&gt;&lt;td&gt;Overlay, modal, tooltip, kart üzeri etiket&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;fixed&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Viewport&lt;/td&gt;&lt;td&gt;✅ Evet&lt;/td&gt;&lt;td&gt;✅ Çalışır&lt;/td&gt;&lt;td&gt;Navbar, chat butonu, &quot;yukarı çık&quot; butonu&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;sticky&lt;/code&gt;*&lt;/td&gt;&lt;td&gt;Ebeveyn + Viewport&lt;/td&gt;&lt;td&gt;Karma&lt;/td&gt;&lt;td&gt;✅ Çalışır&lt;/td&gt;&lt;td&gt;Scroll'da yapışan header&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+  &lt;p style=&quot;font-size: 0.7rem; color: #888;&quot;&gt;*sticky, modern bir değerdir; belirli bir scroll noktasına kadar normal, sonra fixed gibi davranır.&lt;/p&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 9: Pratik Örnekler --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;💡 Pratik Örnekler&lt;/h2&gt;
+
+  &lt;h3&gt;📌 Örnek 1: Sabit Navbar&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #333;
+  color: white;
+  padding: 1rem;
+  z-index: 100;
+}
+
+body {
+  padding-top: 60px;  /* Navbar'ın altına içerik kaymasın */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 2: Kart Üzeri Etiket (Absolute)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.card {
+  position: relative;
+  width: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff6464;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;position: relative; width: 250px; background: #2a2a32; border-radius: 12px; overflow: hidden;&quot;&gt;
+        &lt;div style=&quot;height: 150px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center;&quot;&gt;🖼️&lt;/div&gt;
+        &lt;div style=&quot;padding: 1rem;&quot;&gt;
+          &lt;h4&gt;Ürün Adı&lt;/h4&gt;
+          &lt;p&gt;Açıklama...&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div style=&quot;position: absolute; top: 10px; right: 10px; background: #ff6464; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;&quot;&gt;🔥 İndirim!&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;h3&gt;📌 Örnek 3: Modal (Popup)&lt;/h3&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 10: Sık Yapılan Hatalar --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;⚠️ Sık Yapılan Hatalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; Absolute elementi relative ebeveyn olmadan kullanmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+&lt;!-- Absolute, relative ebeveyn yoksa viewport'a göre konumlanır! --&gt;
+&lt;div&gt;
+  &lt;div style=&quot;position: absolute; top: 0;&quot;&gt;Bu viewport'a göre konumlanır&lt;/div&gt;
+&lt;/div&gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Ebeveyni &lt;code&gt;position: relative&lt;/code&gt; yapın!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; Fixed element için boşluk bırakmamak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.fixed-nav {
+  position: fixed;
+  top: 0;
+  height: 60px;
+}
+/* İçerik navbar'ın altına kaybolur! */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;body { padding-top: 60px; }&lt;/code&gt; ekleyin!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 3:&lt;/strong&gt; z-index'in static elementlerde çalışmadığını unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.static-element {
+  z-index: 100;  /* ❌ ÇALIŞMAZ! position belirtilmemiş */
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;position: relative&lt;/code&gt; ekleyin (z-index için yeterli)!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 11: Özet --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Position Özeti&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📍 &lt;strong&gt;static&lt;/strong&gt; (varsayılan) → Normal akış, top/left çalışmaz&lt;/li&gt;
+      &lt;li&gt;📌 &lt;strong&gt;fixed&lt;/strong&gt; → &lt;strong&gt;Viewport'a&lt;/strong&gt; göre sabit, scroll'da hareket etmez&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;absolute&lt;/strong&gt; → En yakın &lt;strong&gt;positioned ebeveyne&lt;/strong&gt; göre (yoksa viewport)&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;relative&lt;/strong&gt; → Normal konumundan kayar, &lt;strong&gt;orijinal yeri boş kalır&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;📚 &lt;strong&gt;z-index&lt;/strong&gt; → Katman sırası (büyük değer önde) — sadece positioned elementlerde çalışır&lt;/li&gt;
+      &lt;li&gt;🔧 &lt;strong&gt;Absolute + Relative&lt;/strong&gt; → Overlay, badge, tooltip, modal için mükemmel ikili!&lt;/li&gt;
+      &lt;li&gt;⚠️ Fixed kullanırken &lt;strong&gt;padding-top&lt;/strong&gt; ile içeriği kaydırmayı unutmayın!&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — CSS Position | static · fixed · absolute · relative · z-index
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-position-deep.css - CSS Position Derinlemesine Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Position Demo Alanları */
+.position-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  position: relative;
+  min-height: 300px;
+}
+
+.demo-area {
+  background: #2a2a32;
+  border: 1px solid #e8ff47;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Fixed demo için sabit alan */
+.fixed-demo-container {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.fixed-demo-scroll {
+  height: 500px;
+  position: relative;
+}
+
+.fixed-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+/* Absolute/Relative demo */
+.parent-box {
+  background: #3a3a4a;
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  min-height: 250px;
+}
+
+.child-absolute {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+/* Overlay demo */
+.image-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: white;
+  font-weight: bold;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+
+/* z-index demo */
+.z-index-container {
+  position: relative;
+  height: 200px;
+  margin: 2rem 0;
+}
+
+.z-box {
+  position: absolute;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.z-box-1 {
+  background: #ff6464;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+}
+
+.z-box-2 {
+  background: #64c8ff;
+  top: 60px;
+  left: 60px;
+  z-index: 2;
+}
+
+.z-box-3 {
+  background: #6bcb77;
+  top: 100px;
+  left: 100px;
+  z-index: 3;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Position - Derinlemesine - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-position-deep.css">
+  <style>
+    /* Fixed buton için sayfa bazında stil */
+    .fixed-demo-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #e8ff47;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Space Mono', monospace;
+      font-weight: bold;
+      text-decoration: none;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    .fixed-demo-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Fixed Demo Buton - Sayfada aşağı kaydırınca görün! -->
+<a href="#" class="fixed-demo-btn" style="position: fixed; bottom: 30px; right: 30px; background: #e8ff47; color: #000; padding: 12px 20px; border-radius: 50px; font-family: 'Space Mono', monospace; font-weight: bold; text-decoration: none; z-index: 1000;">📌 Fixed! (Kaydırınca sabit)</a>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📍 <span class="highlight">CSS Position</span></h1>
+  <div class="subtitle">static · fixed · absolute · relative · z-index — Elementleri tam istediğin yere koy!</div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 1: Position Nedir? -->
+  <!-- ============================================================ -->
+  <h2>🎯 Position Nedir?</h2>
+  <div class="card">
+    <p><strong>Positioned layout</strong>, bir elementin sayfada <strong>tam olarak nerede olacağını</strong> belirlemenizi sağlar.</p>
+
+    <div class="info-note">
+      <strong>📌 Position Kullanmak İçin 3 Adım:</strong>
+      <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Position method</strong> belirle: <code>static</code>, <code>fixed</code>, <code>absolute</code>, <code>relative</code></li>
+        <li><strong>Offset</strong> (uzaklık) belirle: <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code></li>
+        <li><strong>z-index</strong> (isteğe bağlı) → Katman sıralaması</li>
+      </ol>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* Position örnek yapısı */
+.element {
+  position: fixed;     /* 1. Position method */
+  top: 50px;           /* 2. Offset (uzaklık) */
+  left: 100px;
+  z-index: 10;         /* 3. Katman sırası (isteğe bağlı) */
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 2: position: static (Varsayılan) -->
+  <!-- ============================================================ -->
+  <h2>📌 position: static — Varsayılan Değer (Hiçbir Şey Olmaz!)</h2>
+  <div class="card">
+    <p><code>position: static</code>, tüm elementlerin <strong>varsayılan değeridir</strong>. Bu modda elementler normal belge akışında (normal flow) kalır ve <code>top/left/bottom/right</code> özellikleri <strong>ÇALIŞMAZ</strong>!</p>
+
+    <div class="code-block">
+      <pre>
+.static-box {
+  position: static;    /* Varsayılan - zaten gerekmez */
+  top: 50px;           /* ❌ ÇALIŞMAZ! */
+  left: 100px;         /* ❌ ÇALIŞMAZ! */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div style="background: #3a3a4a; padding: 1rem; border-radius: 8px;">
+        <div style="background: #ff6464; padding: 0.5rem; margin: 0.3rem;">Normal div (static)</div>
+        <div style="background: #ff6464; padding: 0.5rem; margin: 0.3rem;">Normal div (static)</div>
+        <div style="background: #ff6464; padding: 0.5rem; margin: 0.3rem;">Normal div (static)</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Static elementler <strong>normal akışta</strong> kalır, yukarıdan aşağıya dizilir.</p>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Önemli:</strong> <code>top/left/bottom/right</code> kullanabilmek için <strong>position static OLMAMALI</strong>!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 3: position: fixed (Viewport'a Sabit) -->
+  <!-- ============================================================ -->
+  <h2>📌 position: fixed — Viewport'a Sabit</h2>
+  <div class="card">
+    <p><code>position: fixed</code> ile bir element, <strong>viewport'a göre sabitlenir</strong> ve <strong>sayfa kaydırıldığında hareket etmez</strong>. Element normal akıştan <strong>çıkarılır</strong> ve kendi katmanında konumlandırılır.</p>
+
+    <div class="code-block">
+      <pre>
+.fixed-menu {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #e8ff47;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Fixed Demo (Aşağı kaydırın!)</h4>
+      <div class="fixed-demo-container" style="background: #2a2a32; border-radius: 8px; padding: 1rem; height: 250px; overflow-y: scroll;">
+        <div style="height: 400px; position: relative;">
+          <p>Bu alanı <strong>kaydırın</strong> → Sağ alt köşedeki buton <strong>sabit kalır</strong>!</p>
+          <p>↓ Kaydırmaya devam...</p>
+          <p>↓ Kaydırmaya devam...</p>
+          <p>↓ Kaydırmaya devam...</p>
+          <p style="position: fixed; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem;">📌 Fixed! (kaymaz)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>✨ Fixed Kullanım Alanları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>Navigasyon çubukları</strong> (navbar) — her zaman üstte kalır</li>
+        <li>✅ <strong>Chat butonu</strong> / "Yukarı çık" butonu</li>
+        <li>✅ <strong>Bildirim toast'ları</strong> (sağ alt köşede sabit)</li>
+        <li>✅ <strong>Reklam banner'ları</strong> (sayfa kaydırılsa da görünür)</li>
+      </ul>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Fixed Özellikleri:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>🎯 Referans noktası → <strong>Viewport</strong> (tarayıcı görüntü alanı)</li>
+        <li>📦 Normal akıştan <strong>tamamen çıkarılır</strong> (diğer elementler onun yerine kayar)</li>
+        <li>🔄 <strong>Scroll yapınca sabit kalır</strong> — hareket etmez!</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 4: position: absolute -->
+  <!-- ============================================================ -->
+  <h2>📌 position: absolute — Kapsayıcı Elemente Göre Mutlak</h2>
+  <div class="card">
+    <p><code>position: absolute</code> ile bir element, <strong>en yakın positioned (relative/absolute/fixed) ebeveynine</strong> göre konumlanır. Eğer böyle bir ebeveyn yoksa, <strong>viewport'a</strong> göre konumlanır.</p>
+
+    <div class="code-block">
+      <pre>
+.absolute-box {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Absolute Demo (Ebeveyn relative değil → viewport'a göre)</h4>
+      <div class="demo-area" style="background: #2a2a32; border: 1px solid #e8ff47; border-radius: 8px; padding: 1rem; min-height: 200px; position: relative;">
+        <p>Bu alan bir container.</p>
+        <p>Absolute element, <strong>relative ebeveyni</strong> olmadığı için viewport'a göre konumlanır.</p>
+        <div style="position: absolute; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 0.5rem; border-radius: 8px;">
+          📌 absolute (viewport'a göre)
+        </div>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 Absolute + Relative — Mükemmel İkili!</strong>
+      <p>Absolute bir elementi, belirli bir ebeveynin <strong>içinde konumlandırmak</strong> için, o ebeveyni <code>position: relative</code> yapın!</p>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Absolute + Relative Birlikte</h4>
+      <div class="parent-box" style="background: #3a3a4a; padding: 2rem; border-radius: 8px; position: relative; min-height: 200px;">
+        <p><strong>Parent (position: relative)</strong></p>
+        <p>Bu kutu, absolute element için <strong>referans noktası</strong> oldu.</p>
+        <div class="child-absolute" style="position: absolute; bottom: 20px; right: 20px; background: #e8ff47; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">
+          📌 absolute (parent'a göre)
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Absolute element, <strong>parent'ın sağ alt köşesine</strong> konumlandı!</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 5: position: relative -->
+  <!-- ============================================================ -->
+  <h2>📌 position: relative — Normal Konumundan Kaydırma</h2>
+  <div class="card">
+    <p><code>position: relative</code> ile bir element, <strong>normalde olacağı yerden</strong> kaydırılır. Element <strong>normal akışta kendi yerini korur</strong> (boşluk bırakır), sadece görsel olarak taşınır.</p>
+
+    <div class="code-block">
+      <pre>
+.relative-box {
+  position: relative;
+  top: 20px;      /* Normal konumundan 20px aşağı */
+  left: 30px;     /* Normal konumundan 30px sağa */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Relative Örneği</h4>
+      <div style="background: #3a3a4a; padding: 1rem; border-radius: 8px;">
+        <div style="background: #ff6464; padding: 0.5rem; margin: 0.3rem;">Normal div 1</div>
+        <div style="background: #e8ff47; color: #000; padding: 0.5rem; margin: 0.3rem; position: relative; top: 15px; left: 20px;">
+          📍 relative (top:15px, left:20px) — kendi yerinden kaydı!
+        </div>
+        <div style="background: #ff6464; padding: 0.5rem; margin: 0.3rem;">Normal div 3</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Relative element <strong>kendi normal konumundan kaydı</strong>, ama <strong>orijinal yeri boş kaldı</strong>!</p>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Relative'in En Önemli Kullanımı:</strong>
+      <p>Relative, genellikle <strong>absolute elementler için referans noktası</strong> oluşturmak amacıyla kullanılır.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.parent {
+  position: relative;  /* Absolute çocuklar için referans */
+}
+
+.child {
+  position: absolute;  /* Parent'a göre konumlanır */
+  top: 0;
+  right: 0;
+}
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 6: Overlay (Absolute + Relative ile) -->
+  <!-- ============================================================ -->
+  <h2>🎨 Overlay — Popüler Kullanım Alanı</h2>
+  <div class="card">
+    <p>Absolute + Relative kullanarak, bir resim veya kart üzerine <strong>hover'da görünen overlay</strong> (üst katman) yapabilirsiniz.</p>
+
+    <div class="code-block">
+      <pre>
+.image-container {
+  position: relative;   /* Referans noktası */
+  display: inline-block;
+}
+
+.overlay {
+  position: absolute;   /* Container'a göre konumlanır */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;  /* Hover'da görünür */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div class="image-container" style="position: relative; display: inline-block; border-radius: 8px; overflow: hidden;">
+        <div style="width: 300px; height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white;">🖼️ Resim</div>
+        <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white; font-weight: bold; border-radius: 8px;">
+          ✨ Hover'da görünen overlay!
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ Resmin üzerine <strong>hover yapın</strong> → Overlay görünür!</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 7: z-index — Katman Sıralaması -->
+  <!-- ============================================================ -->
+  <h2>📚 z-index — Katman Sıralaması</h2>
+  <div class="card">
+    <p><code>z-index</code>, üst üste binen positioned elementlerin <strong>hangisinin önde olacağını</strong> belirler. Büyük değer <strong>önde</strong> gösterilir.</p>
+
+    <div class="code-block">
+      <pre>
+.box1 {
+  position: absolute;
+  z-index: 1;  /* Düşük → arkada */
+}
+
+.box2 {
+  position: absolute;
+  z-index: 2;  /* Yüksek → önde */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div class="z-index-container" style="position: relative; height: 180px; margin: 2rem 0;">
+        <div class="z-box-1" style="position: absolute; width: 120px; height: 80px; background: #ff6464; top: 20px; left: 20px; z-index: 1; display: flex; align-items: center; justify-content: center;">z-index:1</div>
+        <div class="z-box-2" style="position: absolute; width: 120px; height: 80px; background: #64c8ff; top: 60px; left: 60px; z-index: 2; display: flex; align-items: center; justify-content: center;">z-index:2</div>
+        <div class="z-box-3" style="position: absolute; width: 120px; height: 80px; background: #6bcb77; top: 100px; left: 100px; z-index: 3; display: flex; align-items: center; justify-content: center;">z-index:3</div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <strong>z-index değeri büyük olan önde!</strong> (3 > 2 > 1)</p>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Önemli:</strong> z-index <strong>sadece positioned elementlerde</strong> (position: relative/absolute/fixed) çalışır! Static elementlerde çalışmaz.
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 8: Tüm Position Değerleri Karşılaştırması -->
+  <!-- ============================================================ -->
+  <h2>📊 Position Değerleri Karşılaştırması</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Değer</th><th>Referans Noktası</th><th>Normal Akıştan Çıkar mı?</th><th>top/left/right/bottom</th><th>Kullanım Alanı</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>static</code></td><td>—</td><td>❌ Hayır</td><td>❌ Çalışmaz</td><td>Varsayılan</td>
+      </tr>
+      <tr><td><code>relative</code></td><td>Normal konumu</td><td>❌ Hayır (yer korunur)</td><td>✅ Çalışır (kaydırır)</td><td>Absolute için referans, hafif kaydırma</td>
+      </tr>
+      <tr><td><code>absolute</code></td><td>En yakın positioned ebeveyn (yoksa viewport)</td><td>✅ Evet</td><td>✅ Çalışır</td><td>Overlay, modal, tooltip, kart üzeri etiket</td>
+      </tr>
+      <tr><td><code>fixed</code></td><td>Viewport</td><td>✅ Evet</td><td>✅ Çalışır</td><td>Navbar, chat butonu, "yukarı çık" butonu</td>
+      </tr>
+      <tr><td><code>sticky</code>*</td><td>Ebeveyn + Viewport</td><td>Karma</td><td>✅ Çalışır</td><td>Scroll'da yapışan header</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size: 0.7rem; color: #888;">*sticky, modern bir değerdir; belirli bir scroll noktasına kadar normal, sonra fixed gibi davranır.</p>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 9: Pratik Örnekler -->
+  <!-- ============================================================ -->
+  <h2>💡 Pratik Örnekler</h2>
+
+  <h3>📌 Örnek 1: Sabit Navbar</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #333;
+  color: white;
+  padding: 1rem;
+  z-index: 100;
+}
+
+body {
+  padding-top: 60px;  /* Navbar'ın altına içerik kaymasın */
+}
+      </pre>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 2: Kart Üzeri Etiket (Absolute)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.card {
+  position: relative;
+  width: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff6464;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+}
+      </pre>
+    </div>
+    <div class="demo-box">
+      <div style="position: relative; width: 250px; background: #2a2a32; border-radius: 12px; overflow: hidden;">
+        <div style="height: 150px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center;">🖼️</div>
+        <div style="padding: 1rem;">
+          <h4>Ürün Adı</h4>
+          <p>Açıklama...</p>
+        </div>
+        <div style="position: absolute; top: 10px; right: 10px; background: #ff6464; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;">🔥 İndirim!</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>📌 Örnek 3: Modal (Popup)</h3>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+}
+      </pre>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 10: Sık Yapılan Hatalar -->
+  <!-- ============================================================ -->
+  <h2>⚠️ Sık Yapılan Hatalar</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> Absolute elementi relative ebeveyn olmadan kullanmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+<!-- Absolute, relative ebeveyn yoksa viewport'a göre konumlanır! -->
+<div>
+  <div style="position: absolute; top: 0;">Bu viewport'a göre konumlanır</div>
+</div>
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> Ebeveyni <code>position: relative</code> yapın!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> Fixed element için boşluk bırakmamak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.fixed-nav {
+  position: fixed;
+  top: 0;
+  height: 60px;
+}
+/* İçerik navbar'ın altına kaybolur! */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>body { padding-top: 60px; }</code> ekleyin!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 3:</strong> z-index'in static elementlerde çalışmadığını unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.static-element {
+  z-index: 100;  /* ❌ ÇALIŞMAZ! position belirtilmemiş */
+}
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>position: relative</code> ekleyin (z-index için yeterli)!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 11: Özet -->
+  <!-- ============================================================ -->
+  <h2>📋 Position Özeti</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📍 <strong>static</strong> (varsayılan) → Normal akış, top/left çalışmaz</li>
+      <li>📌 <strong>fixed</strong> → <strong>Viewport'a</strong> göre sabit, scroll'da hareket etmez</li>
+      <li>🎯 <strong>absolute</strong> → En yakın <strong>positioned ebeveyne</strong> göre (yoksa viewport)</li>
+      <li>📏 <strong>relative</strong> → Normal konumundan kayar, <strong>orijinal yeri boş kalır</strong></li>
+      <li>📚 <strong>z-index</strong> → Katman sırası (büyük değer önde) — sadece positioned elementlerde çalışır</li>
+      <li>🔧 <strong>Absolute + Relative</strong> → Overlay, badge, tooltip, modal için mükemmel ikili!</li>
+      <li>⚠️ Fixed kullanırken <strong>padding-top</strong> ile içeriği kaydırmayı unutmayın!</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — CSS Position | static · fixed · absolute · relative · z-index
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-position-deep.css - CSS Position Derinlemesine Ders Stili */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0d0d0f;
+  color: #e8e8f0;
+  font-family: 'Syne', sans-serif;
+  line-height: 1.6;
+}
+
+.header {
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid #2a2a32;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  background: #0d0d0f;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: #e8ff47;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  border: 1px solid #e8ff47;
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #e8ff47;
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: #e8ff47;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+h1 .highlight {
+  color: #e8ff47;
+}
+
+.subtitle {
+  color: #7a7a8c;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid #e8ff47;
+  padding-left: 1rem;
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #2a2a32;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #e8ff47;
+  margin: 1.5rem 0 0.8rem 0;
+  font-family: 'Space Mono', monospace;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.card {
+  background: #16161a;
+  border: 1px solid #2a2a32;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.card-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: #e8ff47;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: 'Space Mono', monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Position Demo Alanları */
+.position-demo {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  position: relative;
+  min-height: 300px;
+}
+
+.demo-area {
+  background: #2a2a32;
+  border: 1px solid #e8ff47;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Fixed demo için sabit alan */
+.fixed-demo-container {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.fixed-demo-scroll {
+  height: 500px;
+  position: relative;
+}
+
+.fixed-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+/* Absolute/Relative demo */
+.parent-box {
+  background: #3a3a4a;
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  min-height: 250px;
+}
+
+.child-absolute {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: #e8ff47;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+/* Overlay demo */
+.image-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  color: white;
+  font-weight: bold;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+
+/* z-index demo */
+.z-index-container {
+  position: relative;
+  height: 200px;
+  margin: 2rem 0;
+}
+
+.z-box {
+  position: absolute;
+  width: 150px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: bold;
+}
+
+.z-box-1 {
+  background: #ff6464;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+}
+
+.z-box-2 {
+  background: #64c8ff;
+  top: 60px;
+  left: 60px;
+  z-index: 2;
+}
+
+.z-box-3 {
+  background: #6bcb77;
+  top: 100px;
+  left: 100px;
+  z-index: 3;
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid #2a2a32;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: #e8ff47;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: #e8ff47;
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid #e8ff47;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid #ff6464;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid #6bcb77;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #2a2a32;
+  color: #7a7a8c;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=css-position-static-fixed-absolute-relative-detayli" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>CSS Position — Static, Fixed, Absolute, Relative (Detaylı) — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>CSS Position - Derinlemesine - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-position-deep.css\">\n  <style>\n    /* Fixed buton için sayfa bazında stil */\n    .fixed-demo-btn {\n      position: fixed;\n      bottom: 30px;\n      right: 30px;\n      background: #e8ff47;\n      color: #000;\n      padding: 12px 20px;\n      border-radius: 50px;\n      font-family: 'Space Mono', monospace;\n      font-weight: bold;\n      text-decoration: none;\n      z-index: 1000;\n      box-shadow: 0 4px 15px rgba(0,0,0,0.3);\n      transition: transform 0.2s;\n    }\n    .fixed-demo-btn:hover {\n      transform: scale(1.05);\n    }\n  </style>\n</head>\n<body>\n\n<!-- Fixed Demo Buton - Sayfada aşağı kaydırınca görün! -->\n<a href=\"#\" class=\"fixed-demo-btn\" style=\"position: fixed; bottom: 30px; right: 30px; background: #e8ff47; color: #000; padding: 12px 20px; border-radius: 50px; font-family: 'Space Mono', monospace; font-weight: bold; text-decoration: none; z-index: 1000;\">📌 Fixed! (Kaydırınca sabit)</a>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📍 <span class=\"highlight\">CSS Position</span></h1>\n  <div class=\"subtitle\">static · fixed · absolute · relative · z-index — Elementleri tam istediğin yere koy!</div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 1: Position Nedir? -->\n  <!-- ============================================================ -->\n  <h2>🎯 Position Nedir?</h2>\n  <div class=\"card\">\n    <p><strong>Positioned layout</strong>, bir elementin sayfada <strong>tam olarak nerede olacağını</strong> belirlemenizi sağlar.</p>\n\n    <div class=\"info-note\">\n      <strong>📌 Position Kullanmak İçin 3 Adım:</strong>\n      <ol style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>Position method</strong> belirle: <code>static</code>, <code>fixed</code>, <code>absolute</code>, <code>relative</code></li>\n        <li><strong>Offset</strong> (uzaklık) belirle: <code>top</code>, <code>left</code>, <code>bottom</code>, <code>right</code></li>\n        <li><strong>z-index</strong> (isteğe bağlı) → Katman sıralaması</li>\n      </ol>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* Position örnek yapısı */\n.element {\n  position: fixed;     /* 1. Position method */\n  top: 50px;           /* 2. Offset (uzaklık) */\n  left: 100px;\n  z-index: 10;         /* 3. Katman sırası (isteğe bağlı) */\n}\n      </pre>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 2: position: static (Varsayılan) -->\n  <!-- ============================================================ -->\n  <h2>📌 position: static — Varsayılan Değer (Hiçbir Şey Olmaz!)</h2>\n  <div class=\"card\">\n    <p><code>position: static</code>, tüm elementlerin <strong>varsayılan değeridir</strong>. Bu modda elementler normal belge akışında (normal flow) kalır ve <code>top/left/bottom/right</code> özellikleri <strong>ÇALIŞMAZ</strong>!</p>\n\n    <div class=\"code-block\">\n      <pre>\n.static-box {\n  position: static;    /* Varsayılan - zaten gerekmez */\n  top: 50px;           /* ❌ ÇALIŞMAZ! */\n  left: 100px;         /* ❌ ÇALIŞMAZ! */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div style=\"background: #3a3a4a; padding: 1rem; border-radius: 8px;\">\n        <div style=\"background: #ff6464; padding: 0.5rem; margin: 0.3rem;\">Normal div (static)</div>\n        <div style=\"background: #ff6464; padding: 0.5rem; margin: 0.3rem;\">Normal div (static)</div>\n        <div style=\"background: #ff6464; padding: 0.5rem; margin: 0.3rem;\">Normal div (static)</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Static elementler <strong>normal akışta</strong> kalır, yukarıdan aşağıya dizilir.</p>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Önemli:</strong> <code>top/left/bottom/right</code> kullanabilmek için <strong>position static OLMAMALI</strong>!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 3: position: fixed (Viewport'a Sabit) -->\n  <!-- ============================================================ -->\n  <h2>📌 position: fixed — Viewport'a Sabit</h2>\n  <div class=\"card\">\n    <p><code>position: fixed</code> ile bir element, <strong>viewport'a göre sabitlenir</strong> ve <strong>sayfa kaydırıldığında hareket etmez</strong>. Element normal akıştan <strong>çıkarılır</strong> ve kendi katmanında konumlandırılır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.fixed-menu {\n  position: fixed;\n  top: 20px;\n  right: 20px;\n  background: #e8ff47;\n  padding: 10px 20px;\n  border-radius: 8px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Fixed Demo (Aşağı kaydırın!)</h4>\n      <div class=\"fixed-demo-container\" style=\"background: #2a2a32; border-radius: 8px; padding: 1rem; height: 250px; overflow-y: scroll;\">\n        <div style=\"height: 400px; position: relative;\">\n          <p>Bu alanı <strong>kaydırın</strong> → Sağ alt köşedeki buton <strong>sabit kalır</strong>!</p>\n          <p>↓ Kaydırmaya devam...</p>\n          <p>↓ Kaydırmaya devam...</p>\n          <p>↓ Kaydırmaya devam...</p>\n          <p style=\"position: fixed; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 5px 10px; border-radius: 5px; font-size: 0.7rem;\">📌 Fixed! (kaymaz)</p>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✨ Fixed Kullanım Alanları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>Navigasyon çubukları</strong> (navbar) — her zaman üstte kalır</li>\n        <li>✅ <strong>Chat butonu</strong> / \"Yukarı çık\" butonu</li>\n        <li>✅ <strong>Bildirim toast'ları</strong> (sağ alt köşede sabit)</li>\n        <li>✅ <strong>Reklam banner'ları</strong> (sayfa kaydırılsa da görünür)</li>\n      </ul>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Fixed Özellikleri:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>🎯 Referans noktası → <strong>Viewport</strong> (tarayıcı görüntü alanı)</li>\n        <li>📦 Normal akıştan <strong>tamamen çıkarılır</strong> (diğer elementler onun yerine kayar)</li>\n        <li>🔄 <strong>Scroll yapınca sabit kalır</strong> — hareket etmez!</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 4: position: absolute -->\n  <!-- ============================================================ -->\n  <h2>📌 position: absolute — Kapsayıcı Elemente Göre Mutlak</h2>\n  <div class=\"card\">\n    <p><code>position: absolute</code> ile bir element, <strong>en yakın positioned (relative/absolute/fixed) ebeveynine</strong> göre konumlanır. Eğer böyle bir ebeveyn yoksa, <strong>viewport'a</strong> göre konumlanır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.absolute-box {\n  position: absolute;\n  bottom: 20px;\n  right: 20px;\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Absolute Demo (Ebeveyn relative değil → viewport'a göre)</h4>\n      <div class=\"demo-area\" style=\"background: #2a2a32; border: 1px solid #e8ff47; border-radius: 8px; padding: 1rem; min-height: 200px; position: relative;\">\n        <p>Bu alan bir container.</p>\n        <p>Absolute element, <strong>relative ebeveyni</strong> olmadığı için viewport'a göre konumlanır.</p>\n        <div style=\"position: absolute; bottom: 10px; right: 10px; background: #e8ff47; color: #000; padding: 0.5rem; border-radius: 8px;\">\n          📌 absolute (viewport'a göre)\n        </div>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 Absolute + Relative — Mükemmel İkili!</strong>\n      <p>Absolute bir elementi, belirli bir ebeveynin <strong>içinde konumlandırmak</strong> için, o ebeveyni <code>position: relative</code> yapın!</p>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Absolute + Relative Birlikte</h4>\n      <div class=\"parent-box\" style=\"background: #3a3a4a; padding: 2rem; border-radius: 8px; position: relative; min-height: 200px;\">\n        <p><strong>Parent (position: relative)</strong></p>\n        <p>Bu kutu, absolute element için <strong>referans noktası</strong> oldu.</p>\n        <div class=\"child-absolute\" style=\"position: absolute; bottom: 20px; right: 20px; background: #e8ff47; color: #000; padding: 0.5rem 1rem; border-radius: 8px;\">\n          📌 absolute (parent'a göre)\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Absolute element, <strong>parent'ın sağ alt köşesine</strong> konumlandı!</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 5: position: relative -->\n  <!-- ============================================================ -->\n  <h2>📌 position: relative — Normal Konumundan Kaydırma</h2>\n  <div class=\"card\">\n    <p><code>position: relative</code> ile bir element, <strong>normalde olacağı yerden</strong> kaydırılır. Element <strong>normal akışta kendi yerini korur</strong> (boşluk bırakır), sadece görsel olarak taşınır.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.relative-box {\n  position: relative;\n  top: 20px;      /* Normal konumundan 20px aşağı */\n  left: 30px;     /* Normal konumundan 30px sağa */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Relative Örneği</h4>\n      <div style=\"background: #3a3a4a; padding: 1rem; border-radius: 8px;\">\n        <div style=\"background: #ff6464; padding: 0.5rem; margin: 0.3rem;\">Normal div 1</div>\n        <div style=\"background: #e8ff47; color: #000; padding: 0.5rem; margin: 0.3rem; position: relative; top: 15px; left: 20px;\">\n          📍 relative (top:15px, left:20px) — kendi yerinden kaydı!\n        </div>\n        <div style=\"background: #ff6464; padding: 0.5rem; margin: 0.3rem;\">Normal div 3</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Relative element <strong>kendi normal konumundan kaydı</strong>, ama <strong>orijinal yeri boş kaldı</strong>!</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Relative'in En Önemli Kullanımı:</strong>\n      <p>Relative, genellikle <strong>absolute elementler için referans noktası</strong> oluşturmak amacıyla kullanılır.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.parent {\n  position: relative;  /* Absolute çocuklar için referans */\n}\n\n.child {\n  position: absolute;  /* Parent'a göre konumlanır */\n  top: 0;\n  right: 0;\n}\n        </pre>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 6: Overlay (Absolute + Relative ile) -->\n  <!-- ============================================================ -->\n  <h2>🎨 Overlay — Popüler Kullanım Alanı</h2>\n  <div class=\"card\">\n    <p>Absolute + Relative kullanarak, bir resim veya kart üzerine <strong>hover'da görünen overlay</strong> (üst katman) yapabilirsiniz.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.image-container {\n  position: relative;   /* Referans noktası */\n  display: inline-block;\n}\n\n.overlay {\n  position: absolute;   /* Container'a göre konumlanır */\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  opacity: 0;\n  transition: opacity 0.3s;\n}\n\n.image-container:hover .overlay {\n  opacity: 1;  /* Hover'da görünür */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"image-container\" style=\"position: relative; display: inline-block; border-radius: 8px; overflow: hidden;\">\n        <div style=\"width: 300px; height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white;\">🖼️ Resim</div>\n        <div class=\"overlay\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: white; font-weight: bold; border-radius: 8px;\">\n          ✨ Hover'da görünen overlay!\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ Resmin üzerine <strong>hover yapın</strong> → Overlay görünür!</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 7: z-index — Katman Sıralaması -->\n  <!-- ============================================================ -->\n  <h2>📚 z-index — Katman Sıralaması</h2>\n  <div class=\"card\">\n    <p><code>z-index</code>, üst üste binen positioned elementlerin <strong>hangisinin önde olacağını</strong> belirler. Büyük değer <strong>önde</strong> gösterilir.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.box1 {\n  position: absolute;\n  z-index: 1;  /* Düşük → arkada */\n}\n\n.box2 {\n  position: absolute;\n  z-index: 2;  /* Yüksek → önde */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"z-index-container\" style=\"position: relative; height: 180px; margin: 2rem 0;\">\n        <div class=\"z-box-1\" style=\"position: absolute; width: 120px; height: 80px; background: #ff6464; top: 20px; left: 20px; z-index: 1; display: flex; align-items: center; justify-content: center;\">z-index:1</div>\n        <div class=\"z-box-2\" style=\"position: absolute; width: 120px; height: 80px; background: #64c8ff; top: 60px; left: 60px; z-index: 2; display: flex; align-items: center; justify-content: center;\">z-index:2</div>\n        <div class=\"z-box-3\" style=\"position: absolute; width: 120px; height: 80px; background: #6bcb77; top: 100px; left: 100px; z-index: 3; display: flex; align-items: center; justify-content: center;\">z-index:3</div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <strong>z-index değeri büyük olan önde!</strong> (3 > 2 > 1)</p>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Önemli:</strong> z-index <strong>sadece positioned elementlerde</strong> (position: relative/absolute/fixed) çalışır! Static elementlerde çalışmaz.\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 8: Tüm Position Değerleri Karşılaştırması -->\n  <!-- ============================================================ -->\n  <h2>📊 Position Değerleri Karşılaştırması</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Değer</th><th>Referans Noktası</th><th>Normal Akıştan Çıkar mı?</th><th>top/left/right/bottom</th><th>Kullanım Alanı</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>static</code></td><td>—</td><td>❌ Hayır</td><td>❌ Çalışmaz</td><td>Varsayılan</td>\n      </tr>\n      <tr><td><code>relative</code></td><td>Normal konumu</td><td>❌ Hayır (yer korunur)</td><td>✅ Çalışır (kaydırır)</td><td>Absolute için referans, hafif kaydırma</td>\n      </tr>\n      <tr><td><code>absolute</code></td><td>En yakın positioned ebeveyn (yoksa viewport)</td><td>✅ Evet</td><td>✅ Çalışır</td><td>Overlay, modal, tooltip, kart üzeri etiket</td>\n      </tr>\n      <tr><td><code>fixed</code></td><td>Viewport</td><td>✅ Evet</td><td>✅ Çalışır</td><td>Navbar, chat butonu, \"yukarı çık\" butonu</td>\n      </tr>\n      <tr><td><code>sticky</code>*</td><td>Ebeveyn + Viewport</td><td>Karma</td><td>✅ Çalışır</td><td>Scroll'da yapışan header</td>\n      </tr>\n    </tbody>\n  </table>\n  <p style=\"font-size: 0.7rem; color: #888;\">*sticky, modern bir değerdir; belirli bir scroll noktasına kadar normal, sonra fixed gibi davranır.</p>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 9: Pratik Örnekler -->\n  <!-- ============================================================ -->\n  <h2>💡 Pratik Örnekler</h2>\n\n  <h3>📌 Örnek 1: Sabit Navbar</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.navbar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  background: #333;\n  color: white;\n  padding: 1rem;\n  z-index: 100;\n}\n\nbody {\n  padding-top: 60px;  /* Navbar'ın altına içerik kaymasın */\n}\n      </pre>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 2: Kart Üzeri Etiket (Absolute)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.card {\n  position: relative;\n  width: 250px;\n  border-radius: 12px;\n  overflow: hidden;\n}\n\n.badge {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  background: #ff6464;\n  color: white;\n  padding: 5px 10px;\n  border-radius: 20px;\n  font-size: 0.7rem;\n}\n      </pre>\n    </div>\n    <div class=\"demo-box\">\n      <div style=\"position: relative; width: 250px; background: #2a2a32; border-radius: 12px; overflow: hidden;\">\n        <div style=\"height: 150px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center;\">🖼️</div>\n        <div style=\"padding: 1rem;\">\n          <h4>Ürün Adı</h4>\n          <p>Açıklama...</p>\n        </div>\n        <div style=\"position: absolute; top: 10px; right: 10px; background: #ff6464; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem;\">🔥 İndirim!</div>\n      </div>\n    </div>\n  </div>\n\n  <h3>📌 Örnek 3: Modal (Popup)</h3>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n.modal-overlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0,0,0,0.5);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 1000;\n}\n\n.modal-content {\n  background: white;\n  padding: 2rem;\n  border-radius: 12px;\n  max-width: 500px;\n}\n      </pre>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 10: Sık Yapılan Hatalar -->\n  <!-- ============================================================ -->\n  <h2>⚠️ Sık Yapılan Hatalar</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> Absolute elementi relative ebeveyn olmadan kullanmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n<!-- Absolute, relative ebeveyn yoksa viewport'a göre konumlanır! -->\n<div>\n  <div style=\"position: absolute; top: 0;\">Bu viewport'a göre konumlanır</div>\n</div>\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> Ebeveyni <code>position: relative</code> yapın!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> Fixed element için boşluk bırakmamak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.fixed-nav {\n  position: fixed;\n  top: 0;\n  height: 60px;\n}\n/* İçerik navbar'ın altına kaybolur! */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>body { padding-top: 60px; }</code> ekleyin!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 3:</strong> z-index'in static elementlerde çalışmadığını unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.static-element {\n  z-index: 100;  /* ❌ ÇALIŞMAZ! position belirtilmemiş */\n}\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>position: relative</code> ekleyin (z-index için yeterli)!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 11: Özet -->\n  <!-- ============================================================ -->\n  <h2>📋 Position Özeti</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📍 <strong>static</strong> (varsayılan) → Normal akış, top/left çalışmaz</li>\n      <li>📌 <strong>fixed</strong> → <strong>Viewport'a</strong> göre sabit, scroll'da hareket etmez</li>\n      <li>🎯 <strong>absolute</strong> → En yakın <strong>positioned ebeveyne</strong> göre (yoksa viewport)</li>\n      <li>📏 <strong>relative</strong> → Normal konumundan kayar, <strong>orijinal yeri boş kalır</strong></li>\n      <li>📚 <strong>z-index</strong> → Katman sırası (büyük değer önde) — sadece positioned elementlerde çalışır</li>\n      <li>🔧 <strong>Absolute + Relative</strong> → Overlay, badge, tooltip, modal için mükemmel ikili!</li>\n      <li>⚠️ Fixed kullanırken <strong>padding-top</strong> ile içeriği kaydırmayı unutmayın!</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — CSS Position | static · fixed · absolute · relative · z-index\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-position-deep.css - CSS Position Derinlemesine Ders Stili */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\nbody {\n  background: #0d0d0f;\n  color: #e8e8f0;\n  font-family: 'Syne', sans-serif;\n  line-height: 1.6;\n}\n\n.header {\n  padding: 1.2rem 2rem;\n  border-bottom: 1px solid #2a2a32;\n  display: flex;\n  align-items: center;\n  gap: 1.2rem;\n  flex-wrap: wrap;\n  background: #0d0d0f;\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: #e8ff47;\n  text-decoration: none;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.78rem;\n  border: 1px solid #e8ff47;\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: #e8ff47;\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: #e8ff47;\n}\n\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: 0.5rem;\n}\n\nh1 .highlight {\n  color: #e8ff47;\n}\n\n.subtitle {\n  color: #7a7a8c;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid #e8ff47;\n  padding-left: 1rem;\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 1rem 0;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  border-bottom: 1px solid #2a2a32;\n  padding-bottom: 0.5rem;\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: #e8ff47;\n  margin: 1.5rem 0 0.8rem 0;\n  font-family: 'Space Mono', monospace;\n}\n\nh4 {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #aaa;\n  margin: 1rem 0 0.5rem 0;\n}\n\n.card {\n  background: #16161a;\n  border: 1px solid #2a2a32;\n  border-radius: 12px;\n  padding: 1.5rem;\n  margin: 1.5rem 0;\n}\n\n.card-header {\n  font-family: 'Space Mono', monospace;\n  font-size: 0.7rem;\n  color: #e8ff47;\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: 1rem;\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: 'Space Mono', monospace;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n/* Position Demo Alanları */\n.position-demo {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 1rem 0;\n  position: relative;\n  min-height: 300px;\n}\n\n.demo-area {\n  background: #2a2a32;\n  border: 1px solid #e8ff47;\n  border-radius: 8px;\n  padding: 1rem;\n  margin: 0.5rem 0;\n  min-height: 200px;\n  position: relative;\n}\n\n/* Fixed demo için sabit alan */\n.fixed-demo-container {\n  background: #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n  height: 250px;\n  overflow-y: scroll;\n}\n\n.fixed-demo-scroll {\n  height: 500px;\n  position: relative;\n}\n\n.fixed-btn {\n  position: fixed;\n  bottom: 20px;\n  right: 20px;\n  background: #e8ff47;\n  color: #000;\n  padding: 0.5rem 1rem;\n  border-radius: 8px;\n  font-family: 'Space Mono', monospace;\n  font-weight: bold;\n  z-index: 1000;\n}\n\n/* Absolute/Relative demo */\n.parent-box {\n  background: #3a3a4a;\n  padding: 2rem;\n  border-radius: 8px;\n  position: relative;\n  min-height: 250px;\n}\n\n.child-absolute {\n  position: absolute;\n  bottom: 20px;\n  right: 20px;\n  background: #e8ff47;\n  color: #000;\n  padding: 0.5rem 1rem;\n  border-radius: 8px;\n}\n\n/* Overlay demo */\n.image-container {\n  position: relative;\n  display: inline-block;\n  border-radius: 8px;\n  overflow: hidden;\n}\n\n.image-container img {\n  display: block;\n  width: 100%;\n  max-width: 400px;\n  height: auto;\n}\n\n.overlay {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.7);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  opacity: 0;\n  transition: opacity 0.3s;\n  color: white;\n  font-weight: bold;\n}\n\n.image-container:hover .overlay {\n  opacity: 1;\n}\n\n/* z-index demo */\n.z-index-container {\n  position: relative;\n  height: 200px;\n  margin: 2rem 0;\n}\n\n.z-box {\n  position: absolute;\n  width: 150px;\n  height: 100px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-family: 'Space Mono', monospace;\n  font-weight: bold;\n}\n\n.z-box-1 {\n  background: #ff6464;\n  top: 20px;\n  left: 20px;\n  z-index: 1;\n}\n\n.z-box-2 {\n  background: #64c8ff;\n  top: 60px;\n  left: 60px;\n  z-index: 2;\n}\n\n.z-box-3 {\n  background: #6bcb77;\n  top: 100px;\n  left: 100px;\n  z-index: 3;\n}\n\n/* Tablo */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid #2a2a32;\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: #e8ff47;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: 'Space Mono', monospace;\n  font-size: 0.8rem;\n  color: #e8ff47;\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid #e8ff47;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid #ff6464;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid #6bcb77;\n  padding: 1rem;\n  margin: 1rem 0;\n  font-size: 0.9rem;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid #2a2a32;\n  color: #7a7a8c;\n  font-size: 0.8rem;\n  font-family: 'Space Mono', monospace;\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
