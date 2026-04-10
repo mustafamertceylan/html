@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relative Font Sizes — px, %, em, rem (Detaylı) - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Relative Font Sizes — px, %, em, rem (Detaylı)</h1>
+    <p class="desc">CSS'de göreceli font birimleri: px (mutlak), % (ebeveyne göre), em (element'in kendi font-size'ine göre), rem (root font-size'e göre). Bileşik etki (compounding) nedir? Neden rem tercih edilmeli? em/rem hangi özelliklerde kullanılır? Pratik örnekler ve sık yapılan hatalar.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Relative Font Sizes - em, rem, % - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-relative-fonts.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📏 &lt;span class=&quot;highlight&quot;&gt;Relative Font Sizes&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;% (yüzde) · em · rem — Neden absolute (px) yerine relative birimler kullanmalıyız?&lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 1: Neden Relative Birimler? --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🤔 Neden Relative Birimler Kullanmalıyız?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Absolute birimler (px)&lt;/strong&gt; yerine &lt;strong&gt;relative birimler (%, em, rem)&lt;/strong&gt; kullanmanın avantajları:&lt;/p&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Farklı ekran boyutlarında çalışır&lt;/strong&gt; — Responsive tasarım için idealdir&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Daha kolay hesaplanır&lt;/strong&gt; — Magic numbers yerine oranlar kullanılır&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Erişilebilirlik (Accessibility)&lt;/strong&gt; — Kullanıcı tarayıcı zoom'u yaptığında orantılı büyür&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Daha az kod&lt;/strong&gt; — Bir yerde değiştir, her yere yansısın&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Absolute (px) — Magic numbers */
+.container {
+  width: 122px;
+  margin: 122px;
+  font-size: 122px;
+}
+
+/* Relative (%) — Oranlar */
+.container {
+  width: 10%;
+  margin: 10%;
+  font-size: 100%;
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Örnek Karşılaştırma:&lt;/strong&gt;
+      &lt;p&gt;&lt;code&gt;10% / 80% / 10%&lt;/code&gt; vs &lt;code&gt;122px / 926px / 122px&lt;/code&gt;&lt;/p&gt;
+      &lt;p&gt;Relative birimlerle çalışmak, absolute birimlerle çalışmaktan &lt;strong&gt;çok daha kolaydır&lt;/strong&gt;!&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 2: px (Piksel) — Mutlak Birim --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📌 px (Piksel) — Mutlak Birim (Absolute)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;px&lt;/strong&gt; en temel birimdir. Ekran pikseli cinsinden &lt;strong&gt;mutlak&lt;/strong&gt; bir değerdir. Ancak responsive tasarımda esnek değildir.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* px kullanımı */
+h1 {
+  font-size: 32px;  /* Her ekranda 32px */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;p style=&quot;font-size: 32px; margin: 0;&quot;&gt;Bu yazı 32px (mutlak)&lt;/p&gt;
+        &lt;p style=&quot;font-size: 16px; margin: 0.5rem 0 0 0;&quot;&gt;Bu yazı 16px (mutlak)&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ px dezavantajı:&lt;/strong&gt; Kullanıcı tarayıcı zoom'u yapsa bile yazı boyutu &lt;strong&gt;değişmez&lt;/strong&gt;. Bu, erişilebilirlik açısından sorun oluşturabilir!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 3: % (Yüzde) — Parent'a Göre --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📊 % (Yüzde) — Parent Element'e Göre&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Yüzde (%) birimi&lt;/strong&gt;, font-size değerini &lt;strong&gt;ebeveyn (parent) elementin font-size'ine göre&lt;/strong&gt; hesaplar. &lt;code&gt;font-size: 100%&lt;/code&gt; = ebeveyn ile aynı boyut.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+.parent {
+  font-size: 30px;
+}
+
+.child {
+  font-size: 75%;  /* 30px * 0.75 = 22.5px */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;percent-parent&quot; style=&quot;font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Parent: font-size: 30px&lt;/strong&gt;
+        &lt;div class=&quot;percent-child&quot; style=&quot;font-size: 75%; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 75% → 30px × 0.75 = 22.5px
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 İç İçe Yüzde — Bileşik Etki (Compounding)&lt;/h3&gt;
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;nested-percent&quot; style=&quot;font-size: 200%; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Parent: font-size: 200% (varsayılan 16px × 2 = 32px)&lt;/strong&gt;
+        &lt;p style=&quot;font-size: 75%; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 75% → 32px × 0.75 = 24px
+        &lt;/p&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;strong&gt;Bileşik etki:&lt;/strong&gt; 16px × 200% × 75% = 24px&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 4: em — Element'in Kendi Font-Size'i --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📐 em — Element'in Kendi Font-Size'i&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;em&lt;/strong&gt;, element'in &lt;strong&gt;kendi hesaplanmış font-size'ini&lt;/strong&gt; temsil eder. &lt;code&gt;1em&lt;/code&gt; = inherit edilen font-size (yani %100 ile aynı).&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* em kullanımı */
+.parent {
+  font-size: 30px;
+}
+
+.child {
+  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;em-parent&quot; style=&quot;font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Parent: font-size: 30px&lt;/strong&gt;
+        &lt;div class=&quot;em-child&quot; style=&quot;font-size: 0.75em; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 0.75em → 30px × 0.75 = 22.5px
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 İç İçe em — Bileşik Etki (Compounding)&lt;/h3&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ ÖNEMLİ:&lt;/strong&gt; em, iç içe kullanıldığında &lt;strong&gt;bileşik etki (compounding)&lt;/strong&gt; yaratır!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;nested-em&quot; style=&quot;font-size: 2em; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Parent: font-size: 2em (varsayılan 16px × 2 = 32px)&lt;/strong&gt;
+        &lt;p style=&quot;font-size: 0.75em; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 0.75em → 32px × 0.75 = 24px
+        &lt;/p&gt;
+        &lt;div style=&quot;font-size: 0.5em; margin-top: 0.5rem;&quot;&gt;
+          Deep child: 0.5em → 24px × 0.5 = 12px
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;strong&gt;Bileşik etki:&lt;/strong&gt; 16px × 2 × 0.75 × 0.5 = 12px&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 h1 varsayılanı 2em:&lt;/strong&gt;
+      &lt;div class=&quot;h1-em-demo&quot; style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;&quot;&gt;
+        &lt;h1 style=&quot;font-size: 2em; margin: 0;&quot;&gt;h1 varsayılan font-size: 2em (32px)&lt;/h1&gt;
+        &lt;p style=&quot;margin-top: 0.5rem;&quot;&gt;Tarayıcılar h1'e varsayılan olarak &lt;strong&gt;2em&lt;/strong&gt; verir. Bu nedenle 16px root'ta h1 32px görünür.&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 5: rem — Root Element'in Font-Size'i --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📐 rem — Root EM (HTML Elementi)&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;rem&lt;/strong&gt; (root em), &lt;strong&gt;root element'in (html tag) font-size'ini&lt;/strong&gt; temsil eder. &lt;code&gt;1rem&lt;/code&gt; = html elementinin font-size'i. &lt;strong&gt;Bileşik etki YOKTUR!&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* rem kullanımı — html root belirlenir */
+html {
+  font-size: 16px;  /* Varsayılan */
+}
+
+.child {
+  font-size: 0.75rem;  /* 16px × 0.75 = 12px — parent'dan bağımsız! */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;rem-demo&quot; style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Root font-size: 16px (varsayılan)&lt;/strong&gt;
+        &lt;div class=&quot;rem-child&quot; style=&quot;font-size: 0.75rem; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 0.75rem → 16px × 0.75 = 12px (parent'dan bağımsız!)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📌 İç İçe rem — Bileşik Etki YOK!&lt;/h3&gt;
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ rem'in en büyük avantajı:&lt;/strong&gt; İç içe kullanılsa bile &lt;strong&gt;bileşik etki yaratmaz&lt;/strong&gt;!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div class=&quot;nested-rem&quot; style=&quot;font-size: 2rem; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;strong&gt;Parent: font-size: 2rem (16px × 2 = 32px)&lt;/strong&gt;
+        &lt;p style=&quot;font-size: 0.75rem; margin-top: 0.5rem;&quot;&gt;
+          Child: font-size: 0.75rem → &lt;strong&gt;HALA 12px!&lt;/strong&gt; (parent'dan etkilenmez)
+        &lt;/p&gt;
+        &lt;div style=&quot;font-size: 0.5rem; margin-top: 0.5rem;&quot;&gt;
+          Deep child: 0.5rem → &lt;strong&gt;HALA 8px!&lt;/strong&gt; (parent'dan etkilenmez)
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;strong&gt;rem'de bileşik etki yok!&lt;/strong&gt; Her zaman root'a göre hesaplanır.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 6: Karşılaştırma Tablosu --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📊 px vs % vs em vs rem — Karşılaştırma&lt;/h2&gt;
+  &lt;table class=&quot;comparison-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Birim&lt;/th&gt;&lt;th&gt;Referans&lt;/th&gt;&lt;th&gt;Bileşik Etki&lt;/th&gt;&lt;th&gt;Kullanım Alanı&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;px&lt;/code&gt;&lt;/td&gt;
+        &lt;td&gt;Ekran pikseli (mutlak)&lt;/td&gt;
+        &lt;td&gt;Yok&lt;/td&gt;
+        &lt;td&gt;Border, shadow, sabit boyutlar&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;%&lt;/code&gt;&lt;/td&gt;
+        &lt;td&gt;Ebeveyn (parent) element&lt;/td&gt;
+        &lt;td&gt;✅ Var&lt;/td&gt;
+        &lt;td&gt;Responsive genişlik, yükseklik&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;em&lt;/code&gt;&lt;/td&gt;
+        &lt;td&gt;Element'in kendi font-size'i&lt;/td&gt;
+        &lt;td&gt;✅ Var&lt;/td&gt;
+        &lt;td&gt;Font-size, margin, padding (iç içe istendiğinde)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;rem&lt;/code&gt;&lt;/td&gt;
+        &lt;td&gt;Root (html) font-size&lt;/td&gt;
+        &lt;td&gt;❌ Yok&lt;/td&gt;
+        &lt;td&gt;&lt;strong&gt;Font-size için EN ÇOK ÖNERİLEN&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 7: em/rem Kullanım Alanları --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🎯 em/rem Nerelerde Kullanılır?&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Sadece &lt;strong&gt;font-size&lt;/strong&gt; için değil, birçok CSS özelliğinde &lt;strong&gt;em/rem&lt;/strong&gt; kullanabilirsiniz:&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* em/rem kullanılabilecek özellikler */
+.element {
+  font-size: 1.2rem;      /* ✅ Font-size için rem önerilir */
+  line-height: 1.5em;     /* ✅ Satır yüksekliği için em */
+  margin-top: 1rem;       /* ✅ Margin için rem */
+  margin-bottom: 1.5rem;  /* ✅ Margin için rem */
+  padding: 1rem;          /* ✅ Padding için rem */
+  border-radius: 0.5rem;  /* ✅ Border-radius için rem */
+  width: 80%;             /* ✅ Genişlik için yüzde */
+  max-width: 1200px;      /* ⚠️ Max-width için px veya rem */
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 En İyi Pratikler:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;font-size&lt;/strong&gt; için → &lt;code&gt;rem&lt;/code&gt; (bileşik etki yok, tutarlı)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;margin / padding&lt;/strong&gt; için → &lt;code&gt;rem&lt;/code&gt; (tutarlı boşluklar)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;line-height&lt;/strong&gt; için → &lt;code&gt;em&lt;/code&gt; veya birimsiz değer (1.5)&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;width / height&lt;/strong&gt; için → &lt;code&gt;%&lt;/code&gt; veya &lt;code&gt;vw/vh&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;border / shadow&lt;/strong&gt; için → &lt;code&gt;px&lt;/code&gt; (ince detaylar)&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 8: Pratik Örnek — Responsive Tipografi --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;💡 Pratik Örnek: Responsive Tipografi&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Root font-size değişince her şey orantılı değişir! */
+html {
+  font-size: 16px;  /* Varsayılan */
+}
+
+/* Tablet için */
+@media (min-width: 768px) {
+  html {
+    font-size: 18px;  /* Biraz daha büyük */
+  }
+}
+
+/* Masaüstü için */
+@media (min-width: 1200px) {
+  html {
+    font-size: 20px;  /* Daha da büyük */
+  }
+}
+
+/* Tüm font'lar rem ile tanımlandığı için otomatik ölçeklenir! */
+h1 { font-size: 2rem; }   /* 32px → 36px → 40px */
+h2 { font-size: 1.5rem; } /* 24px → 27px → 30px */
+p { font-size: 1rem; }    /* 16px → 18px → 20px */
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;div style=&quot;background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+        &lt;h3 style=&quot;color: #e8ff47; margin-top: 0;&quot;&gt;Responsive Tipografi Demo&lt;/h3&gt;
+        &lt;p style=&quot;font-size: 1rem;&quot;&gt;Bu paragraf 1rem = 16px (root 16px)&lt;/p&gt;
+        &lt;p style=&quot;font-size: 1rem;&quot;&gt;Tarayıcı zoom'u yapın veya root font-size değişince her şey orantılı büyür!&lt;/p&gt;
+        &lt;div style=&quot;background: #3a3a4a; padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;&quot;&gt;
+          &lt;code&gt;html { font-size: 16px; }&lt;/code&gt; (varsayılan)
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 9: Sık Yapılan Hatalar --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;⚠️ Sık Yapılan Hatalar&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 1:&lt;/strong&gt; em'i iç içe kullanıp istenmeyen bileşik etki yaratmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+.parent { font-size: 2em; }    /* 32px */
+.child { font-size: 0.5em; }   /* 16px BEKLERKEN → 16px DEĞİL! */
+/* Aslında: 32px × 0.5 = 16px OLUR! (doğru aslında) */
+/* Ama derinleştikçe çarpım etkisi artar! */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; İç içe elementlerde font-size için &lt;code&gt;rem&lt;/code&gt; kullanın!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 2:&lt;/strong&gt; html root font-size'i değiştirip rem kullanan elementleri unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+html { font-size: 10px; }  /* 10px yapınca tüm rem'ler küçülür! */
+/* 1rem = 10px oldu! */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; Root font-size değiştirirken &lt;strong&gt;tüm rem birimlerinin&lt;/strong&gt; buna göre hesaplanacağını unutmayın!
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;❌ Hata 3:&lt;/strong&gt; Erişilebilirliği unutmak
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* Kullanıcı tarayıcı zoom'u yapınca px büyümez! */
+body { font-size: 16px; }  /* Zoom'da değişmez */
+        &lt;/pre&gt;
+      &lt;/div&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;code&gt;rem&lt;/code&gt; kullanın — kullanıcı zoom yapınca orantılı büyür!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 10: Özet --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Relative Font Sizes — Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📌 &lt;strong&gt;px&lt;/strong&gt; → Mutlak birim, responsive değil, erişilebilirlik sorunlu&lt;/li&gt;
+      &lt;li&gt;📊 &lt;strong&gt;% (yüzde)&lt;/strong&gt; → Ebeveyne göre, bileşik etki var&lt;/li&gt;
+      &lt;li&gt;📐 &lt;strong&gt;em&lt;/strong&gt; → Element'in kendi font-size'ine göre, bileşik etki var&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;rem&lt;/strong&gt; → Root (html) font-size'ine göre, &lt;strong&gt;bileşik etki YOK&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;font-size için en çok önerilen → rem!&lt;/strong&gt; (tutarlı, öngörülebilir)&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;margin/padding için → rem&lt;/strong&gt; (tutarlı boşluklar)&lt;/li&gt;
+      &lt;li&gt;📐 &lt;strong&gt;line-height için → em veya birimsiz&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;♿ &lt;strong&gt;Erişilebilirlik için relative birimler şart!&lt;/strong&gt; (kullanıcı zoom yapabilir)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Relative Font Sizes | px · % · em · rem | Neden rem tercih edilmeli?
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-relative-fonts.css - Relative Font Sizes (em, rem, %) */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+/* Root font-size — rem için temel */
+html {
+  font-size: 16px;  /* Varsayılan tarayıcı font-size'i genelde 16px'dir */
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* PX DEMO (MUTLAK BİRİM) */
+/* ============================================ */
+.px-demo {
+  font-size: 16px;
+}
+
+/* ============================================ */
+/* PERCENT (%) DEMO */
+/* ============================================ */
+.percent-parent {
+  font-size: 30px;
+}
+
+.percent-child {
+  font-size: 75%;
+}
+
+/* İç içe percent örneği */
+.nested-percent {
+  font-size: 200%;  /* 2 kat */
+}
+
+.nested-percent p {
+  font-size: 75%;   /* Parent'ın 75%'si */
+}
+
+/* ============================================ */
+/* EM DEMO */
+/* ============================================ */
+.em-parent {
+  font-size: 30px;
+}
+
+.em-child {
+  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */
+}
+
+/* İç içe em örneği — BİLEŞİK (compound) etki! */
+.nested-em {
+  font-size: 2em;  /* 2 kat */
+}
+
+.nested-em p {
+  font-size: 0.75em;  /* Parent'ın 0.75'ü → bileşik hesaplama! */
+}
+
+/* h1 örneği — tarayıcı varsayılanı 2em */
+.h1-em-demo h1 {
+  font-size: 2em;  /* Tarayıcı varsayılanı zaten 2em */
+}
+
+/* ============================================ */
+/* REM DEMO (Root EM) */
+/* ============================================ */
+/* html root zaten 16px varsayılan */
+.rem-demo {
+  font-size: 1rem;  /* 16px */
+}
+
+.rem-child {
+  font-size: 0.75rem;  /* 16px * 0.75 = 12px, parent'dan bağımsız! */
+}
+
+/* İç içe rem — BİLEŞİK ETKİ YOK! */
+.nested-rem {
+  font-size: 2rem;  /* 32px */
+}
+
+.nested-rem p {
+  font-size: 0.75rem;  /* HALA 12px! (parent'dan etkilenmez) */
+}
+
+/* ============================================ */
+/* KARŞILAŞTIRMA TABLOSU */
+/* ============================================ */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relative Font Sizes - em, rem, % - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-relative-fonts.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📏 <span class="highlight">Relative Font Sizes</span></h1>
+  <div class="subtitle">% (yüzde) · em · rem — Neden absolute (px) yerine relative birimler kullanmalıyız?</div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 1: Neden Relative Birimler? -->
+  <!-- ============================================================ -->
+  <h2>🤔 Neden Relative Birimler Kullanmalıyız?</h2>
+  <div class="card">
+    <p><strong>Absolute birimler (px)</strong> yerine <strong>relative birimler (%, em, rem)</strong> kullanmanın avantajları:</p>
+
+    <div class="success-note">
+      <ul style="margin-left: 1.5rem;">
+        <li>✅ <strong>Farklı ekran boyutlarında çalışır</strong> — Responsive tasarım için idealdir</li>
+        <li>✅ <strong>Daha kolay hesaplanır</strong> — Magic numbers yerine oranlar kullanılır</li>
+        <li>✅ <strong>Erişilebilirlik (Accessibility)</strong> — Kullanıcı tarayıcı zoom'u yaptığında orantılı büyür</li>
+        <li>✅ <strong>Daha az kod</strong> — Bir yerde değiştir, her yere yansısın</li>
+      </ul>
+    </div>
+
+    <div class="code-block">
+      <pre>
+/* Absolute (px) — Magic numbers */
+.container {
+  width: 122px;
+  margin: 122px;
+  font-size: 122px;
+}
+
+/* Relative (%) — Oranlar */
+.container {
+  width: 10%;
+  margin: 10%;
+  font-size: 100%;
+}
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Örnek Karşılaştırma:</strong>
+      <p><code>10% / 80% / 10%</code> vs <code>122px / 926px / 122px</code></p>
+      <p>Relative birimlerle çalışmak, absolute birimlerle çalışmaktan <strong>çok daha kolaydır</strong>!</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 2: px (Piksel) — Mutlak Birim -->
+  <!-- ============================================================ -->
+  <h2>📌 px (Piksel) — Mutlak Birim (Absolute)</h2>
+  <div class="card">
+    <p><strong>px</strong> en temel birimdir. Ekran pikseli cinsinden <strong>mutlak</strong> bir değerdir. Ancak responsive tasarımda esnek değildir.</p>
+
+    <div class="code-block">
+      <pre>
+/* px kullanımı */
+h1 {
+  font-size: 32px;  /* Her ekranda 32px */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div style="background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <p style="font-size: 32px; margin: 0;">Bu yazı 32px (mutlak)</p>
+        <p style="font-size: 16px; margin: 0.5rem 0 0 0;">Bu yazı 16px (mutlak)</p>
+      </div>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ px dezavantajı:</strong> Kullanıcı tarayıcı zoom'u yapsa bile yazı boyutu <strong>değişmez</strong>. Bu, erişilebilirlik açısından sorun oluşturabilir!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 3: % (Yüzde) — Parent'a Göre -->
+  <!-- ============================================================ -->
+  <h2>📊 % (Yüzde) — Parent Element'e Göre</h2>
+  <div class="card">
+    <p><strong>Yüzde (%) birimi</strong>, font-size değerini <strong>ebeveyn (parent) elementin font-size'ine göre</strong> hesaplar. <code>font-size: 100%</code> = ebeveyn ile aynı boyut.</p>
+
+    <div class="code-block">
+      <pre>
+.parent {
+  font-size: 30px;
+}
+
+.child {
+  font-size: 75%;  /* 30px * 0.75 = 22.5px */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div class="percent-parent" style="font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Parent: font-size: 30px</strong>
+        <div class="percent-child" style="font-size: 75%; margin-top: 0.5rem;">
+          Child: font-size: 75% → 30px × 0.75 = 22.5px
+        </div>
+      </div>
+    </div>
+
+    <h3>📌 İç İçe Yüzde — Bileşik Etki (Compounding)</h3>
+    <div class="demo-box">
+      <div class="nested-percent" style="font-size: 200%; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Parent: font-size: 200% (varsayılan 16px × 2 = 32px)</strong>
+        <p style="font-size: 75%; margin-top: 0.5rem;">
+          Child: font-size: 75% → 32px × 0.75 = 24px
+        </p>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <strong>Bileşik etki:</strong> 16px × 200% × 75% = 24px</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 4: em — Element'in Kendi Font-Size'i -->
+  <!-- ============================================================ -->
+  <h2>📐 em — Element'in Kendi Font-Size'i</h2>
+  <div class="card">
+    <p><strong>em</strong>, element'in <strong>kendi hesaplanmış font-size'ini</strong> temsil eder. <code>1em</code> = inherit edilen font-size (yani %100 ile aynı).</p>
+
+    <div class="code-block">
+      <pre>
+/* em kullanımı */
+.parent {
+  font-size: 30px;
+}
+
+.child {
+  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div class="em-parent" style="font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Parent: font-size: 30px</strong>
+        <div class="em-child" style="font-size: 0.75em; margin-top: 0.5rem;">
+          Child: font-size: 0.75em → 30px × 0.75 = 22.5px
+        </div>
+      </div>
+    </div>
+
+    <h3>📌 İç İçe em — Bileşik Etki (Compounding)</h3>
+    <div class="warning-note">
+      <strong>⚠️ ÖNEMLİ:</strong> em, iç içe kullanıldığında <strong>bileşik etki (compounding)</strong> yaratır!
+    </div>
+
+    <div class="demo-box">
+      <div class="nested-em" style="font-size: 2em; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Parent: font-size: 2em (varsayılan 16px × 2 = 32px)</strong>
+        <p style="font-size: 0.75em; margin-top: 0.5rem;">
+          Child: font-size: 0.75em → 32px × 0.75 = 24px
+        </p>
+        <div style="font-size: 0.5em; margin-top: 0.5rem;">
+          Deep child: 0.5em → 24px × 0.5 = 12px
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <strong>Bileşik etki:</strong> 16px × 2 × 0.75 × 0.5 = 12px</p>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 h1 varsayılanı 2em:</strong>
+      <div class="h1-em-demo" style="background: #2a2a32; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;">
+        <h1 style="font-size: 2em; margin: 0;">h1 varsayılan font-size: 2em (32px)</h1>
+        <p style="margin-top: 0.5rem;">Tarayıcılar h1'e varsayılan olarak <strong>2em</strong> verir. Bu nedenle 16px root'ta h1 32px görünür.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 5: rem — Root Element'in Font-Size'i -->
+  <!-- ============================================================ -->
+  <h2>📐 rem — Root EM (HTML Elementi)</h2>
+  <div class="card">
+    <p><strong>rem</strong> (root em), <strong>root element'in (html tag) font-size'ini</strong> temsil eder. <code>1rem</code> = html elementinin font-size'i. <strong>Bileşik etki YOKTUR!</strong></p>
+
+    <div class="code-block">
+      <pre>
+/* rem kullanımı — html root belirlenir */
+html {
+  font-size: 16px;  /* Varsayılan */
+}
+
+.child {
+  font-size: 0.75rem;  /* 16px × 0.75 = 12px — parent'dan bağımsız! */
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div class="rem-demo" style="background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Root font-size: 16px (varsayılan)</strong>
+        <div class="rem-child" style="font-size: 0.75rem; margin-top: 0.5rem;">
+          Child: font-size: 0.75rem → 16px × 0.75 = 12px (parent'dan bağımsız!)
+        </div>
+      </div>
+    </div>
+
+    <h3>📌 İç İçe rem — Bileşik Etki YOK!</h3>
+    <div class="success-note">
+      <strong>✅ rem'in en büyük avantajı:</strong> İç içe kullanılsa bile <strong>bileşik etki yaratmaz</strong>!
+    </div>
+
+    <div class="demo-box">
+      <div class="nested-rem" style="font-size: 2rem; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <strong>Parent: font-size: 2rem (16px × 2 = 32px)</strong>
+        <p style="font-size: 0.75rem; margin-top: 0.5rem;">
+          Child: font-size: 0.75rem → <strong>HALA 12px!</strong> (parent'dan etkilenmez)
+        </p>
+        <div style="font-size: 0.5rem; margin-top: 0.5rem;">
+          Deep child: 0.5rem → <strong>HALA 8px!</strong> (parent'dan etkilenmez)
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <strong>rem'de bileşik etki yok!</strong> Her zaman root'a göre hesaplanır.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 6: Karşılaştırma Tablosu -->
+  <!-- ============================================================ -->
+  <h2>📊 px vs % vs em vs rem — Karşılaştırma</h2>
+  <table class="comparison-table">
+    <thead>
+      <tr><th>Birim</th><th>Referans</th><th>Bileşik Etki</th><th>Kullanım Alanı</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>px</code></td>
+        <td>Ekran pikseli (mutlak)</td>
+        <td>Yok</td>
+        <td>Border, shadow, sabit boyutlar</td>
+      </tr>
+      <tr><td><code>%</code></td>
+        <td>Ebeveyn (parent) element</td>
+        <td>✅ Var</td>
+        <td>Responsive genişlik, yükseklik</td>
+      </tr>
+      <tr><td><code>em</code></td>
+        <td>Element'in kendi font-size'i</td>
+        <td>✅ Var</td>
+        <td>Font-size, margin, padding (iç içe istendiğinde)</td>
+      </tr>
+      <tr><td><code>rem</code></td>
+        <td>Root (html) font-size</td>
+        <td>❌ Yok</td>
+        <td><strong>Font-size için EN ÇOK ÖNERİLEN</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 7: em/rem Kullanım Alanları -->
+  <!-- ============================================================ -->
+  <h2>🎯 em/rem Nerelerde Kullanılır?</h2>
+  <div class="card">
+    <p>Sadece <strong>font-size</strong> için değil, birçok CSS özelliğinde <strong>em/rem</strong> kullanabilirsiniz:</p>
+
+    <div class="code-block">
+      <pre>
+/* em/rem kullanılabilecek özellikler */
+.element {
+  font-size: 1.2rem;      /* ✅ Font-size için rem önerilir */
+  line-height: 1.5em;     /* ✅ Satır yüksekliği için em */
+  margin-top: 1rem;       /* ✅ Margin için rem */
+  margin-bottom: 1.5rem;  /* ✅ Margin için rem */
+  padding: 1rem;          /* ✅ Padding için rem */
+  border-radius: 0.5rem;  /* ✅ Border-radius için rem */
+  width: 80%;             /* ✅ Genişlik için yüzde */
+  max-width: 1200px;      /* ⚠️ Max-width için px veya rem */
+}
+      </pre>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 En İyi Pratikler:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>font-size</strong> için → <code>rem</code> (bileşik etki yok, tutarlı)</li>
+        <li>✅ <strong>margin / padding</strong> için → <code>rem</code> (tutarlı boşluklar)</li>
+        <li>✅ <strong>line-height</strong> için → <code>em</code> veya birimsiz değer (1.5)</li>
+        <li>✅ <strong>width / height</strong> için → <code>%</code> veya <code>vw/vh</code></li>
+        <li>✅ <strong>border / shadow</strong> için → <code>px</code> (ince detaylar)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 8: Pratik Örnek — Responsive Tipografi -->
+  <!-- ============================================================ -->
+  <h2>💡 Pratik Örnek: Responsive Tipografi</h2>
+  <div class="card">
+    <div class="code-block">
+      <pre>
+/* Root font-size değişince her şey orantılı değişir! */
+html {
+  font-size: 16px;  /* Varsayılan */
+}
+
+/* Tablet için */
+@media (min-width: 768px) {
+  html {
+    font-size: 18px;  /* Biraz daha büyük */
+  }
+}
+
+/* Masaüstü için */
+@media (min-width: 1200px) {
+  html {
+    font-size: 20px;  /* Daha da büyük */
+  }
+}
+
+/* Tüm font'lar rem ile tanımlandığı için otomatik ölçeklenir! */
+h1 { font-size: 2rem; }   /* 32px → 36px → 40px */
+h2 { font-size: 1.5rem; } /* 24px → 27px → 30px */
+p { font-size: 1rem; }    /* 16px → 18px → 20px */
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <div style="background: #2a2a32; padding: 1rem; border-radius: 8px;">
+        <h3 style="color: #e8ff47; margin-top: 0;">Responsive Tipografi Demo</h3>
+        <p style="font-size: 1rem;">Bu paragraf 1rem = 16px (root 16px)</p>
+        <p style="font-size: 1rem;">Tarayıcı zoom'u yapın veya root font-size değişince her şey orantılı büyür!</p>
+        <div style="background: #3a3a4a; padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;">
+          <code>html { font-size: 16px; }</code> (varsayılan)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 9: Sık Yapılan Hatalar -->
+  <!-- ============================================================ -->
+  <h2>⚠️ Sık Yapılan Hatalar</h2>
+  <div class="card">
+    <div class="warning-note">
+      <strong>❌ Hata 1:</strong> em'i iç içe kullanıp istenmeyen bileşik etki yaratmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+.parent { font-size: 2em; }    /* 32px */
+.child { font-size: 0.5em; }   /* 16px BEKLERKEN → 16px DEĞİL! */
+/* Aslında: 32px × 0.5 = 16px OLUR! (doğru aslında) */
+/* Ama derinleştikçe çarpım etkisi artar! */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> İç içe elementlerde font-size için <code>rem</code> kullanın!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 2:</strong> html root font-size'i değiştirip rem kullanan elementleri unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+html { font-size: 10px; }  /* 10px yapınca tüm rem'ler küçülür! */
+/* 1rem = 10px oldu! */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> Root font-size değiştirirken <strong>tüm rem birimlerinin</strong> buna göre hesaplanacağını unutmayın!
+    </div>
+
+    <div class="warning-note">
+      <strong>❌ Hata 3:</strong> Erişilebilirliği unutmak
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* Kullanıcı tarayıcı zoom'u yapınca px büyümez! */
+body { font-size: 16px; }  /* Zoom'da değişmez */
+        </pre>
+      </div>
+      <strong>✅ Çözüm:</strong> <code>rem</code> kullanın — kullanıcı zoom yapınca orantılı büyür!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 10: Özet -->
+  <!-- ============================================================ -->
+  <h2>📋 Relative Font Sizes — Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📌 <strong>px</strong> → Mutlak birim, responsive değil, erişilebilirlik sorunlu</li>
+      <li>📊 <strong>% (yüzde)</strong> → Ebeveyne göre, bileşik etki var</li>
+      <li>📐 <strong>em</strong> → Element'in kendi font-size'ine göre, bileşik etki var</li>
+      <li>📏 <strong>rem</strong> → Root (html) font-size'ine göre, <strong>bileşik etki YOK</strong></li>
+      <li>🎯 <strong>font-size için en çok önerilen → rem!</strong> (tutarlı, öngörülebilir)</li>
+      <li>📏 <strong>margin/padding için → rem</strong> (tutarlı boşluklar)</li>
+      <li>📐 <strong>line-height için → em veya birimsiz</strong></li>
+      <li>♿ <strong>Erişilebilirlik için relative birimler şart!</strong> (kullanıcı zoom yapabilir)</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Relative Font Sizes | px · % · em · rem | Neden rem tercih edilmeli?
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-relative-fonts.css - Relative Font Sizes (em, rem, %) */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+/* Root font-size — rem için temel */
+html {
+  font-size: 16px;  /* Varsayılan tarayıcı font-size'i genelde 16px'dir */
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* PX DEMO (MUTLAK BİRİM) */
+/* ============================================ */
+.px-demo {
+  font-size: 16px;
+}
+
+/* ============================================ */
+/* PERCENT (%) DEMO */
+/* ============================================ */
+.percent-parent {
+  font-size: 30px;
+}
+
+.percent-child {
+  font-size: 75%;
+}
+
+/* İç içe percent örneği */
+.nested-percent {
+  font-size: 200%;  /* 2 kat */
+}
+
+.nested-percent p {
+  font-size: 75%;   /* Parent'ın 75%'si */
+}
+
+/* ============================================ */
+/* EM DEMO */
+/* ============================================ */
+.em-parent {
+  font-size: 30px;
+}
+
+.em-child {
+  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */
+}
+
+/* İç içe em örneği — BİLEŞİK (compound) etki! */
+.nested-em {
+  font-size: 2em;  /* 2 kat */
+}
+
+.nested-em p {
+  font-size: 0.75em;  /* Parent'ın 0.75'ü → bileşik hesaplama! */
+}
+
+/* h1 örneği — tarayıcı varsayılanı 2em */
+.h1-em-demo h1 {
+  font-size: 2em;  /* Tarayıcı varsayılanı zaten 2em */
+}
+
+/* ============================================ */
+/* REM DEMO (Root EM) */
+/* ============================================ */
+/* html root zaten 16px varsayılan */
+.rem-demo {
+  font-size: 1rem;  /* 16px */
+}
+
+.rem-child {
+  font-size: 0.75rem;  /* 16px * 0.75 = 12px, parent'dan bağımsız! */
+}
+
+/* İç içe rem — BİLEŞİK ETKİ YOK! */
+.nested-rem {
+  font-size: 2rem;  /* 32px */
+}
+
+.nested-rem p {
+  font-size: 0.75rem;  /* HALA 12px! (parent'dan etkilenmez) */
+}
+
+/* ============================================ */
+/* KARŞILAŞTIRMA TABLOSU */
+/* ============================================ */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.comparison-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.comparison-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=relative-font-sizes-px-em-rem-detayli" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Relative Font Sizes — px, %, em, rem (Detaylı) — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Relative Font Sizes - em, rem, % - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-relative-fonts.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📏 <span class=\"highlight\">Relative Font Sizes</span></h1>\n  <div class=\"subtitle\">% (yüzde) · em · rem — Neden absolute (px) yerine relative birimler kullanmalıyız?</div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 1: Neden Relative Birimler? -->\n  <!-- ============================================================ -->\n  <h2>🤔 Neden Relative Birimler Kullanmalıyız?</h2>\n  <div class=\"card\">\n    <p><strong>Absolute birimler (px)</strong> yerine <strong>relative birimler (%, em, rem)</strong> kullanmanın avantajları:</p>\n\n    <div class=\"success-note\">\n      <ul style=\"margin-left: 1.5rem;\">\n        <li>✅ <strong>Farklı ekran boyutlarında çalışır</strong> — Responsive tasarım için idealdir</li>\n        <li>✅ <strong>Daha kolay hesaplanır</strong> — Magic numbers yerine oranlar kullanılır</li>\n        <li>✅ <strong>Erişilebilirlik (Accessibility)</strong> — Kullanıcı tarayıcı zoom'u yaptığında orantılı büyür</li>\n        <li>✅ <strong>Daha az kod</strong> — Bir yerde değiştir, her yere yansısın</li>\n      </ul>\n    </div>\n\n    <div class=\"code-block\">\n      <pre>\n/* Absolute (px) — Magic numbers */\n.container {\n  width: 122px;\n  margin: 122px;\n  font-size: 122px;\n}\n\n/* Relative (%) — Oranlar */\n.container {\n  width: 10%;\n  margin: 10%;\n  font-size: 100%;\n}\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Örnek Karşılaştırma:</strong>\n      <p><code>10% / 80% / 10%</code> vs <code>122px / 926px / 122px</code></p>\n      <p>Relative birimlerle çalışmak, absolute birimlerle çalışmaktan <strong>çok daha kolaydır</strong>!</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 2: px (Piksel) — Mutlak Birim -->\n  <!-- ============================================================ -->\n  <h2>📌 px (Piksel) — Mutlak Birim (Absolute)</h2>\n  <div class=\"card\">\n    <p><strong>px</strong> en temel birimdir. Ekran pikseli cinsinden <strong>mutlak</strong> bir değerdir. Ancak responsive tasarımda esnek değildir.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* px kullanımı */\nh1 {\n  font-size: 32px;  /* Her ekranda 32px */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div style=\"background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <p style=\"font-size: 32px; margin: 0;\">Bu yazı 32px (mutlak)</p>\n        <p style=\"font-size: 16px; margin: 0.5rem 0 0 0;\">Bu yazı 16px (mutlak)</p>\n      </div>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ px dezavantajı:</strong> Kullanıcı tarayıcı zoom'u yapsa bile yazı boyutu <strong>değişmez</strong>. Bu, erişilebilirlik açısından sorun oluşturabilir!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 3: % (Yüzde) — Parent'a Göre -->\n  <!-- ============================================================ -->\n  <h2>📊 % (Yüzde) — Parent Element'e Göre</h2>\n  <div class=\"card\">\n    <p><strong>Yüzde (%) birimi</strong>, font-size değerini <strong>ebeveyn (parent) elementin font-size'ine göre</strong> hesaplar. <code>font-size: 100%</code> = ebeveyn ile aynı boyut.</p>\n\n    <div class=\"code-block\">\n      <pre>\n.parent {\n  font-size: 30px;\n}\n\n.child {\n  font-size: 75%;  /* 30px * 0.75 = 22.5px */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"percent-parent\" style=\"font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Parent: font-size: 30px</strong>\n        <div class=\"percent-child\" style=\"font-size: 75%; margin-top: 0.5rem;\">\n          Child: font-size: 75% → 30px × 0.75 = 22.5px\n        </div>\n      </div>\n    </div>\n\n    <h3>📌 İç İçe Yüzde — Bileşik Etki (Compounding)</h3>\n    <div class=\"demo-box\">\n      <div class=\"nested-percent\" style=\"font-size: 200%; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Parent: font-size: 200% (varsayılan 16px × 2 = 32px)</strong>\n        <p style=\"font-size: 75%; margin-top: 0.5rem;\">\n          Child: font-size: 75% → 32px × 0.75 = 24px\n        </p>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <strong>Bileşik etki:</strong> 16px × 200% × 75% = 24px</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 4: em — Element'in Kendi Font-Size'i -->\n  <!-- ============================================================ -->\n  <h2>📐 em — Element'in Kendi Font-Size'i</h2>\n  <div class=\"card\">\n    <p><strong>em</strong>, element'in <strong>kendi hesaplanmış font-size'ini</strong> temsil eder. <code>1em</code> = inherit edilen font-size (yani %100 ile aynı).</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* em kullanımı */\n.parent {\n  font-size: 30px;\n}\n\n.child {\n  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"em-parent\" style=\"font-size: 30px; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Parent: font-size: 30px</strong>\n        <div class=\"em-child\" style=\"font-size: 0.75em; margin-top: 0.5rem;\">\n          Child: font-size: 0.75em → 30px × 0.75 = 22.5px\n        </div>\n      </div>\n    </div>\n\n    <h3>📌 İç İçe em — Bileşik Etki (Compounding)</h3>\n    <div class=\"warning-note\">\n      <strong>⚠️ ÖNEMLİ:</strong> em, iç içe kullanıldığında <strong>bileşik etki (compounding)</strong> yaratır!\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"nested-em\" style=\"font-size: 2em; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Parent: font-size: 2em (varsayılan 16px × 2 = 32px)</strong>\n        <p style=\"font-size: 0.75em; margin-top: 0.5rem;\">\n          Child: font-size: 0.75em → 32px × 0.75 = 24px\n        </p>\n        <div style=\"font-size: 0.5em; margin-top: 0.5rem;\">\n          Deep child: 0.5em → 24px × 0.5 = 12px\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <strong>Bileşik etki:</strong> 16px × 2 × 0.75 × 0.5 = 12px</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 h1 varsayılanı 2em:</strong>\n      <div class=\"h1-em-demo\" style=\"background: #2a2a32; padding: 1rem; border-radius: 8px; margin-top: 0.5rem;\">\n        <h1 style=\"font-size: 2em; margin: 0;\">h1 varsayılan font-size: 2em (32px)</h1>\n        <p style=\"margin-top: 0.5rem;\">Tarayıcılar h1'e varsayılan olarak <strong>2em</strong> verir. Bu nedenle 16px root'ta h1 32px görünür.</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 5: rem — Root Element'in Font-Size'i -->\n  <!-- ============================================================ -->\n  <h2>📐 rem — Root EM (HTML Elementi)</h2>\n  <div class=\"card\">\n    <p><strong>rem</strong> (root em), <strong>root element'in (html tag) font-size'ini</strong> temsil eder. <code>1rem</code> = html elementinin font-size'i. <strong>Bileşik etki YOKTUR!</strong></p>\n\n    <div class=\"code-block\">\n      <pre>\n/* rem kullanımı — html root belirlenir */\nhtml {\n  font-size: 16px;  /* Varsayılan */\n}\n\n.child {\n  font-size: 0.75rem;  /* 16px × 0.75 = 12px — parent'dan bağımsız! */\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"rem-demo\" style=\"background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Root font-size: 16px (varsayılan)</strong>\n        <div class=\"rem-child\" style=\"font-size: 0.75rem; margin-top: 0.5rem;\">\n          Child: font-size: 0.75rem → 16px × 0.75 = 12px (parent'dan bağımsız!)\n        </div>\n      </div>\n    </div>\n\n    <h3>📌 İç İçe rem — Bileşik Etki YOK!</h3>\n    <div class=\"success-note\">\n      <strong>✅ rem'in en büyük avantajı:</strong> İç içe kullanılsa bile <strong>bileşik etki yaratmaz</strong>!\n    </div>\n\n    <div class=\"demo-box\">\n      <div class=\"nested-rem\" style=\"font-size: 2rem; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <strong>Parent: font-size: 2rem (16px × 2 = 32px)</strong>\n        <p style=\"font-size: 0.75rem; margin-top: 0.5rem;\">\n          Child: font-size: 0.75rem → <strong>HALA 12px!</strong> (parent'dan etkilenmez)\n        </p>\n        <div style=\"font-size: 0.5rem; margin-top: 0.5rem;\">\n          Deep child: 0.5rem → <strong>HALA 8px!</strong> (parent'dan etkilenmez)\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <strong>rem'de bileşik etki yok!</strong> Her zaman root'a göre hesaplanır.</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 6: Karşılaştırma Tablosu -->\n  <!-- ============================================================ -->\n  <h2>📊 px vs % vs em vs rem — Karşılaştırma</h2>\n  <table class=\"comparison-table\">\n    <thead>\n      <tr><th>Birim</th><th>Referans</th><th>Bileşik Etki</th><th>Kullanım Alanı</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><code>px</code></td>\n        <td>Ekran pikseli (mutlak)</td>\n        <td>Yok</td>\n        <td>Border, shadow, sabit boyutlar</td>\n      </tr>\n      <tr><td><code>%</code></td>\n        <td>Ebeveyn (parent) element</td>\n        <td>✅ Var</td>\n        <td>Responsive genişlik, yükseklik</td>\n      </tr>\n      <tr><td><code>em</code></td>\n        <td>Element'in kendi font-size'i</td>\n        <td>✅ Var</td>\n        <td>Font-size, margin, padding (iç içe istendiğinde)</td>\n      </tr>\n      <tr><td><code>rem</code></td>\n        <td>Root (html) font-size</td>\n        <td>❌ Yok</td>\n        <td><strong>Font-size için EN ÇOK ÖNERİLEN</strong></td>\n      </tr>\n    </tbody>\n  </table>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 7: em/rem Kullanım Alanları -->\n  <!-- ============================================================ -->\n  <h2>🎯 em/rem Nerelerde Kullanılır?</h2>\n  <div class=\"card\">\n    <p>Sadece <strong>font-size</strong> için değil, birçok CSS özelliğinde <strong>em/rem</strong> kullanabilirsiniz:</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* em/rem kullanılabilecek özellikler */\n.element {\n  font-size: 1.2rem;      /* ✅ Font-size için rem önerilir */\n  line-height: 1.5em;     /* ✅ Satır yüksekliği için em */\n  margin-top: 1rem;       /* ✅ Margin için rem */\n  margin-bottom: 1.5rem;  /* ✅ Margin için rem */\n  padding: 1rem;          /* ✅ Padding için rem */\n  border-radius: 0.5rem;  /* ✅ Border-radius için rem */\n  width: 80%;             /* ✅ Genişlik için yüzde */\n  max-width: 1200px;      /* ⚠️ Max-width için px veya rem */\n}\n      </pre>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 En İyi Pratikler:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>font-size</strong> için → <code>rem</code> (bileşik etki yok, tutarlı)</li>\n        <li>✅ <strong>margin / padding</strong> için → <code>rem</code> (tutarlı boşluklar)</li>\n        <li>✅ <strong>line-height</strong> için → <code>em</code> veya birimsiz değer (1.5)</li>\n        <li>✅ <strong>width / height</strong> için → <code>%</code> veya <code>vw/vh</code></li>\n        <li>✅ <strong>border / shadow</strong> için → <code>px</code> (ince detaylar)</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 8: Pratik Örnek — Responsive Tipografi -->\n  <!-- ============================================================ -->\n  <h2>💡 Pratik Örnek: Responsive Tipografi</h2>\n  <div class=\"card\">\n    <div class=\"code-block\">\n      <pre>\n/* Root font-size değişince her şey orantılı değişir! */\nhtml {\n  font-size: 16px;  /* Varsayılan */\n}\n\n/* Tablet için */\n@media (min-width: 768px) {\n  html {\n    font-size: 18px;  /* Biraz daha büyük */\n  }\n}\n\n/* Masaüstü için */\n@media (min-width: 1200px) {\n  html {\n    font-size: 20px;  /* Daha da büyük */\n  }\n}\n\n/* Tüm font'lar rem ile tanımlandığı için otomatik ölçeklenir! */\nh1 { font-size: 2rem; }   /* 32px → 36px → 40px */\nh2 { font-size: 1.5rem; } /* 24px → 27px → 30px */\np { font-size: 1rem; }    /* 16px → 18px → 20px */\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <div style=\"background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n        <h3 style=\"color: #e8ff47; margin-top: 0;\">Responsive Tipografi Demo</h3>\n        <p style=\"font-size: 1rem;\">Bu paragraf 1rem = 16px (root 16px)</p>\n        <p style=\"font-size: 1rem;\">Tarayıcı zoom'u yapın veya root font-size değişince her şey orantılı büyür!</p>\n        <div style=\"background: #3a3a4a; padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem;\">\n          <code>html { font-size: 16px; }</code> (varsayılan)\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 9: Sık Yapılan Hatalar -->\n  <!-- ============================================================ -->\n  <h2>⚠️ Sık Yapılan Hatalar</h2>\n  <div class=\"card\">\n    <div class=\"warning-note\">\n      <strong>❌ Hata 1:</strong> em'i iç içe kullanıp istenmeyen bileşik etki yaratmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n.parent { font-size: 2em; }    /* 32px */\n.child { font-size: 0.5em; }   /* 16px BEKLERKEN → 16px DEĞİL! */\n/* Aslında: 32px × 0.5 = 16px OLUR! (doğru aslında) */\n/* Ama derinleştikçe çarpım etkisi artar! */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> İç içe elementlerde font-size için <code>rem</code> kullanın!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 2:</strong> html root font-size'i değiştirip rem kullanan elementleri unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\nhtml { font-size: 10px; }  /* 10px yapınca tüm rem'ler küçülür! */\n/* 1rem = 10px oldu! */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> Root font-size değiştirirken <strong>tüm rem birimlerinin</strong> buna göre hesaplanacağını unutmayın!\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>❌ Hata 3:</strong> Erişilebilirliği unutmak\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* Kullanıcı tarayıcı zoom'u yapınca px büyümez! */\nbody { font-size: 16px; }  /* Zoom'da değişmez */\n        </pre>\n      </div>\n      <strong>✅ Çözüm:</strong> <code>rem</code> kullanın — kullanıcı zoom yapınca orantılı büyür!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 10: Özet -->\n  <!-- ============================================================ -->\n  <h2>📋 Relative Font Sizes — Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📌 <strong>px</strong> → Mutlak birim, responsive değil, erişilebilirlik sorunlu</li>\n      <li>📊 <strong>% (yüzde)</strong> → Ebeveyne göre, bileşik etki var</li>\n      <li>📐 <strong>em</strong> → Element'in kendi font-size'ine göre, bileşik etki var</li>\n      <li>📏 <strong>rem</strong> → Root (html) font-size'ine göre, <strong>bileşik etki YOK</strong></li>\n      <li>🎯 <strong>font-size için en çok önerilen → rem!</strong> (tutarlı, öngörülebilir)</li>\n      <li>📏 <strong>margin/padding için → rem</strong> (tutarlı boşluklar)</li>\n      <li>📐 <strong>line-height için → em veya birimsiz</strong></li>\n      <li>♿ <strong>Erişilebilirlik için relative birimler şart!</strong> (kullanıcı zoom yapabilir)</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Relative Font Sizes | px · % · em · rem | Neden rem tercih edilmeli?\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-relative-fonts.css - Relative Font Sizes (em, rem, %) */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n:root {\n  --primary-color: #e8ff47;\n  --secondary-color: #ff6464;\n  --accent-color: #64c8ff;\n  --success-color: #6bcb77;\n  --dark-bg: #0d0d0f;\n  --card-bg: #16161a;\n  --border-color: #2a2a32;\n  --text-color: #e8e8f0;\n  --muted-color: #7a7a8c;\n  --spacing-small: 0.5rem;\n  --spacing-medium: 1rem;\n  --spacing-large: 1.5rem;\n  --border-radius: 12px;\n  --font-mono: 'Space Mono', monospace;\n  --font-sans: 'Syne', sans-serif;\n}\n\n/* Root font-size — rem için temel */\nhtml {\n  font-size: 16px;  /* Varsayılan tarayıcı font-size'i genelde 16px'dir */\n}\n\nbody {\n  background: var(--dark-bg);\n  color: var(--text-color);\n  font-family: var(--font-sans);\n  line-height: 1.6;\n}\n\n.header {\n  padding: var(--spacing-large) 2rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-large);\n  flex-wrap: wrap;\n  background: var(--dark-bg);\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: var(--primary-color);\n  text-decoration: none;\n  font-family: var(--font-mono);\n  font-size: 0.78rem;\n  border: 1px solid var(--primary-color);\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: var(--primary-color);\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: var(--primary-color);\n}\n\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: var(--spacing-small);\n}\n\nh1 .highlight {\n  color: var(--primary-color);\n}\n\n.subtitle {\n  color: var(--muted-color);\n  font-family: var(--font-mono);\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid var(--primary-color);\n  padding-left: var(--spacing-medium);\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 var(--spacing-medium) 0;\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-small);\n  border-bottom: 1px solid var(--border-color);\n  padding-bottom: var(--spacing-small);\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: var(--primary-color);\n  margin: var(--spacing-large) 0 var(--spacing-small) 0;\n  font-family: var(--font-mono);\n}\n\n.card {\n  background: var(--card-bg);\n  border: 1px solid var(--border-color);\n  border-radius: var(--border-radius);\n  padding: var(--spacing-large);\n  margin: var(--spacing-large) 0;\n}\n\n.card-header {\n  font-family: var(--font-mono);\n  font-size: 0.7rem;\n  color: var(--primary-color);\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: var(--spacing-medium);\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid var(--border-color);\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: var(--spacing-medium) 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: var(--font-mono);\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n}\n\n/* ============================================ */\n/* PX DEMO (MUTLAK BİRİM) */\n/* ============================================ */\n.px-demo {\n  font-size: 16px;\n}\n\n/* ============================================ */\n/* PERCENT (%) DEMO */\n/* ============================================ */\n.percent-parent {\n  font-size: 30px;\n}\n\n.percent-child {\n  font-size: 75%;\n}\n\n/* İç içe percent örneği */\n.nested-percent {\n  font-size: 200%;  /* 2 kat */\n}\n\n.nested-percent p {\n  font-size: 75%;   /* Parent'ın 75%'si */\n}\n\n/* ============================================ */\n/* EM DEMO */\n/* ============================================ */\n.em-parent {\n  font-size: 30px;\n}\n\n.em-child {\n  font-size: 0.75em;  /* 30px * 0.75 = 22.5px */\n}\n\n/* İç içe em örneği — BİLEŞİK (compound) etki! */\n.nested-em {\n  font-size: 2em;  /* 2 kat */\n}\n\n.nested-em p {\n  font-size: 0.75em;  /* Parent'ın 0.75'ü → bileşik hesaplama! */\n}\n\n/* h1 örneği — tarayıcı varsayılanı 2em */\n.h1-em-demo h1 {\n  font-size: 2em;  /* Tarayıcı varsayılanı zaten 2em */\n}\n\n/* ============================================ */\n/* REM DEMO (Root EM) */\n/* ============================================ */\n/* html root zaten 16px varsayılan */\n.rem-demo {\n  font-size: 1rem;  /* 16px */\n}\n\n.rem-child {\n  font-size: 0.75rem;  /* 16px * 0.75 = 12px, parent'dan bağımsız! */\n}\n\n/* İç içe rem — BİLEŞİK ETKİ YOK! */\n.nested-rem {\n  font-size: 2rem;  /* 32px */\n}\n\n.nested-rem p {\n  font-size: 0.75rem;  /* HALA 12px! (parent'dan etkilenmez) */\n}\n\n/* ============================================ */\n/* KARŞILAŞTIRMA TABLOSU */\n/* ============================================ */\n.comparison-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: var(--spacing-medium) 0;\n}\n\n.comparison-table th,\n.comparison-table td {\n  border: 1px solid var(--border-color);\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.comparison-table th {\n  background: #1a1a20;\n  color: var(--primary-color);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n}\n\n.comparison-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.comparison-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  color: var(--primary-color);\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid var(--primary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid var(--secondary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid var(--success-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid var(--border-color);\n  color: var(--muted-color);\n  font-size: 0.8rem;\n  font-family: var(--font-mono);\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .comparison-table th,\n  .comparison-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
