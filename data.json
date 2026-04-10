@@ -101,5 +101,61 @@
     "slug": "layout-exercise-squarespace-ben",
     "hasCss": true,
     "updatedAt": "2026-04-09T15:56:18.148Z"
+  },
+  {
+    "title": "CSS Flexbox — Derinlemesine (Detaylı)",
+    "description": "Flexbox modern CSS layout modülü. Flex Container ve Flex Item yapısı, justify-content (flex-start, center, space-between, space-around), align-items (stretch, flex-start, center, flex-end), flex-direction (row, column, reverse), flex-grow/shrink/basis, inline elementlerin flex item olunca davranışı ve pratik örnekler.",
+    "slug": "css-flexbox-derinlemesine-detayli",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T16:45:01.380Z"
+  },
+  {
+    "title": "Flex Item Sizing — flex-basis, flex-shrink, flex-grow",
+    "description": "Flex item'ların boyutlandırılması: flex-basis (başlangıç boyutu), flex-shrink (küçülme), flex-grow (büyüme), align-items: stretch (dikey gerilme). flex-direction: row ve column için farklılıklar, flex kısayolu ve pratik örnekler.",
+    "slug": "flex-item-sizing-flex-basis-flex-shrink-flex-grow",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T17:03:28.407Z"
+  },
+  {
+    "title": "Height & Width Birimleri — vh, vw, %, box-sizing",
+    "description": "CSS'de boyutlandırma birimleri: yüzde (%) ebeveyne göre, vh/vw viewport'a göre. Viewport nedir? box-sizing: content-box vs border-box farkları, tam sayfa düzeni için 100vh kullanımı ve pratik örnekler.",
+    "slug": "height-width-birimleri-vh-vw-box-sizing",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T17:28:28.534Z"
+  },
+  {
+    "title": "CSS Position — Static, Fixed, Absolute, Relative (Detaylı)",
+    "description": "CSS position özelliği ile elementleri tam istediğin yere konumlandır. Static (varsayılan), Fixed (viewport'a sabit), Absolute (ebeveyne göre mutlak), Relative (normal konumundan kaydırma), z-index ile katman sıralaması. Overlay, sabit navbar, kart üzeri etiket, modal gibi pratik örnekler ve sık yapılan hatalar.",
+    "slug": "css-position-static-fixed-absolute-relative-detayli",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T17:31:08.372Z"
+  },
+  {
+    "title": "Kullanışlı CSS Özellikleri — calc(), Variables, Background, Web Fonts",
+    "description": "CSS'in en kullanışlı özellikleri: calc() ile dinamik hesaplamalar, CSS değişkenleri (custom properties) ile tekrar kullanılabilir değerler, background-size ile resim boyutlandırma, Google Fonts ile web fontları, @font-face ile özel font yükleme ve fallback fontlar.",
+    "slug": "kullanisli-css-ozellikleri-calc-variables-background-web-fonts",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T18:01:55.543Z"
+  },
+  {
+    "title": "Mobil Web ve Responsive Tasarım — Viewport, Media Queries, Mobile-First",
+    "description": "Mobil web geliştirmenin temelleri: Viewport meta tag ile mobil ölçeklendirme, CSS Media Queries ile farklı ekran boyutlarına uyum sağlama, Chrome Device Mode ile mobil simülasyonu, Remote Debugging ile gerçek cihazda test, Mobile-First vs Desktop-First yaklaşımları ve pratik ipuçları.",
+    "slug": "mobil-web-ve-responsive-tasarim-viewport-media-queries-mobile-first",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T18:06:29.460Z"
+  },
+  {
+    "title": "Relative Font Sizes — px, %, em, rem (Detaylı)",
+    "description": "CSS'de göreceli font birimleri: px (mutlak), % (ebeveyne göre), em (element'in kendi font-size'ine göre), rem (root font-size'e göre). Bileşik etki (compounding) nedir? Neden rem tercih edilmeli? em/rem hangi özelliklerde kullanılır? Pratik örnekler ve sık yapılan hatalar.",
+    "slug": "relative-font-sizes-px-em-rem-detayli",
+    "hasCss": true,
+    "updatedAt": "2026-04-09T18:13:15.062Z"
+  },
+  {
+    "title": "flex,border,position",
+    "description": "temel giriş seviyesi örnek",
+    "slug": "flexborderposition",
+    "hasCss": true,
+    "updatedAt": "2026-04-10T06:26:55.112Z"
   }
 ]
