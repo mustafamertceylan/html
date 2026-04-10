@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flex,border,position - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>flex,border,position</h1>
+    <p class="desc">temel giriş seviyesi örnek</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;div class=&quot;card&quot;&gt;
+    &lt;!-- Position ile sabitlenmiş indirim etiketi --&gt;
+    &lt;div class=&quot;discount-badge&quot;&gt;
+      🔥 %20 İNDİRİM
+    &lt;/div&gt;
+
+    &lt;!-- Flexbox ile ortalanmış ürün resmi --&gt;
+    &lt;div class=&quot;product-image&quot;&gt;
+      📦
+    &lt;/div&gt;
+
+    &lt;!-- Ürün başlığı --&gt;
+    &lt;h3 class=&quot;product-title&quot;&gt;
+      Süper Ürün Pro Max 
+      &lt;span class=&quot;info-icon&quot;&gt;
+        ℹ️
+        &lt;span class=&quot;info-tooltip&quot;&gt;En çok satan ürün&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/h3&gt;
+
+    &lt;!-- Ürün açıklaması --&gt;
+    &lt;p class=&quot;product-desc&quot;&gt;
+      Bu ürün hayatınızı kolaylaştıracak. Kaliteli ve dayanıklı 
+      malzemeden üretilmiştir. 2 yıl garanti kapsamındadır.
+    &lt;/p&gt;
+
+    &lt;!-- Flexbox ile iki uca yaslanmış fiyat bölümü --&gt;
+    &lt;div class=&quot;price-section&quot;&gt;
+      &lt;span class=&quot;current-price&quot;&gt;
+        ₺199 &lt;small&gt;/ adet&lt;/small&gt;
+      &lt;/span&gt;
+      &lt;span class=&quot;old-price&quot;&gt;₺249&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Flexbox ile yan yana dizilmiş rating --&gt;
+    &lt;div class=&quot;rating&quot;&gt;
+      &lt;div class=&quot;stars&quot;&gt;
+        &lt;span class=&quot;star&quot;&gt;★&lt;/span&gt;
+        &lt;span class=&quot;star&quot;&gt;★&lt;/span&gt;
+        &lt;span class=&quot;star&quot;&gt;★&lt;/span&gt;
+        &lt;span class=&quot;star&quot;&gt;★&lt;/span&gt;
+        &lt;span class=&quot;star&quot;&gt;★&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;span class=&quot;review-count&quot;&gt;(128 değerlendirme)&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Flexbox ile ortalanmış buton --&gt;
+    &lt;button class=&quot;button&quot;&gt;
+      🛒 Sepete Ekle
+    &lt;/button&gt;
+
+    &lt;!-- Stok durumu --&gt;
+    &lt;div class=&quot;stock-status&quot;&gt;
+      &lt;span class=&quot;stock-dot&quot;&gt;&lt;/span&gt;
+      &lt;span class=&quot;stock-text&quot;&gt;Stokta var&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">
+
+    /* ============================================ */
+    /* KART (Box Model + Position Reference)       */
+    /* ============================================ */
+    .card {
+      /* ----- BOX MODEL ----- */
+      width: 360px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      padding: 24px;
+      
+      /* ----- POSITION ----- */
+      position: relative;  /* Absolute çocuklar için referans noktası */
+      
+      /* ----- GEÇİŞ ----- */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ============================================ */
+    /* İNDİRİM ETİKETİ (Position Örneği)           */
+    /* ============================================ */
+    .discount-badge {
+      /* ----- POSITION ----- */
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      z-index: 10;
+      
+      /* ----- BOX MODEL ----- */
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 30px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      
+      /* ----- SHADOW ----- */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ============================================ */
+    /* ÜRÜN RESMİ (Flexbox Örneği)                 */
+    /* ============================================ */
+    .product-image {
+      /* ----- BOX MODEL ----- */
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 64px;
+      color: white;
+      
+      /* ----- GEÇİŞ ----- */
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .product-image {
+      transform: scale(1.02);
+    }
+
+    /* ============================================ */
+    /* BAŞLIK                                      */
+    /* ============================================ */
+    .product-title {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 8px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a1a2e;
+    }
+
+    /* ============================================ */
+    /* AÇIKLAMA                                    */
+    /* ============================================ */
+    .product-desc {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* ============================================ */
+    /* FİYAT BÖLÜMÜ (Flexbox Örneği)               */
+    /* ============================================ */
+    .price-section {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      padding: 12px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .current-price {
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 28px;
+      font-weight: 800;
+      color: #667eea;
+    }
+
+    .current-price small {
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .old-price {
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 16px;
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    /* ============================================ */
+    /* RATING (Flexbox Örneği)                     */
+    /* ============================================ */
+    .rating {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stars {
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      gap: 4px;
+    }
+
+    .star {
+      color: #ffc107;
+      font-size: 16px;
+    }
+
+    .review-count {
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* ============================================ */
+    /* BUTON (Flexbox Örneği)                      */
+    /* ============================================ */
+    .button {
+      /* ----- BOX MODEL ----- */
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      cursor: pointer;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      
+      /* ----- GEÇİŞ ----- */
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    /* ============================================ */
+    /* STOK DURUMU (Position + Flexbox)            */
+    /* ============================================ */
+    .stock-status {
+      /* ----- BOX MODEL ----- */
+      margin-top: 16px;
+      padding-top: 12px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .stock-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #4caf50;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .stock-text {
+      font-size: 12px;
+      color: #4caf50;
+      font-weight: 500;
+    }
+
+    /* ============================================ */
+    /* EXTRA: TOOLTIP (Position Örneği)            */
+    /* ============================================ */
+    .info-icon {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+
+    .info-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      background: #1a1a2e;
+      color: white;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 20;
+    }
+
+    .info-icon:hover .info-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<div class="card">
+    <!-- Position ile sabitlenmiş indirim etiketi -->
+    <div class="discount-badge">
+      🔥 %20 İNDİRİM
+    </div>
+
+    <!-- Flexbox ile ortalanmış ürün resmi -->
+    <div class="product-image">
+      📦
+    </div>
+
+    <!-- Ürün başlığı -->
+    <h3 class="product-title">
+      Süper Ürün Pro Max 
+      <span class="info-icon">
+        ℹ️
+        <span class="info-tooltip">En çok satan ürün</span>
+      </span>
+    </h3>
+
+    <!-- Ürün açıklaması -->
+    <p class="product-desc">
+      Bu ürün hayatınızı kolaylaştıracak. Kaliteli ve dayanıklı 
+      malzemeden üretilmiştir. 2 yıl garanti kapsamındadır.
+    </p>
+
+    <!-- Flexbox ile iki uca yaslanmış fiyat bölümü -->
+    <div class="price-section">
+      <span class="current-price">
+        ₺199 <small>/ adet</small>
+      </span>
+      <span class="old-price">₺249</span>
+    </div>
+
+    <!-- Flexbox ile yan yana dizilmiş rating -->
+    <div class="rating">
+      <div class="stars">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+      </div>
+      <span class="review-count">(128 değerlendirme)</span>
+    </div>
+
+    <!-- Flexbox ile ortalanmış buton -->
+    <button class="button">
+      🛒 Sepete Ekle
+    </button>
+
+    <!-- Stok durumu -->
+    <div class="stock-status">
+      <span class="stock-dot"></span>
+      <span class="stock-text">Stokta var</span>
+    </div>
+  </div>
+
+
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+
+
+    /* ============================================ */
+    /* KART (Box Model + Position Reference)       */
+    /* ============================================ */
+    .card {
+      /* ----- BOX MODEL ----- */
+      width: 360px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      padding: 24px;
+      
+      /* ----- POSITION ----- */
+      position: relative;  /* Absolute çocuklar için referans noktası */
+      
+      /* ----- GEÇİŞ ----- */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ============================================ */
+    /* İNDİRİM ETİKETİ (Position Örneği)           */
+    /* ============================================ */
+    .discount-badge {
+      /* ----- POSITION ----- */
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      z-index: 10;
+      
+      /* ----- BOX MODEL ----- */
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 30px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      
+      /* ----- SHADOW ----- */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ============================================ */
+    /* ÜRÜN RESMİ (Flexbox Örneği)                 */
+    /* ============================================ */
+    .product-image {
+      /* ----- BOX MODEL ----- */
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 64px;
+      color: white;
+      
+      /* ----- GEÇİŞ ----- */
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .product-image {
+      transform: scale(1.02);
+    }
+
+    /* ============================================ */
+    /* BAŞLIK                                      */
+    /* ============================================ */
+    .product-title {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 8px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a1a2e;
+    }
+
+    /* ============================================ */
+    /* AÇIKLAMA                                    */
+    /* ============================================ */
+    .product-desc {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* ============================================ */
+    /* FİYAT BÖLÜMÜ (Flexbox Örneği)               */
+    /* ============================================ */
+    .price-section {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      padding: 12px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .current-price {
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 28px;
+      font-weight: 800;
+      color: #667eea;
+    }
+
+    .current-price small {
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .old-price {
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 16px;
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    /* ============================================ */
+    /* RATING (Flexbox Örneği)                     */
+    /* ============================================ */
+    .rating {
+      /* ----- BOX MODEL ----- */
+      margin-bottom: 20px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stars {
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      gap: 4px;
+    }
+
+    .star {
+      color: #ffc107;
+      font-size: 16px;
+    }
+
+    .review-count {
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* ============================================ */
+    /* BUTON (Flexbox Örneği)                      */
+    /* ============================================ */
+    .button {
+      /* ----- BOX MODEL ----- */
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      cursor: pointer;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      
+      /* ----- TYPOGRAPHY ----- */
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      
+      /* ----- GEÇİŞ ----- */
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    /* ============================================ */
+    /* STOK DURUMU (Position + Flexbox)            */
+    /* ============================================ */
+    .stock-status {
+      /* ----- BOX MODEL ----- */
+      margin-top: 16px;
+      padding-top: 12px;
+      
+      /* ----- FLEXBOX ----- */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .stock-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #4caf50;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .stock-text {
+      font-size: 12px;
+      color: #4caf50;
+      font-weight: 500;
+    }
+
+    /* ============================================ */
+    /* EXTRA: TOOLTIP (Position Örneği)            */
+    /* ============================================ */
+    .info-icon {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+
+    .info-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      background: #1a1a2e;
+      color: white;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 20;
+    }
+
+    .info-icon:hover .info-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=flexborderposition" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>flex,border,position — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<div class=\"card\">\n    <!-- Position ile sabitlenmiş indirim etiketi -->\n    <div class=\"discount-badge\">\n      🔥 %20 İNDİRİM\n    </div>\n\n    <!-- Flexbox ile ortalanmış ürün resmi -->\n    <div class=\"product-image\">\n      📦\n    </div>\n\n    <!-- Ürün başlığı -->\n    <h3 class=\"product-title\">\n      Süper Ürün Pro Max \n      <span class=\"info-icon\">\n        ℹ️\n        <span class=\"info-tooltip\">En çok satan ürün</span>\n      </span>\n    </h3>\n\n    <!-- Ürün açıklaması -->\n    <p class=\"product-desc\">\n      Bu ürün hayatınızı kolaylaştıracak. Kaliteli ve dayanıklı \n      malzemeden üretilmiştir. 2 yıl garanti kapsamındadır.\n    </p>\n\n    <!-- Flexbox ile iki uca yaslanmış fiyat bölümü -->\n    <div class=\"price-section\">\n      <span class=\"current-price\">\n        ₺199 <small>/ adet</small>\n      </span>\n      <span class=\"old-price\">₺249</span>\n    </div>\n\n    <!-- Flexbox ile yan yana dizilmiş rating -->\n    <div class=\"rating\">\n      <div class=\"stars\">\n        <span class=\"star\">★</span>\n        <span class=\"star\">★</span>\n        <span class=\"star\">★</span>\n        <span class=\"star\">★</span>\n        <span class=\"star\">★</span>\n      </div>\n      <span class=\"review-count\">(128 değerlendirme)</span>\n    </div>\n\n    <!-- Flexbox ile ortalanmış buton -->\n    <button class=\"button\">\n      🛒 Sepete Ekle\n    </button>\n\n    <!-- Stok durumu -->\n    <div class=\"stock-status\">\n      <span class=\"stock-dot\"></span>\n      <span class=\"stock-text\">Stokta var</span>\n    </div>\n  </div>\n\n";
+    const cssCode = "\n\n    /* ============================================ */\n    /* KART (Box Model + Position Reference)       */\n    /* ============================================ */\n    .card {\n      /* ----- BOX MODEL ----- */\n      width: 360px;\n      background: white;\n      border-radius: 20px;\n      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);\n      padding: 24px;\n      \n      /* ----- POSITION ----- */\n      position: relative;  /* Absolute çocuklar için referans noktası */\n      \n      /* ----- GEÇİŞ ----- */\n      transition: transform 0.3s ease, box-shadow 0.3s ease;\n    }\n\n    .card:hover {\n      transform: translateY(-5px);\n      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.25);\n    }\n\n    /* ============================================ */\n    /* İNDİRİM ETİKETİ (Position Örneği)           */\n    /* ============================================ */\n    .discount-badge {\n      /* ----- POSITION ----- */\n      position: absolute;\n      top: -12px;\n      right: 16px;\n      z-index: 10;\n      \n      /* ----- BOX MODEL ----- */\n      background: linear-gradient(135deg, #ff6b6b, #ee5a24);\n      color: white;\n      padding: 6px 14px;\n      border-radius: 30px;\n      \n      /* ----- TYPOGRAPHY ----- */\n      font-size: 12px;\n      font-weight: bold;\n      letter-spacing: 1px;\n      \n      /* ----- SHADOW ----- */\n      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);\n    }\n\n    /* ============================================ */\n    /* ÜRÜN RESMİ (Flexbox Örneği)                 */\n    /* ============================================ */\n    .product-image {\n      /* ----- BOX MODEL ----- */\n      width: 100%;\n      height: 200px;\n      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n      border-radius: 16px;\n      margin-bottom: 20px;\n      \n      /* ----- FLEXBOX ----- */\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      \n      /* ----- TYPOGRAPHY ----- */\n      font-size: 64px;\n      color: white;\n      \n      /* ----- GEÇİŞ ----- */\n      transition: transform 0.3s ease;\n    }\n\n    .card:hover .product-image {\n      transform: scale(1.02);\n    }\n\n    /* ============================================ */\n    /* BAŞLIK                                      */\n    /* ============================================ */\n    .product-title {\n      /* ----- BOX MODEL ----- */\n      margin-bottom: 8px;\n      \n      /* ----- TYPOGRAPHY ----- */\n      font-size: 22px;\n      font-weight: 800;\n      color: #1a1a2e;\n    }\n\n    /* ============================================ */\n    /* AÇIKLAMA                                    */\n    /* ============================================ */\n    .product-desc {\n      /* ----- BOX MODEL ----- */\n      margin-bottom: 20px;\n      \n      /* ----- TYPOGRAPHY ----- */\n      font-size: 14px;\n      color: #666;\n      line-height: 1.5;\n    }\n\n    /* ============================================ */\n    /* FİYAT BÖLÜMÜ (Flexbox Örneği)               */\n    /* ============================================ */\n    .price-section {\n      /* ----- BOX MODEL ----- */\n      margin-bottom: 20px;\n      padding: 12px 0;\n      border-top: 1px solid #eee;\n      border-bottom: 1px solid #eee;\n      \n      /* ----- FLEXBOX ----- */\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      flex-wrap: wrap;\n      gap: 10px;\n    }\n\n    .current-price {\n      /* ----- TYPOGRAPHY ----- */\n      font-size: 28px;\n      font-weight: 800;\n      color: #667eea;\n    }\n\n    .current-price small {\n      font-size: 14px;\n      font-weight: normal;\n    }\n\n    .old-price {\n      /* ----- TYPOGRAPHY ----- */\n      font-size: 16px;\n      color: #999;\n      text-decoration: line-through;\n    }\n\n    /* ============================================ */\n    /* RATING (Flexbox Örneği)                     */\n    /* ============================================ */\n    .rating {\n      /* ----- BOX MODEL ----- */\n      margin-bottom: 20px;\n      \n      /* ----- FLEXBOX ----- */\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .stars {\n      /* ----- FLEXBOX ----- */\n      display: flex;\n      gap: 4px;\n    }\n\n    .star {\n      color: #ffc107;\n      font-size: 16px;\n    }\n\n    .review-count {\n      font-size: 12px;\n      color: #999;\n    }\n\n    /* ============================================ */\n    /* BUTON (Flexbox Örneği)                      */\n    /* ============================================ */\n    .button {\n      /* ----- BOX MODEL ----- */\n      width: 100%;\n      padding: 14px;\n      border: none;\n      border-radius: 12px;\n      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n      cursor: pointer;\n      \n      /* ----- FLEXBOX ----- */\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 8px;\n      \n      /* ----- TYPOGRAPHY ----- */\n      font-size: 16px;\n      font-weight: 600;\n      color: white;\n      \n      /* ----- GEÇİŞ ----- */\n      transition: all 0.3s ease;\n    }\n\n    .button:hover {\n      transform: translateY(-2px);\n      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);\n    }\n\n    .button:active {\n      transform: translateY(1px);\n    }\n\n    /* ============================================ */\n    /* STOK DURUMU (Position + Flexbox)            */\n    /* ============================================ */\n    .stock-status {\n      /* ----- BOX MODEL ----- */\n      margin-top: 16px;\n      padding-top: 12px;\n      \n      /* ----- FLEXBOX ----- */\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 6px;\n    }\n\n    .stock-dot {\n      width: 8px;\n      height: 8px;\n      background-color: #4caf50;\n      border-radius: 50%;\n      display: inline-block;\n    }\n\n    .stock-text {\n      font-size: 12px;\n      color: #4caf50;\n      font-weight: 500;\n    }\n\n    /* ============================================ */\n    /* EXTRA: TOOLTIP (Position Örneği)            */\n    /* ============================================ */\n    .info-icon {\n      position: relative;\n      display: inline-block;\n      cursor: help;\n    }\n\n    .info-tooltip {\n      position: absolute;\n      bottom: 100%;\n      left: 50%;\n      transform: translateX(-50%);\n      margin-bottom: 8px;\n      background: #1a1a2e;\n      color: white;\n      font-size: 11px;\n      padding: 4px 8px;\n      border-radius: 6px;\n      white-space: nowrap;\n      opacity: 0;\n      visibility: hidden;\n      transition: all 0.2s ease;\n      z-index: 20;\n    }\n\n    .info-icon:hover .info-tooltip {\n      opacity: 1;\n      visibility: visible;\n    }";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
