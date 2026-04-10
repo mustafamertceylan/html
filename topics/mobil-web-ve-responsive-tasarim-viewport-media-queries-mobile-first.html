@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobil Web ve Responsive Tasarım — Viewport, Media Queries, Mobile-First - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0d0d0f;--surface:#16161a;--border:#2a2a32;--accent:#e8ff47;--accent2:#47e8ff;--text:#e8e8f0;--muted:#7a7a8c;--code-bg:#0a0a0c}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh}
+    header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1.2rem;position:sticky;top:0;background:rgba(13,13,15,.95);backdrop-filter:blur(10px);z-index:10}
+    .back-btn{color:var(--accent);text-decoration:none;font-family:'Space Mono',monospace;font-size:.78rem;border:1px solid var(--accent);padding:.3rem .9rem;transition:all .15s}
+    .back-btn:hover{background:var(--accent);color:#000}
+    .logo{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+    .logo span{color:var(--accent)}
+    .preview-btn{margin-left:auto;background:var(--accent2);color:#000;border:none;padding:.4rem 1rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+    .preview-btn:hover{opacity:.85}
+    main{max-width:1400px;margin:0 auto;padding:2.5rem 2rem}
+    h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;line-height:1.05;margin-bottom:.6rem}
+    .desc{color:var(--muted);font-size:.95rem;margin-bottom:2rem;font-family:'Space Mono',monospace;line-height:1.6}
+    .panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+    @media(max-width:900px){.panels{grid-template-columns:1fr}}
+    .panel{border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .panel-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;gap:.5rem}
+    .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+    .dot-html{background:#e8ff47}
+    .dot-css{background:#47e8ff}
+    .dot-prev{background:#ff47a8}
+    .code-area{background:var(--code-bg);padding:1.4rem;font-family:'Space Mono',monospace;font-size:.79rem;line-height:1.75;color:#b0c4de;overflow-x:auto;white-space:pre;flex:1}
+    .preview-area{padding:1.4rem;background:#fff;color:#000;min-height:220px;flex:1;font-family:sans-serif}
+    .actions{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:.8rem}
+    .btn{background:var(--accent);color:#000;border:none;padding:.55rem 1.4rem;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:opacity .15s}
+    .btn:hover{opacity:.85}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{border-color:var(--text);color:var(--text);opacity:1}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center}
+    #overlay.show{display:flex}
+    #overlay-inner{background:#fff;width:min(960px,92vw);height:85vh;display:flex;flex-direction:column;overflow:hidden}
+    #overlay-bar{background:#111;padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    #overlay-bar span{font-family:'Space Mono',monospace;font-size:.75rem;color:#aaa}
+    #overlay-close{background:none;border:none;color:#fff;font-family:'Space Mono',monospace;font-size:.8rem;cursor:pointer;padding:.2rem .6rem}
+    #overlay-close:hover{color:var(--accent)}
+    #overlay-frame{flex:1;border:none;width:100%}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-btn">← Ana Sayfa</a>
+    <div class="logo">HTML<span>Book</span></div>
+    <button class="preview-btn" onclick="openPreview()">⬛ Tam Ekran Önizle</button>
+  </header>
+
+  <main>
+    <h1>Mobil Web ve Responsive Tasarım — Viewport, Media Queries, Mobile-First</h1>
+    <p class="desc">Mobil web geliştirmenin temelleri: Viewport meta tag ile mobil ölçeklendirme, CSS Media Queries ile farklı ekran boyutlarına uyum sağlama, Chrome Device Mode ile mobil simülasyonu, Remote Debugging ile gerçek cihazda test, Mobile-First vs Desktop-First yaklaşımları ve pratik ipuçları.</p>
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-html"></span> HTML Kodu</div>
+        <div class="code-area">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;tr&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Mobil Web &amp; Responsive Tasarım - HTMLBook&lt;/title&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;family=Syne:wght@400;700;800&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;css-mobile-responsive.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;header class=&quot;header&quot;&gt;
+  &lt;a href=&quot;/&quot; class=&quot;back-btn&quot;&gt;← Ana Sayfa&lt;/a&gt;
+  &lt;div class=&quot;logo&quot;&gt;HTML&lt;span&gt;Book&lt;/span&gt;&lt;/div&gt;
+&lt;/header&gt;
+
+&lt;main class=&quot;container&quot;&gt;
+  &lt;h1&gt;📱 &lt;span class=&quot;highlight&quot;&gt;Mobil Web &amp; Responsive Tasarım&lt;/span&gt;&lt;/h1&gt;
+  &lt;div class=&quot;subtitle&quot;&gt;Viewport Meta Tag · CSS Media Queries · Chrome Device Mode · Mobile-First Design&lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 1: Mobil Web Problemi --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📱 Mobil Web Problemi&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Mobil cihazlarda (telefon, tablet) web sitelerini görüntülerken karşılaştığımız temel sorun: &lt;strong&gt;ekran çok küçük&lt;/strong&gt;!&lt;/p&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Mobil Tarayıcılar Nasıl Çalışır?&lt;/strong&gt;
+      &lt;p&gt;Mobil tarayıcılar, web sayfalarını &lt;strong&gt;önce masaüstü genişliğinde (~1000px) render eder&lt;/strong&gt;, sonra tüm sayfa ekrana sığana kadar &lt;strong&gt;&quot;zoom out&quot; (uzaklaştırma)&lt;/strong&gt; yapar. Bu nedenle yazılar çok küçük görünür!&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Sorun:&lt;/strong&gt; Mobil desteği eklenmemiş sitelerde yazılar &lt;strong&gt;çok küçük ve okunması zor&lt;/strong&gt; olur.
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;✅ Çözüm:&lt;/strong&gt; &lt;strong&gt;Responsive Web Design&lt;/strong&gt; — Farklı ekran boyutlarında iyi görünen CSS yazma sanatı.
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 2: Viewport Meta Tag --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🔧 Viewport Meta Tag — Mobil Görüntülemenin Anahtarı&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Viewport meta tag&lt;/strong&gt;, mobil tarayıcılara sayfanın &lt;strong&gt;nasıl ölçekleneceğini&lt;/strong&gt; söyler. Bu tag olmadan mobil cihazlar sayfayı masaüstü genişliğinde render eder!&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+&amp;lt;!-- HTML head bölümüne mutlaka ekleyin! --&amp;gt;
+&amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&amp;gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Parametrelerin Anlamı:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;name=&quot;viewport&quot;&lt;/strong&gt; → &quot;Tarayıcı, sana viewport'u nasıl göstermemi istediğimi söyleyeceğim.&quot;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;width=device-width&lt;/strong&gt; → &quot;Viewport'un genişliği, cihazın genişliği ile aynı olsun.&quot; (Masaüstü genişliğinde render etme!)&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;initial-scale=1&lt;/strong&gt; → &quot;Başlangıç zoom seviyesi %100 olsun.&quot;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 Altın Kural:&lt;/strong&gt; Bu tag'i &lt;strong&gt;her HTML sayfanıza&lt;/strong&gt; ekleyin! Modern web geliştirmenin vazgeçilmezidir.
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Viewport Tag Karşılaştırması&lt;/h4&gt;
+      &lt;div style=&quot;background: #2a2a32; border-radius: 8px; overflow: hidden;&quot;&gt;
+        &lt;div style=&quot;background: #ff6464; padding: 0.5rem; text-align: center; font-size: 0.7rem;&quot;&gt;❌ Viewport Tag OLMADAN&lt;/div&gt;
+        &lt;div style=&quot;padding: 1rem; text-align: center;&quot;&gt;
+          &lt;p style=&quot;font-size: 10px;&quot;&gt;Bu yazı çok küçük görünür (mobilde 10px çok küçüktür!)&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div style=&quot;background: #2a2a32; border-radius: 8px; overflow: hidden; margin-top: 1rem;&quot;&gt;
+        &lt;div style=&quot;background: #6bcb77; padding: 0.5rem; text-align: center; font-size: 0.7rem;&quot;&gt;✅ Viewport Tag İLE&lt;/div&gt;
+        &lt;div style=&quot;padding: 1rem; text-align: center;&quot;&gt;
+          &lt;p&gt;Bu yazı normal boyutta görünür (viewport tag sayesinde)&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 3: CSS Media Queries --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📏 CSS Media Queries — Farklı Ekranlar İçin Farklı Stiller&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Media Queries&lt;/strong&gt;, cihazın özelliklerine (ekran genişliği, yüksekliği, yönü vb.) göre &lt;strong&gt;farklı CSS kuralları&lt;/strong&gt; uygulamanızı sağlar.&lt;/p&gt;
+
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+/* Ekran genişliği 500px veya daha küçükse */
+@media (max-width: 500px) {
+  article {
+    margin: 0 2px;
+  }
+}
+
+/* Ekran genişliği 768px ile 1024px arasındaysa */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* Yatay mod (landscape) */
+@media (orientation: landscape) {
+  .hero {
+    height: 100vh;
+  }
+}
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;demo-box&quot;&gt;
+      &lt;h4 style=&quot;color: #e8ff47; margin-bottom: 0.5rem;&quot;&gt;📺 Media Query Demo (Tarayıcıyı yeniden boyutlandırın!)&lt;/h4&gt;
+      &lt;div class=&quot;responsive-demo&quot; style=&quot;background: #2a2a32; border-radius: 8px; padding: 1rem;&quot;&gt;
+        &lt;div class=&quot;responsive-card&quot; style=&quot;background: #64c8ff; color: #000; padding: 1rem; border-radius: 8px; text-align: center;&quot;&gt;
+          📱 Bu kutunun stili ekran boyutuna göre değişir!
+        &lt;/div&gt;
+        &lt;div class=&quot;responsive-grid&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;&quot;&gt;
+          &lt;div class=&quot;responsive-item&quot; style=&quot;background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;&quot;&gt;Item 1&lt;/div&gt;
+          &lt;div class=&quot;responsive-item&quot; style=&quot;background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;&quot;&gt;Item 2&lt;/div&gt;
+          &lt;div class=&quot;responsive-item&quot; style=&quot;background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;&quot;&gt;Item 3&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;p style=&quot;margin-top: 0.5rem; font-size: 0.8rem;&quot;&gt;⬆️ &lt;strong&gt;Tarayıcı penceresini küçültün!&lt;/strong&gt; 768px altında grid dikey hale gelir.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Yaygın Media Query Breakpoint'leri:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;Telefon (portre)&lt;/strong&gt; → &lt;code&gt;@media (max-width: 480px)&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Telefon (yatay) / Küçük tablet&lt;/strong&gt; → &lt;code&gt;@media (max-width: 768px)&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Tablet&lt;/strong&gt; → &lt;code&gt;@media (max-width: 1024px)&lt;/code&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;Masaüstü&lt;/strong&gt; → &lt;code&gt;@media (min-width: 1025px)&lt;/code&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 4: Responsive Örnek Site --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🌐 Responsive Örnek Site&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;Aşağıdaki örnek site, &lt;strong&gt;farklı ekran boyutlarına&lt;/strong&gt; göre düzenini değiştirir. Tarayıcı penceresini yeniden boyutlandırarak test edin!&lt;/p&gt;
+
+    &lt;div class=&quot;demo-website&quot; style=&quot;background: #1a1a20; border-radius: 12px; overflow: hidden;&quot;&gt;
+      &lt;nav class=&quot;demo-nav&quot; style=&quot;background: #e8ff47; color: #000; padding: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;&quot;&gt;
+        &lt;div class=&quot;demo-logo&quot; style=&quot;font-weight: bold;&quot;&gt;✨ Logo&lt;/div&gt;
+        &lt;div class=&quot;demo-nav-links&quot; style=&quot;display: flex; gap: 1.5rem; flex-wrap: wrap;&quot;&gt;
+          &lt;a href=&quot;#&quot; style=&quot;color: #000; text-decoration: none;&quot;&gt;Anasayfa&lt;/a&gt;
+          &lt;a href=&quot;#&quot; style=&quot;color: #000; text-decoration: none;&quot;&gt;Hakkımızda&lt;/a&gt;
+          &lt;a href=&quot;#&quot; style=&quot;color: #000; text-decoration: none;&quot;&gt;Ürünler&lt;/a&gt;
+          &lt;a href=&quot;#&quot; style=&quot;color: #000; text-decoration: none;&quot;&gt;İletişim&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/nav&gt;
+      
+      &lt;div class=&quot;demo-hero&quot; style=&quot;background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 3rem 2rem; text-align: center;&quot;&gt;
+        &lt;h2 style=&quot;margin-bottom: 1rem;&quot;&gt;Responsive Web Sitesi&lt;/h2&gt;
+        &lt;p&gt;Bu site her ekran boyutunda mükemmel görünür!&lt;/p&gt;
+      &lt;/div&gt;
+      
+      &lt;div class=&quot;demo-content&quot; style=&quot;display: flex; gap: 2rem; padding: 2rem; flex-wrap: wrap;&quot;&gt;
+        &lt;main class=&quot;demo-main&quot; style=&quot;flex: 2; min-width: 200px;&quot;&gt;
+          &lt;h3&gt;Ana İçerik&lt;/h3&gt;
+          &lt;p&gt;Bu ana içerik alanıdır. Masaüstünde geniş, mobilde tam genişlikte görünür.&lt;/p&gt;
+          &lt;p&gt;Media queries sayesinde düzen otomatik olarak değişir.&lt;/p&gt;
+        &lt;/main&gt;
+        &lt;aside class=&quot;demo-sidebar&quot; style=&quot;flex: 1; min-width: 200px; background: #2a2a32; padding: 1rem; border-radius: 8px;&quot;&gt;
+          &lt;h3&gt;Sidebar&lt;/h3&gt;
+          &lt;p&gt;Yan menü içeriği. Mobilde ana içeriğin altına kayar.&lt;/p&gt;
+        &lt;/aside&gt;
+      &lt;/div&gt;
+      
+      &lt;footer class=&quot;demo-footer&quot; style=&quot;background: #2a2a32; text-align: center; padding: 1rem;&quot;&gt;
+        &lt;p&gt;© 2024 - Responsive Web Site&lt;/p&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 5: Chrome Device Mode (Geliştirici Araçları) --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🛠️ Chrome Device Mode — Mobil Simülasyon&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;p&gt;&lt;strong&gt;Chrome Device Mode&lt;/strong&gt;, tarayıcınızda farklı mobil cihazları &lt;strong&gt;simüle etmenizi&lt;/strong&gt; sağlayan bir geliştirici aracıdır.&lt;/p&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 Nasıl Açılır?&lt;/strong&gt;
+      &lt;ol style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;&lt;strong&gt;F12&lt;/strong&gt; veya &lt;strong&gt;Sağ Tık → İncele&lt;/strong&gt; ile Geliştirici Araçları'nı açın&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;📱 Cihaz simgesine&lt;/strong&gt; (Toggle Device Toolbar) tıklayın&lt;/li&gt;
+        &lt;li&gt;Veya &lt;strong&gt;Ctrl + Shift + M&lt;/strong&gt; (Windows/Linux) / &lt;strong&gt;Cmd + Shift + M&lt;/strong&gt; (Mac)&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Chrome Device Mode Avantajları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Çok kullanışlı&lt;/strong&gt; — Tek tıkla mobil görünüm&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Genellikle doğru&lt;/strong&gt; — Gerçek cihaza yakın sonuçlar&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Farklı cihazlar&lt;/strong&gt; — iPhone, Pixel, iPad vb. seçenekler&lt;/li&gt;
+        &lt;li&gt;✅ &lt;strong&gt;Responsive mod&lt;/strong&gt; — Ekranı istediğiniz boyuta sürükleyin&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;⚠️ Chrome Device Mode Dezavantajları:&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;❌ &lt;strong&gt;Her zaman %100 doğru değil&lt;/strong&gt; — Özellikle iPhone'da farklılıklar olabilir&lt;/li&gt;
+        &lt;li&gt;❌ &lt;strong&gt;Performans sorunlarını simüle etmez&lt;/strong&gt; — Gerçek cihazda daha yavaş olabilir&lt;/li&gt;
+        &lt;li&gt;❌ &lt;strong&gt;Bazı özellikler hatalı çalışabilir&lt;/strong&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;💡 En İyi Pratik:&lt;/strong&gt; Geliştirme sırasında Chrome Device Mode kullanın, &lt;strong&gt;ancak her zaman gerçek cihazlarda da test edin&lt;/strong&gt;!
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 6: Remote Debugging --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;🔌 Remote Debugging — Gerçek Cihazda Test&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;h3&gt;📱 Android (Chrome Remote Debugging)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+1. Android telefonunuzda USB Hata Ayıklama'yı açın
+2. USB kablo ile bilgisayara bağlayın
+3. Chrome'da chrome://inspect adresini açın
+4. Telefonunuzdaki sayfayı inceleyin ve debug edin!
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;h3&gt;📱 iOS (Safari Remote Debugging)&lt;/h3&gt;
+    &lt;div class=&quot;code-block&quot;&gt;
+      &lt;pre&gt;
+1. iPhone'da Ayarlar → Safari → Geliştirici → Web Denetçisi'ni açın
+2. USB kablo ile Mac'e bağlayın
+3. Mac'te Safari → Geliştirici menüsünden telefonunuzu seçin
+      &lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;💡 Port Forwarding ile Local Server:&lt;/strong&gt;
+      &lt;p&gt;Bilgisayarınızda çalışan local sunucuyu (localhost:3000) telefonunuzda test etmek için Chrome remote debugging üzerinden &lt;strong&gt;port forwarding&lt;/strong&gt; kullanabilirsiniz.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 7: Mobile-First vs Desktop-First --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📱 Mobile-First vs Desktop-First Tasarım&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;info-note&quot;&gt;
+      &lt;strong&gt;📌 Mobile-First (Önerilen):&lt;/strong&gt;
+      &lt;p&gt;Önce &lt;strong&gt;mobil için&lt;/strong&gt; CSS yaz, sonra &lt;strong&gt;min-width&lt;/strong&gt; ile daha büyük ekranlar için stiller ekle.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* Mobil varsayılan (max-width yok) */
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet ve üzeri */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;warning-note&quot;&gt;
+      &lt;strong&gt;📌 Desktop-First (Eski yaklaşım):&lt;/strong&gt;
+      &lt;p&gt;Önce &lt;strong&gt;masaüstü için&lt;/strong&gt; CSS yaz, sonra &lt;strong&gt;max-width&lt;/strong&gt; ile küçük ekranlar için stiller ekle.&lt;/p&gt;
+      &lt;div class=&quot;code-block&quot; style=&quot;margin-top: 0.5rem;&quot;&gt;
+        &lt;pre&gt;
+/* Masaüstü varsayılan */
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;success-note&quot;&gt;
+      &lt;strong&gt;🎯 Neden Mobile-First?&lt;/strong&gt;
+      &lt;ul style=&quot;margin-left: 1.5rem; margin-top: 0.5rem;&quot;&gt;
+        &lt;li&gt;📱 Mobil kullanım &lt;strong&gt;masaüstünden fazla&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;⚡ Daha &lt;strong&gt;hızlı yüklenir&lt;/strong&gt; (mobil için daha az CSS)&lt;/li&gt;
+        &lt;li&gt;🎨 &lt;strong&gt;Önce içerik&lt;/strong&gt;, sonra düzen düşünmeyi sağlar&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 8: Özet Tablo --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📊 Responsive Tasarım Özet Tablosu&lt;/h2&gt;
+  &lt;table class=&quot;property-table&quot;&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Kavram&lt;/th&gt;&lt;th&gt;Açıklama&lt;/th&gt;&lt;th&gt;Kod Örneği&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Viewport Meta Tag&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Mobil cihazlarda doğru ölçeklendirme için&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;&amp;lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&amp;gt;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Media Query&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Farklı ekran boyutları için farklı CSS&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;@media (max-width: 768px) { ... }&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Chrome Device Mode&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Tarayıcıda mobil simülasyonu&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;Ctrl + Shift + M&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Remote Debugging&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Gerçek cihazda test ve debug&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;chrome://inspect&lt;/code&gt; (Android)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Mobile-First&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Önce mobil, sonra büyük ekranlar&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;@media (min-width: 768px)&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;strong&gt;Breakpoint&lt;/strong&gt;&lt;/td&gt;
+        &lt;td&gt;Düzenin değiştiği eşik değerleri&lt;/td&gt;
+        &lt;td&gt;&lt;code&gt;480px, 768px, 1024px, 1200px&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 9: Pratik İpuçları --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;💡 Pratik İpuçları&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📱 &lt;strong&gt;Her zaman viewport meta tag'i ekleyin!&lt;/strong&gt; — Unutmayın, olmazsa mobilde zoom yapılır.&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;Rem/em kullanın&lt;/strong&gt; — Piksel yerine göreceli birimler responsive tasarımı kolaylaştırır.&lt;/li&gt;
+      &lt;li&gt;🖼️ &lt;strong&gt;max-width: 100%&lt;/strong&gt; — Resimlerin taşmasını engeller.&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;Mobile-first yaklaşımı benimseyin&lt;/strong&gt; — Önce küçük ekran, sonra büyük ekran.&lt;/li&gt;
+      &lt;li&gt;🔍 &lt;strong&gt;Gerçek cihazlarda test edin&lt;/strong&gt; — Simülasyon her zaman %100 doğru değildir.&lt;/li&gt;
+      &lt;li&gt;📐 &lt;strong&gt;Flexbox ve Grid kullanın&lt;/strong&gt; — Responsive düzenler için en iyi araçlar.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;!-- ============================================================ --&gt;
+  &lt;!-- BÖLÜM 10: Özet --&gt;
+  &lt;!-- ============================================================ --&gt;
+  &lt;h2&gt;📋 Genel Özet&lt;/h2&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;ul style=&quot;margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;&quot;&gt;
+      &lt;li&gt;📱 &lt;strong&gt;Viewport Meta Tag&lt;/strong&gt; → Mobil cihazlarda doğru ölçeklendirme için &lt;strong&gt;OLMAZSA OLMAZ&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;📏 &lt;strong&gt;CSS Media Queries&lt;/strong&gt; → Farklı ekran boyutları için farklı stiller (&lt;code&gt;@media&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;🛠️ &lt;strong&gt;Chrome Device Mode&lt;/strong&gt; → Tarayıcıda mobil simülasyonu (&lt;code&gt;Ctrl+Shift+M&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;🔌 &lt;strong&gt;Remote Debugging&lt;/strong&gt; → Gerçek cihazda test etme (&lt;code&gt;chrome://inspect&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;📱 &lt;strong&gt;Mobile-First&lt;/strong&gt; → Önce mobil, sonra büyük ekranlar (önerilen yaklaşım)&lt;/li&gt;
+      &lt;li&gt;📐 &lt;strong&gt;Breakpoint'ler&lt;/strong&gt; → 480px, 768px, 1024px, 1200px (yaygın eşik değerleri)&lt;/li&gt;
+      &lt;li&gt;🎯 &lt;strong&gt;Her zaman gerçek cihazlarda test edin!&lt;/strong&gt; — Simülasyon yeterli değil&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+
+&lt;/main&gt;
+
+&lt;footer class=&quot;footer&quot;&gt;
+  HTMLBook — Mobil Web &amp; Responsive Tasarım | Viewport · Media Queries · Mobile-First · Chrome Device Mode
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-css"></span> CSS Kodu</div>
+        <div class="code-area">/* css-mobile-responsive.css - Mobil Web ve Responsive Tasarım */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE DEMO - Media Queries ile */
+/* ============================================ */
+.responsive-demo {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.responsive-card {
+  background: var(--accent-color);
+  color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.responsive-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.responsive-item {
+  background: var(--secondary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+}
+
+/* Media Queries Örnekleri */
+@media (max-width: 768px) {
+  .responsive-grid {
+    flex-direction: column;
+  }
+  
+  .responsive-card {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-card {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+}
+
+/* ============================================ */
+/* ÖRNEK SİTE DEMO (Responsive) */
+/* ============================================ */
+.demo-website {
+  background: #1a1a20;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.demo-nav {
+  background: var(--primary-color);
+  color: #000;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.demo-nav-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.demo-hero {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.demo-content {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+.demo-main {
+  flex: 2;
+  min-width: 200px;
+}
+
+.demo-sidebar {
+  flex: 1;
+  min-width: 200px;
+  background: #2a2a32;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.demo-footer {
+  background: #2a2a32;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+
+/* Demo website için media queries */
+@media (max-width: 768px) {
+  .demo-nav {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .demo-nav-links {
+    justify-content: center;
+  }
+  
+  .demo-hero {
+    padding: 2rem 1rem;
+  }
+  
+  .demo-hero h2 {
+    font-size: 1.5rem;
+  }
+  
+  .demo-content {
+    padding: 1rem;
+  }
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span class="dot dot-prev"></span> Tarayıcıda Görünüm</div>
+        <div class="preview-area">
+<!--USER_HTML_START-->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobil Web & Responsive Tasarım - HTMLBook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css-mobile-responsive.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="/" class="back-btn">← Ana Sayfa</a>
+  <div class="logo">HTML<span>Book</span></div>
+</header>
+
+<main class="container">
+  <h1>📱 <span class="highlight">Mobil Web & Responsive Tasarım</span></h1>
+  <div class="subtitle">Viewport Meta Tag · CSS Media Queries · Chrome Device Mode · Mobile-First Design</div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 1: Mobil Web Problemi -->
+  <!-- ============================================================ -->
+  <h2>📱 Mobil Web Problemi</h2>
+  <div class="card">
+    <p>Mobil cihazlarda (telefon, tablet) web sitelerini görüntülerken karşılaştığımız temel sorun: <strong>ekran çok küçük</strong>!</p>
+
+    <div class="info-note">
+      <strong>📌 Mobil Tarayıcılar Nasıl Çalışır?</strong>
+      <p>Mobil tarayıcılar, web sayfalarını <strong>önce masaüstü genişliğinde (~1000px) render eder</strong>, sonra tüm sayfa ekrana sığana kadar <strong>"zoom out" (uzaklaştırma)</strong> yapar. Bu nedenle yazılar çok küçük görünür!</p>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Sorun:</strong> Mobil desteği eklenmemiş sitelerde yazılar <strong>çok küçük ve okunması zor</strong> olur.
+    </div>
+
+    <div class="success-note">
+      <strong>✅ Çözüm:</strong> <strong>Responsive Web Design</strong> — Farklı ekran boyutlarında iyi görünen CSS yazma sanatı.
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 2: Viewport Meta Tag -->
+  <!-- ============================================================ -->
+  <h2>🔧 Viewport Meta Tag — Mobil Görüntülemenin Anahtarı</h2>
+  <div class="card">
+    <p><strong>Viewport meta tag</strong>, mobil tarayıcılara sayfanın <strong>nasıl ölçekleneceğini</strong> söyler. Bu tag olmadan mobil cihazlar sayfayı masaüstü genişliğinde render eder!</p>
+
+    <div class="code-block">
+      <pre>
+&lt;!-- HTML head bölümüne mutlaka ekleyin! --&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Parametrelerin Anlamı:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>name="viewport"</strong> → "Tarayıcı, sana viewport'u nasıl göstermemi istediğimi söyleyeceğim."</li>
+        <li><strong>width=device-width</strong> → "Viewport'un genişliği, cihazın genişliği ile aynı olsun." (Masaüstü genişliğinde render etme!)</li>
+        <li><strong>initial-scale=1</strong> → "Başlangıç zoom seviyesi %100 olsun."</li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 Altın Kural:</strong> Bu tag'i <strong>her HTML sayfanıza</strong> ekleyin! Modern web geliştirmenin vazgeçilmezidir.
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Viewport Tag Karşılaştırması</h4>
+      <div style="background: #2a2a32; border-radius: 8px; overflow: hidden;">
+        <div style="background: #ff6464; padding: 0.5rem; text-align: center; font-size: 0.7rem;">❌ Viewport Tag OLMADAN</div>
+        <div style="padding: 1rem; text-align: center;">
+          <p style="font-size: 10px;">Bu yazı çok küçük görünür (mobilde 10px çok küçüktür!)</p>
+        </div>
+      </div>
+      <div style="background: #2a2a32; border-radius: 8px; overflow: hidden; margin-top: 1rem;">
+        <div style="background: #6bcb77; padding: 0.5rem; text-align: center; font-size: 0.7rem;">✅ Viewport Tag İLE</div>
+        <div style="padding: 1rem; text-align: center;">
+          <p>Bu yazı normal boyutta görünür (viewport tag sayesinde)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 3: CSS Media Queries -->
+  <!-- ============================================================ -->
+  <h2>📏 CSS Media Queries — Farklı Ekranlar İçin Farklı Stiller</h2>
+  <div class="card">
+    <p><strong>Media Queries</strong>, cihazın özelliklerine (ekran genişliği, yüksekliği, yönü vb.) göre <strong>farklı CSS kuralları</strong> uygulamanızı sağlar.</p>
+
+    <div class="code-block">
+      <pre>
+/* Ekran genişliği 500px veya daha küçükse */
+@media (max-width: 500px) {
+  article {
+    margin: 0 2px;
+  }
+}
+
+/* Ekran genişliği 768px ile 1024px arasındaysa */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* Yatay mod (landscape) */
+@media (orientation: landscape) {
+  .hero {
+    height: 100vh;
+  }
+}
+      </pre>
+    </div>
+
+    <div class="demo-box">
+      <h4 style="color: #e8ff47; margin-bottom: 0.5rem;">📺 Media Query Demo (Tarayıcıyı yeniden boyutlandırın!)</h4>
+      <div class="responsive-demo" style="background: #2a2a32; border-radius: 8px; padding: 1rem;">
+        <div class="responsive-card" style="background: #64c8ff; color: #000; padding: 1rem; border-radius: 8px; text-align: center;">
+          📱 Bu kutunun stili ekran boyutuna göre değişir!
+        </div>
+        <div class="responsive-grid" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+          <div class="responsive-item" style="background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;">Item 1</div>
+          <div class="responsive-item" style="background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;">Item 2</div>
+          <div class="responsive-item" style="background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;">Item 3</div>
+        </div>
+      </div>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">⬆️ <strong>Tarayıcı penceresini küçültün!</strong> 768px altında grid dikey hale gelir.</p>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Yaygın Media Query Breakpoint'leri:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>Telefon (portre)</strong> → <code>@media (max-width: 480px)</code></li>
+        <li><strong>Telefon (yatay) / Küçük tablet</strong> → <code>@media (max-width: 768px)</code></li>
+        <li><strong>Tablet</strong> → <code>@media (max-width: 1024px)</code></li>
+        <li><strong>Masaüstü</strong> → <code>@media (min-width: 1025px)</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 4: Responsive Örnek Site -->
+  <!-- ============================================================ -->
+  <h2>🌐 Responsive Örnek Site</h2>
+  <div class="card">
+    <p>Aşağıdaki örnek site, <strong>farklı ekran boyutlarına</strong> göre düzenini değiştirir. Tarayıcı penceresini yeniden boyutlandırarak test edin!</p>
+
+    <div class="demo-website" style="background: #1a1a20; border-radius: 12px; overflow: hidden;">
+      <nav class="demo-nav" style="background: #e8ff47; color: #000; padding: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <div class="demo-logo" style="font-weight: bold;">✨ Logo</div>
+        <div class="demo-nav-links" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+          <a href="#" style="color: #000; text-decoration: none;">Anasayfa</a>
+          <a href="#" style="color: #000; text-decoration: none;">Hakkımızda</a>
+          <a href="#" style="color: #000; text-decoration: none;">Ürünler</a>
+          <a href="#" style="color: #000; text-decoration: none;">İletişim</a>
+        </div>
+      </nav>
+      
+      <div class="demo-hero" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 3rem 2rem; text-align: center;">
+        <h2 style="margin-bottom: 1rem;">Responsive Web Sitesi</h2>
+        <p>Bu site her ekran boyutunda mükemmel görünür!</p>
+      </div>
+      
+      <div class="demo-content" style="display: flex; gap: 2rem; padding: 2rem; flex-wrap: wrap;">
+        <main class="demo-main" style="flex: 2; min-width: 200px;">
+          <h3>Ana İçerik</h3>
+          <p>Bu ana içerik alanıdır. Masaüstünde geniş, mobilde tam genişlikte görünür.</p>
+          <p>Media queries sayesinde düzen otomatik olarak değişir.</p>
+        </main>
+        <aside class="demo-sidebar" style="flex: 1; min-width: 200px; background: #2a2a32; padding: 1rem; border-radius: 8px;">
+          <h3>Sidebar</h3>
+          <p>Yan menü içeriği. Mobilde ana içeriğin altına kayar.</p>
+        </aside>
+      </div>
+      
+      <footer class="demo-footer" style="background: #2a2a32; text-align: center; padding: 1rem;">
+        <p>© 2024 - Responsive Web Site</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 5: Chrome Device Mode (Geliştirici Araçları) -->
+  <!-- ============================================================ -->
+  <h2>🛠️ Chrome Device Mode — Mobil Simülasyon</h2>
+  <div class="card">
+    <p><strong>Chrome Device Mode</strong>, tarayıcınızda farklı mobil cihazları <strong>simüle etmenizi</strong> sağlayan bir geliştirici aracıdır.</p>
+
+    <div class="success-note">
+      <strong>🎯 Nasıl Açılır?</strong>
+      <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li><strong>F12</strong> veya <strong>Sağ Tık → İncele</strong> ile Geliştirici Araçları'nı açın</li>
+        <li><strong>📱 Cihaz simgesine</strong> (Toggle Device Toolbar) tıklayın</li>
+        <li>Veya <strong>Ctrl + Shift + M</strong> (Windows/Linux) / <strong>Cmd + Shift + M</strong> (Mac)</li>
+      </ol>
+    </div>
+
+    <div class="info-note">
+      <strong>📌 Chrome Device Mode Avantajları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ <strong>Çok kullanışlı</strong> — Tek tıkla mobil görünüm</li>
+        <li>✅ <strong>Genellikle doğru</strong> — Gerçek cihaza yakın sonuçlar</li>
+        <li>✅ <strong>Farklı cihazlar</strong> — iPhone, Pixel, iPad vb. seçenekler</li>
+        <li>✅ <strong>Responsive mod</strong> — Ekranı istediğiniz boyuta sürükleyin</li>
+      </ul>
+    </div>
+
+    <div class="warning-note">
+      <strong>⚠️ Chrome Device Mode Dezavantajları:</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>❌ <strong>Her zaman %100 doğru değil</strong> — Özellikle iPhone'da farklılıklar olabilir</li>
+        <li>❌ <strong>Performans sorunlarını simüle etmez</strong> — Gerçek cihazda daha yavaş olabilir</li>
+        <li>❌ <strong>Bazı özellikler hatalı çalışabilir</strong></li>
+      </ul>
+    </div>
+
+    <div class="success-note">
+      <strong>💡 En İyi Pratik:</strong> Geliştirme sırasında Chrome Device Mode kullanın, <strong>ancak her zaman gerçek cihazlarda da test edin</strong>!
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 6: Remote Debugging -->
+  <!-- ============================================================ -->
+  <h2>🔌 Remote Debugging — Gerçek Cihazda Test</h2>
+  <div class="card">
+    <h3>📱 Android (Chrome Remote Debugging)</h3>
+    <div class="code-block">
+      <pre>
+1. Android telefonunuzda USB Hata Ayıklama'yı açın
+2. USB kablo ile bilgisayara bağlayın
+3. Chrome'da chrome://inspect adresini açın
+4. Telefonunuzdaki sayfayı inceleyin ve debug edin!
+      </pre>
+    </div>
+
+    <h3>📱 iOS (Safari Remote Debugging)</h3>
+    <div class="code-block">
+      <pre>
+1. iPhone'da Ayarlar → Safari → Geliştirici → Web Denetçisi'ni açın
+2. USB kablo ile Mac'e bağlayın
+3. Mac'te Safari → Geliştirici menüsünden telefonunuzu seçin
+      </pre>
+    </div>
+
+    <div class="info-note">
+      <strong>💡 Port Forwarding ile Local Server:</strong>
+      <p>Bilgisayarınızda çalışan local sunucuyu (localhost:3000) telefonunuzda test etmek için Chrome remote debugging üzerinden <strong>port forwarding</strong> kullanabilirsiniz.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 7: Mobile-First vs Desktop-First -->
+  <!-- ============================================================ -->
+  <h2>📱 Mobile-First vs Desktop-First Tasarım</h2>
+  <div class="card">
+    <div class="info-note">
+      <strong>📌 Mobile-First (Önerilen):</strong>
+      <p>Önce <strong>mobil için</strong> CSS yaz, sonra <strong>min-width</strong> ile daha büyük ekranlar için stiller ekle.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* Mobil varsayılan (max-width yok) */
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet ve üzeri */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+}
+        </pre>
+      </div>
+    </div>
+
+    <div class="warning-note">
+      <strong>📌 Desktop-First (Eski yaklaşım):</strong>
+      <p>Önce <strong>masaüstü için</strong> CSS yaz, sonra <strong>max-width</strong> ile küçük ekranlar için stiller ekle.</p>
+      <div class="code-block" style="margin-top: 0.5rem;">
+        <pre>
+/* Masaüstü varsayılan */
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+        </pre>
+      </div>
+    </div>
+
+    <div class="success-note">
+      <strong>🎯 Neden Mobile-First?</strong>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>📱 Mobil kullanım <strong>masaüstünden fazla</strong></li>
+        <li>⚡ Daha <strong>hızlı yüklenir</strong> (mobil için daha az CSS)</li>
+        <li>🎨 <strong>Önce içerik</strong>, sonra düzen düşünmeyi sağlar</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 8: Özet Tablo -->
+  <!-- ============================================================ -->
+  <h2>📊 Responsive Tasarım Özet Tablosu</h2>
+  <table class="property-table">
+    <thead>
+      <tr><th>Kavram</th><th>Açıklama</th><th>Kod Örneği</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Viewport Meta Tag</strong></td>
+        <td>Mobil cihazlarda doğru ölçeklendirme için</td>
+        <td><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></td>
+      </tr>
+      <tr><td><strong>Media Query</strong></td>
+        <td>Farklı ekran boyutları için farklı CSS</td>
+        <td><code>@media (max-width: 768px) { ... }</code></td>
+      </tr>
+      <tr><td><strong>Chrome Device Mode</strong></td>
+        <td>Tarayıcıda mobil simülasyonu</td>
+        <td><code>Ctrl + Shift + M</code></td>
+      </tr>
+      <tr><td><strong>Remote Debugging</strong></td>
+        <td>Gerçek cihazda test ve debug</td>
+        <td><code>chrome://inspect</code> (Android)</td>
+      </tr>
+      <tr><td><strong>Mobile-First</strong></td>
+        <td>Önce mobil, sonra büyük ekranlar</td>
+        <td><code>@media (min-width: 768px)</code></td>
+      </tr>
+      <tr><td><strong>Breakpoint</strong></td>
+        <td>Düzenin değiştiği eşik değerleri</td>
+        <td><code>480px, 768px, 1024px, 1200px</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 9: Pratik İpuçları -->
+  <!-- ============================================================ -->
+  <h2>💡 Pratik İpuçları</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📱 <strong>Her zaman viewport meta tag'i ekleyin!</strong> — Unutmayın, olmazsa mobilde zoom yapılır.</li>
+      <li>📏 <strong>Rem/em kullanın</strong> — Piksel yerine göreceli birimler responsive tasarımı kolaylaştırır.</li>
+      <li>🖼️ <strong>max-width: 100%</strong> — Resimlerin taşmasını engeller.</li>
+      <li>🎯 <strong>Mobile-first yaklaşımı benimseyin</strong> — Önce küçük ekran, sonra büyük ekran.</li>
+      <li>🔍 <strong>Gerçek cihazlarda test edin</strong> — Simülasyon her zaman %100 doğru değildir.</li>
+      <li>📐 <strong>Flexbox ve Grid kullanın</strong> — Responsive düzenler için en iyi araçlar.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BÖLÜM 10: Özet -->
+  <!-- ============================================================ -->
+  <h2>📋 Genel Özet</h2>
+  <div class="card">
+    <ul style="margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;">
+      <li>📱 <strong>Viewport Meta Tag</strong> → Mobil cihazlarda doğru ölçeklendirme için <strong>OLMAZSA OLMAZ</strong></li>
+      <li>📏 <strong>CSS Media Queries</strong> → Farklı ekran boyutları için farklı stiller (<code>@media</code>)</li>
+      <li>🛠️ <strong>Chrome Device Mode</strong> → Tarayıcıda mobil simülasyonu (<code>Ctrl+Shift+M</code>)</li>
+      <li>🔌 <strong>Remote Debugging</strong> → Gerçek cihazda test etme (<code>chrome://inspect</code>)</li>
+      <li>📱 <strong>Mobile-First</strong> → Önce mobil, sonra büyük ekranlar (önerilen yaklaşım)</li>
+      <li>📐 <strong>Breakpoint'ler</strong> → 480px, 768px, 1024px, 1200px (yaygın eşik değerleri)</li>
+      <li>🎯 <strong>Her zaman gerçek cihazlarda test edin!</strong> — Simülasyon yeterli değil</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="footer">
+  HTMLBook — Mobil Web & Responsive Tasarım | Viewport · Media Queries · Mobile-First · Chrome Device Mode
+</footer>
+
+</body>
+</html>
+<!--USER_HTML_END-->
+          <style>
+<!--USER_CSS_START-->
+/* css-mobile-responsive.css - Mobil Web ve Responsive Tasarım */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #e8ff47;
+  --secondary-color: #ff6464;
+  --accent-color: #64c8ff;
+  --success-color: #6bcb77;
+  --dark-bg: #0d0d0f;
+  --card-bg: #16161a;
+  --border-color: #2a2a32;
+  --text-color: #e8e8f0;
+  --muted-color: #7a7a8c;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 1.5rem;
+  --border-radius: 12px;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Syne', sans-serif;
+}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* Header */
+.header {
+  padding: var(--spacing-large) 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-large);
+  flex-wrap: wrap;
+  background: var(--dark-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--primary-color);
+  padding: 0.3rem 0.9rem;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--primary-color);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--spacing-small);
+}
+
+h1 .highlight {
+  color: var(--primary-color);
+}
+
+.subtitle {
+  color: var(--muted-color);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--primary-color);
+  padding-left: var(--spacing-medium);
+}
+
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 2rem 0 var(--spacing-medium) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-small);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: var(--spacing-large) 0 var(--spacing-small) 0;
+  font-family: var(--font-mono);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-large);
+  margin: var(--spacing-large) 0;
+}
+
+.card-header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-medium);
+}
+
+.code-block {
+  background: #0a0a0c;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  margin: var(--spacing-medium) 0;
+}
+
+.code-block pre {
+  color: #b0c4de;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.demo-box {
+  background: #1a1a20;
+  border-radius: 8px;
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE DEMO - Media Queries ile */
+/* ============================================ */
+.responsive-demo {
+  background: #2a2a32;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.responsive-card {
+  background: var(--accent-color);
+  color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+.responsive-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.responsive-item {
+  background: var(--secondary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+}
+
+/* Media Queries Örnekleri */
+@media (max-width: 768px) {
+  .responsive-grid {
+    flex-direction: column;
+  }
+  
+  .responsive-card {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-card {
+    font-size: 0.8rem;
+    padding: 0.8rem;
+  }
+}
+
+/* ============================================ */
+/* ÖRNEK SİTE DEMO (Responsive) */
+/* ============================================ */
+.demo-website {
+  background: #1a1a20;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.demo-nav {
+  background: var(--primary-color);
+  color: #000;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.demo-nav-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.demo-hero {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.demo-content {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+.demo-main {
+  flex: 2;
+  min-width: 200px;
+}
+
+.demo-sidebar {
+  flex: 1;
+  min-width: 200px;
+  background: #2a2a32;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.demo-footer {
+  background: #2a2a32;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+
+/* Demo website için media queries */
+@media (max-width: 768px) {
+  .demo-nav {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .demo-nav-links {
+    justify-content: center;
+  }
+  
+  .demo-hero {
+    padding: 2rem 1rem;
+  }
+  
+  .demo-hero h2 {
+    font-size: 1.5rem;
+  }
+  
+  .demo-content {
+    padding: 1rem;
+  }
+}
+
+/* Tablo */
+.property-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-medium) 0;
+}
+
+.property-table th,
+.property-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.property-table th {
+  background: #1a1a20;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.property-table td {
+  color: #c0c0d0;
+  font-size: 0.9rem;
+}
+
+.property-table code {
+  background: #0a0a0c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.info-note {
+  background: rgba(232, 255, 71, 0.1);
+  border-left: 3px solid var(--primary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.warning-note {
+  background: rgba(255, 100, 100, 0.1);
+  border-left: 3px solid var(--secondary-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.success-note {
+  background: rgba(107, 203, 119, 0.1);
+  border-left: 3px solid var(--success-color);
+  padding: var(--spacing-medium);
+  margin: var(--spacing-medium) 0;
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .property-table th,
+  .property-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+<!--USER_CSS_END-->
+</style>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="/editor.html?slug=mobil-web-ve-responsive-tasarim-viewport-media-queries-mobile-first" class="btn btn-ghost">✏ Düzenle</a>
+      <a href="/" class="btn">← Listeye Dön</a>
+    </div>
+  </main>
+
+  <div id="overlay">
+    <div id="overlay-inner">
+      <div id="overlay-bar">
+        <span>Mobil Web ve Responsive Tasarım — Viewport, Media Queries, Mobile-First — Tam Ekran Önizleme</span>
+        <button id="overlay-close" onclick="closePreview()">✕ Kapat</button>
+      </div>
+      <iframe id="overlay-frame" title="Tam ekran önizleme"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const htmlCode = "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Mobil Web & Responsive Tasarım - HTMLBook</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap\" rel=\"stylesheet\">\n  <link rel=\"stylesheet\" href=\"css-mobile-responsive.css\">\n</head>\n<body>\n\n<header class=\"header\">\n  <a href=\"/\" class=\"back-btn\">← Ana Sayfa</a>\n  <div class=\"logo\">HTML<span>Book</span></div>\n</header>\n\n<main class=\"container\">\n  <h1>📱 <span class=\"highlight\">Mobil Web & Responsive Tasarım</span></h1>\n  <div class=\"subtitle\">Viewport Meta Tag · CSS Media Queries · Chrome Device Mode · Mobile-First Design</div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 1: Mobil Web Problemi -->\n  <!-- ============================================================ -->\n  <h2>📱 Mobil Web Problemi</h2>\n  <div class=\"card\">\n    <p>Mobil cihazlarda (telefon, tablet) web sitelerini görüntülerken karşılaştığımız temel sorun: <strong>ekran çok küçük</strong>!</p>\n\n    <div class=\"info-note\">\n      <strong>📌 Mobil Tarayıcılar Nasıl Çalışır?</strong>\n      <p>Mobil tarayıcılar, web sayfalarını <strong>önce masaüstü genişliğinde (~1000px) render eder</strong>, sonra tüm sayfa ekrana sığana kadar <strong>\"zoom out\" (uzaklaştırma)</strong> yapar. Bu nedenle yazılar çok küçük görünür!</p>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Sorun:</strong> Mobil desteği eklenmemiş sitelerde yazılar <strong>çok küçük ve okunması zor</strong> olur.\n    </div>\n\n    <div class=\"success-note\">\n      <strong>✅ Çözüm:</strong> <strong>Responsive Web Design</strong> — Farklı ekran boyutlarında iyi görünen CSS yazma sanatı.\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 2: Viewport Meta Tag -->\n  <!-- ============================================================ -->\n  <h2>🔧 Viewport Meta Tag — Mobil Görüntülemenin Anahtarı</h2>\n  <div class=\"card\">\n    <p><strong>Viewport meta tag</strong>, mobil tarayıcılara sayfanın <strong>nasıl ölçekleneceğini</strong> söyler. Bu tag olmadan mobil cihazlar sayfayı masaüstü genişliğinde render eder!</p>\n\n    <div class=\"code-block\">\n      <pre>\n&lt;!-- HTML head bölümüne mutlaka ekleyin! --&gt;\n&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Parametrelerin Anlamı:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>name=\"viewport\"</strong> → \"Tarayıcı, sana viewport'u nasıl göstermemi istediğimi söyleyeceğim.\"</li>\n        <li><strong>width=device-width</strong> → \"Viewport'un genişliği, cihazın genişliği ile aynı olsun.\" (Masaüstü genişliğinde render etme!)</li>\n        <li><strong>initial-scale=1</strong> → \"Başlangıç zoom seviyesi %100 olsun.\"</li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 Altın Kural:</strong> Bu tag'i <strong>her HTML sayfanıza</strong> ekleyin! Modern web geliştirmenin vazgeçilmezidir.\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Viewport Tag Karşılaştırması</h4>\n      <div style=\"background: #2a2a32; border-radius: 8px; overflow: hidden;\">\n        <div style=\"background: #ff6464; padding: 0.5rem; text-align: center; font-size: 0.7rem;\">❌ Viewport Tag OLMADAN</div>\n        <div style=\"padding: 1rem; text-align: center;\">\n          <p style=\"font-size: 10px;\">Bu yazı çok küçük görünür (mobilde 10px çok küçüktür!)</p>\n        </div>\n      </div>\n      <div style=\"background: #2a2a32; border-radius: 8px; overflow: hidden; margin-top: 1rem;\">\n        <div style=\"background: #6bcb77; padding: 0.5rem; text-align: center; font-size: 0.7rem;\">✅ Viewport Tag İLE</div>\n        <div style=\"padding: 1rem; text-align: center;\">\n          <p>Bu yazı normal boyutta görünür (viewport tag sayesinde)</p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 3: CSS Media Queries -->\n  <!-- ============================================================ -->\n  <h2>📏 CSS Media Queries — Farklı Ekranlar İçin Farklı Stiller</h2>\n  <div class=\"card\">\n    <p><strong>Media Queries</strong>, cihazın özelliklerine (ekran genişliği, yüksekliği, yönü vb.) göre <strong>farklı CSS kuralları</strong> uygulamanızı sağlar.</p>\n\n    <div class=\"code-block\">\n      <pre>\n/* Ekran genişliği 500px veya daha küçükse */\n@media (max-width: 500px) {\n  article {\n    margin: 0 2px;\n  }\n}\n\n/* Ekran genişliği 768px ile 1024px arasındaysa */\n@media (min-width: 768px) and (max-width: 1024px) {\n  .sidebar {\n    display: none;\n  }\n}\n\n/* Yatay mod (landscape) */\n@media (orientation: landscape) {\n  .hero {\n    height: 100vh;\n  }\n}\n      </pre>\n    </div>\n\n    <div class=\"demo-box\">\n      <h4 style=\"color: #e8ff47; margin-bottom: 0.5rem;\">📺 Media Query Demo (Tarayıcıyı yeniden boyutlandırın!)</h4>\n      <div class=\"responsive-demo\" style=\"background: #2a2a32; border-radius: 8px; padding: 1rem;\">\n        <div class=\"responsive-card\" style=\"background: #64c8ff; color: #000; padding: 1rem; border-radius: 8px; text-align: center;\">\n          📱 Bu kutunun stili ekran boyutuna göre değişir!\n        </div>\n        <div class=\"responsive-grid\" style=\"display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;\">\n          <div class=\"responsive-item\" style=\"background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;\">Item 1</div>\n          <div class=\"responsive-item\" style=\"background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;\">Item 2</div>\n          <div class=\"responsive-item\" style=\"background: #ff6464; color: white; padding: 1rem; border-radius: 8px; text-align: center; flex: 1;\">Item 3</div>\n        </div>\n      </div>\n      <p style=\"margin-top: 0.5rem; font-size: 0.8rem;\">⬆️ <strong>Tarayıcı penceresini küçültün!</strong> 768px altında grid dikey hale gelir.</p>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Yaygın Media Query Breakpoint'leri:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>Telefon (portre)</strong> → <code>@media (max-width: 480px)</code></li>\n        <li><strong>Telefon (yatay) / Küçük tablet</strong> → <code>@media (max-width: 768px)</code></li>\n        <li><strong>Tablet</strong> → <code>@media (max-width: 1024px)</code></li>\n        <li><strong>Masaüstü</strong> → <code>@media (min-width: 1025px)</code></li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 4: Responsive Örnek Site -->\n  <!-- ============================================================ -->\n  <h2>🌐 Responsive Örnek Site</h2>\n  <div class=\"card\">\n    <p>Aşağıdaki örnek site, <strong>farklı ekran boyutlarına</strong> göre düzenini değiştirir. Tarayıcı penceresini yeniden boyutlandırarak test edin!</p>\n\n    <div class=\"demo-website\" style=\"background: #1a1a20; border-radius: 12px; overflow: hidden;\">\n      <nav class=\"demo-nav\" style=\"background: #e8ff47; color: #000; padding: 1rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;\">\n        <div class=\"demo-logo\" style=\"font-weight: bold;\">✨ Logo</div>\n        <div class=\"demo-nav-links\" style=\"display: flex; gap: 1.5rem; flex-wrap: wrap;\">\n          <a href=\"#\" style=\"color: #000; text-decoration: none;\">Anasayfa</a>\n          <a href=\"#\" style=\"color: #000; text-decoration: none;\">Hakkımızda</a>\n          <a href=\"#\" style=\"color: #000; text-decoration: none;\">Ürünler</a>\n          <a href=\"#\" style=\"color: #000; text-decoration: none;\">İletişim</a>\n        </div>\n      </nav>\n      \n      <div class=\"demo-hero\" style=\"background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 3rem 2rem; text-align: center;\">\n        <h2 style=\"margin-bottom: 1rem;\">Responsive Web Sitesi</h2>\n        <p>Bu site her ekran boyutunda mükemmel görünür!</p>\n      </div>\n      \n      <div class=\"demo-content\" style=\"display: flex; gap: 2rem; padding: 2rem; flex-wrap: wrap;\">\n        <main class=\"demo-main\" style=\"flex: 2; min-width: 200px;\">\n          <h3>Ana İçerik</h3>\n          <p>Bu ana içerik alanıdır. Masaüstünde geniş, mobilde tam genişlikte görünür.</p>\n          <p>Media queries sayesinde düzen otomatik olarak değişir.</p>\n        </main>\n        <aside class=\"demo-sidebar\" style=\"flex: 1; min-width: 200px; background: #2a2a32; padding: 1rem; border-radius: 8px;\">\n          <h3>Sidebar</h3>\n          <p>Yan menü içeriği. Mobilde ana içeriğin altına kayar.</p>\n        </aside>\n      </div>\n      \n      <footer class=\"demo-footer\" style=\"background: #2a2a32; text-align: center; padding: 1rem;\">\n        <p>© 2024 - Responsive Web Site</p>\n      </footer>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 5: Chrome Device Mode (Geliştirici Araçları) -->\n  <!-- ============================================================ -->\n  <h2>🛠️ Chrome Device Mode — Mobil Simülasyon</h2>\n  <div class=\"card\">\n    <p><strong>Chrome Device Mode</strong>, tarayıcınızda farklı mobil cihazları <strong>simüle etmenizi</strong> sağlayan bir geliştirici aracıdır.</p>\n\n    <div class=\"success-note\">\n      <strong>🎯 Nasıl Açılır?</strong>\n      <ol style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li><strong>F12</strong> veya <strong>Sağ Tık → İncele</strong> ile Geliştirici Araçları'nı açın</li>\n        <li><strong>📱 Cihaz simgesine</strong> (Toggle Device Toolbar) tıklayın</li>\n        <li>Veya <strong>Ctrl + Shift + M</strong> (Windows/Linux) / <strong>Cmd + Shift + M</strong> (Mac)</li>\n      </ol>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>📌 Chrome Device Mode Avantajları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>✅ <strong>Çok kullanışlı</strong> — Tek tıkla mobil görünüm</li>\n        <li>✅ <strong>Genellikle doğru</strong> — Gerçek cihaza yakın sonuçlar</li>\n        <li>✅ <strong>Farklı cihazlar</strong> — iPhone, Pixel, iPad vb. seçenekler</li>\n        <li>✅ <strong>Responsive mod</strong> — Ekranı istediğiniz boyuta sürükleyin</li>\n      </ul>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>⚠️ Chrome Device Mode Dezavantajları:</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>❌ <strong>Her zaman %100 doğru değil</strong> — Özellikle iPhone'da farklılıklar olabilir</li>\n        <li>❌ <strong>Performans sorunlarını simüle etmez</strong> — Gerçek cihazda daha yavaş olabilir</li>\n        <li>❌ <strong>Bazı özellikler hatalı çalışabilir</strong></li>\n      </ul>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>💡 En İyi Pratik:</strong> Geliştirme sırasında Chrome Device Mode kullanın, <strong>ancak her zaman gerçek cihazlarda da test edin</strong>!\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 6: Remote Debugging -->\n  <!-- ============================================================ -->\n  <h2>🔌 Remote Debugging — Gerçek Cihazda Test</h2>\n  <div class=\"card\">\n    <h3>📱 Android (Chrome Remote Debugging)</h3>\n    <div class=\"code-block\">\n      <pre>\n1. Android telefonunuzda USB Hata Ayıklama'yı açın\n2. USB kablo ile bilgisayara bağlayın\n3. Chrome'da chrome://inspect adresini açın\n4. Telefonunuzdaki sayfayı inceleyin ve debug edin!\n      </pre>\n    </div>\n\n    <h3>📱 iOS (Safari Remote Debugging)</h3>\n    <div class=\"code-block\">\n      <pre>\n1. iPhone'da Ayarlar → Safari → Geliştirici → Web Denetçisi'ni açın\n2. USB kablo ile Mac'e bağlayın\n3. Mac'te Safari → Geliştirici menüsünden telefonunuzu seçin\n      </pre>\n    </div>\n\n    <div class=\"info-note\">\n      <strong>💡 Port Forwarding ile Local Server:</strong>\n      <p>Bilgisayarınızda çalışan local sunucuyu (localhost:3000) telefonunuzda test etmek için Chrome remote debugging üzerinden <strong>port forwarding</strong> kullanabilirsiniz.</p>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 7: Mobile-First vs Desktop-First -->\n  <!-- ============================================================ -->\n  <h2>📱 Mobile-First vs Desktop-First Tasarım</h2>\n  <div class=\"card\">\n    <div class=\"info-note\">\n      <strong>📌 Mobile-First (Önerilen):</strong>\n      <p>Önce <strong>mobil için</strong> CSS yaz, sonra <strong>min-width</strong> ile daha büyük ekranlar için stiller ekle.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* Mobil varsayılan (max-width yok) */\n.container {\n  display: flex;\n  flex-direction: column;\n}\n\n/* Tablet ve üzeri */\n@media (min-width: 768px) {\n  .container {\n    flex-direction: row;\n  }\n}\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"warning-note\">\n      <strong>📌 Desktop-First (Eski yaklaşım):</strong>\n      <p>Önce <strong>masaüstü için</strong> CSS yaz, sonra <strong>max-width</strong> ile küçük ekranlar için stiller ekle.</p>\n      <div class=\"code-block\" style=\"margin-top: 0.5rem;\">\n        <pre>\n/* Masaüstü varsayılan */\n.container {\n  display: flex;\n  flex-direction: row;\n}\n\n/* Mobil */\n@media (max-width: 768px) {\n  .container {\n    flex-direction: column;\n  }\n}\n        </pre>\n      </div>\n    </div>\n\n    <div class=\"success-note\">\n      <strong>🎯 Neden Mobile-First?</strong>\n      <ul style=\"margin-left: 1.5rem; margin-top: 0.5rem;\">\n        <li>📱 Mobil kullanım <strong>masaüstünden fazla</strong></li>\n        <li>⚡ Daha <strong>hızlı yüklenir</strong> (mobil için daha az CSS)</li>\n        <li>🎨 <strong>Önce içerik</strong>, sonra düzen düşünmeyi sağlar</li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 8: Özet Tablo -->\n  <!-- ============================================================ -->\n  <h2>📊 Responsive Tasarım Özet Tablosu</h2>\n  <table class=\"property-table\">\n    <thead>\n      <tr><th>Kavram</th><th>Açıklama</th><th>Kod Örneği</th></tr>\n    </thead>\n    <tbody>\n      <tr><td><strong>Viewport Meta Tag</strong></td>\n        <td>Mobil cihazlarda doğru ölçeklendirme için</td>\n        <td><code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code></td>\n      </tr>\n      <tr><td><strong>Media Query</strong></td>\n        <td>Farklı ekran boyutları için farklı CSS</td>\n        <td><code>@media (max-width: 768px) { ... }</code></td>\n      </tr>\n      <tr><td><strong>Chrome Device Mode</strong></td>\n        <td>Tarayıcıda mobil simülasyonu</td>\n        <td><code>Ctrl + Shift + M</code></td>\n      </tr>\n      <tr><td><strong>Remote Debugging</strong></td>\n        <td>Gerçek cihazda test ve debug</td>\n        <td><code>chrome://inspect</code> (Android)</td>\n      </tr>\n      <tr><td><strong>Mobile-First</strong></td>\n        <td>Önce mobil, sonra büyük ekranlar</td>\n        <td><code>@media (min-width: 768px)</code></td>\n      </tr>\n      <tr><td><strong>Breakpoint</strong></td>\n        <td>Düzenin değiştiği eşik değerleri</td>\n        <td><code>480px, 768px, 1024px, 1200px</code></td>\n      </tr>\n    </tbody>\n  </table>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 9: Pratik İpuçları -->\n  <!-- ============================================================ -->\n  <h2>💡 Pratik İpuçları</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📱 <strong>Her zaman viewport meta tag'i ekleyin!</strong> — Unutmayın, olmazsa mobilde zoom yapılır.</li>\n      <li>📏 <strong>Rem/em kullanın</strong> — Piksel yerine göreceli birimler responsive tasarımı kolaylaştırır.</li>\n      <li>🖼️ <strong>max-width: 100%</strong> — Resimlerin taşmasını engeller.</li>\n      <li>🎯 <strong>Mobile-first yaklaşımı benimseyin</strong> — Önce küçük ekran, sonra büyük ekran.</li>\n      <li>🔍 <strong>Gerçek cihazlarda test edin</strong> — Simülasyon her zaman %100 doğru değildir.</li>\n      <li>📐 <strong>Flexbox ve Grid kullanın</strong> — Responsive düzenler için en iyi araçlar.</li>\n    </ul>\n  </div>\n\n  <!-- ============================================================ -->\n  <!-- BÖLÜM 10: Özet -->\n  <!-- ============================================================ -->\n  <h2>📋 Genel Özet</h2>\n  <div class=\"card\">\n    <ul style=\"margin-left: 1.5rem; color:#c0c0d0; line-height: 1.8;\">\n      <li>📱 <strong>Viewport Meta Tag</strong> → Mobil cihazlarda doğru ölçeklendirme için <strong>OLMAZSA OLMAZ</strong></li>\n      <li>📏 <strong>CSS Media Queries</strong> → Farklı ekran boyutları için farklı stiller (<code>@media</code>)</li>\n      <li>🛠️ <strong>Chrome Device Mode</strong> → Tarayıcıda mobil simülasyonu (<code>Ctrl+Shift+M</code>)</li>\n      <li>🔌 <strong>Remote Debugging</strong> → Gerçek cihazda test etme (<code>chrome://inspect</code>)</li>\n      <li>📱 <strong>Mobile-First</strong> → Önce mobil, sonra büyük ekranlar (önerilen yaklaşım)</li>\n      <li>📐 <strong>Breakpoint'ler</strong> → 480px, 768px, 1024px, 1200px (yaygın eşik değerleri)</li>\n      <li>🎯 <strong>Her zaman gerçek cihazlarda test edin!</strong> — Simülasyon yeterli değil</li>\n    </ul>\n  </div>\n\n</main>\n\n<footer class=\"footer\">\n  HTMLBook — Mobil Web & Responsive Tasarım | Viewport · Media Queries · Mobile-First · Chrome Device Mode\n</footer>\n\n</body>\n</html>";
+    const cssCode = "/* css-mobile-responsive.css - Mobil Web ve Responsive Tasarım */\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n:root {\n  --primary-color: #e8ff47;\n  --secondary-color: #ff6464;\n  --accent-color: #64c8ff;\n  --success-color: #6bcb77;\n  --dark-bg: #0d0d0f;\n  --card-bg: #16161a;\n  --border-color: #2a2a32;\n  --text-color: #e8e8f0;\n  --muted-color: #7a7a8c;\n  --spacing-small: 0.5rem;\n  --spacing-medium: 1rem;\n  --spacing-large: 1.5rem;\n  --border-radius: 12px;\n  --font-mono: 'Space Mono', monospace;\n  --font-sans: 'Syne', sans-serif;\n}\n\nbody {\n  background: var(--dark-bg);\n  color: var(--text-color);\n  font-family: var(--font-sans);\n  line-height: 1.6;\n}\n\n/* Header */\n.header {\n  padding: var(--spacing-large) 2rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-large);\n  flex-wrap: wrap;\n  background: var(--dark-bg);\n  position: sticky;\n  top: 0;\n  z-index: 100;\n}\n\n.back-btn {\n  color: var(--primary-color);\n  text-decoration: none;\n  font-family: var(--font-mono);\n  font-size: 0.78rem;\n  border: 1px solid var(--primary-color);\n  padding: 0.3rem 0.9rem;\n  transition: all 0.15s;\n}\n\n.back-btn:hover {\n  background: var(--primary-color);\n  color: #000;\n}\n\n.logo {\n  font-size: 1.1rem;\n  font-weight: 800;\n  letter-spacing: -0.02em;\n}\n\n.logo span {\n  color: var(--primary-color);\n}\n\n.container {\n  max-width: 1400px;\n  margin: 0 auto;\n  padding: 2rem;\n}\n\nh1 {\n  font-size: clamp(2rem, 5vw, 3rem);\n  font-weight: 800;\n  margin-bottom: var(--spacing-small);\n}\n\nh1 .highlight {\n  color: var(--primary-color);\n}\n\n.subtitle {\n  color: var(--muted-color);\n  font-family: var(--font-mono);\n  font-size: 0.85rem;\n  margin-bottom: 2rem;\n  border-left: 3px solid var(--primary-color);\n  padding-left: var(--spacing-medium);\n}\n\nh2 {\n  font-size: 1.6rem;\n  font-weight: 700;\n  margin: 2rem 0 var(--spacing-medium) 0;\n  display: flex;\n  align-items: center;\n  gap: var(--spacing-small);\n  border-bottom: 1px solid var(--border-color);\n  padding-bottom: var(--spacing-small);\n}\n\nh3 {\n  font-size: 1.2rem;\n  font-weight: 600;\n  color: var(--primary-color);\n  margin: var(--spacing-large) 0 var(--spacing-small) 0;\n  font-family: var(--font-mono);\n}\n\n.card {\n  background: var(--card-bg);\n  border: 1px solid var(--border-color);\n  border-radius: var(--border-radius);\n  padding: var(--spacing-large);\n  margin: var(--spacing-large) 0;\n}\n\n.card-header {\n  font-family: var(--font-mono);\n  font-size: 0.7rem;\n  color: var(--primary-color);\n  text-transform: uppercase;\n  letter-spacing: 0.1em;\n  margin-bottom: var(--spacing-medium);\n}\n\n.code-block {\n  background: #0a0a0c;\n  border: 1px solid var(--border-color);\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  overflow-x: auto;\n  margin: var(--spacing-medium) 0;\n}\n\n.code-block pre {\n  color: #b0c4de;\n  font-family: var(--font-mono);\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.demo-box {\n  background: #1a1a20;\n  border-radius: 8px;\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n}\n\n/* ============================================ */\n/* RESPONSIVE DEMO - Media Queries ile */\n/* ============================================ */\n.responsive-demo {\n  background: #2a2a32;\n  border-radius: 8px;\n  padding: 1rem;\n}\n\n.responsive-card {\n  background: var(--accent-color);\n  color: #000;\n  padding: 1rem;\n  border-radius: 8px;\n  text-align: center;\n  font-family: var(--font-mono);\n}\n\n.responsive-grid {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n  margin-top: 1rem;\n}\n\n.responsive-item {\n  background: var(--secondary-color);\n  color: white;\n  padding: 1rem;\n  border-radius: 8px;\n  text-align: center;\n  flex: 1;\n  min-width: 150px;\n}\n\n/* Media Queries Örnekleri */\n@media (max-width: 768px) {\n  .responsive-grid {\n    flex-direction: column;\n  }\n  \n  .responsive-card {\n    font-size: 0.9rem;\n  }\n}\n\n@media (max-width: 480px) {\n  .responsive-card {\n    font-size: 0.8rem;\n    padding: 0.8rem;\n  }\n}\n\n/* ============================================ */\n/* ÖRNEK SİTE DEMO (Responsive) */\n/* ============================================ */\n.demo-website {\n  background: #1a1a20;\n  border-radius: 12px;\n  overflow: hidden;\n}\n\n.demo-nav {\n  background: var(--primary-color);\n  color: #000;\n  padding: 1rem;\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  gap: 1rem;\n}\n\n.demo-nav-links {\n  display: flex;\n  gap: 1.5rem;\n  flex-wrap: wrap;\n}\n\n.demo-hero {\n  background: linear-gradient(135deg, #667eea, #764ba2);\n  color: white;\n  padding: 3rem 2rem;\n  text-align: center;\n}\n\n.demo-content {\n  display: flex;\n  gap: 2rem;\n  padding: 2rem;\n  flex-wrap: wrap;\n}\n\n.demo-main {\n  flex: 2;\n  min-width: 200px;\n}\n\n.demo-sidebar {\n  flex: 1;\n  min-width: 200px;\n  background: #2a2a32;\n  padding: 1rem;\n  border-radius: 8px;\n}\n\n.demo-footer {\n  background: #2a2a32;\n  text-align: center;\n  padding: 1rem;\n  font-size: 0.8rem;\n}\n\n/* Demo website için media queries */\n@media (max-width: 768px) {\n  .demo-nav {\n    flex-direction: column;\n    text-align: center;\n  }\n  \n  .demo-nav-links {\n    justify-content: center;\n  }\n  \n  .demo-hero {\n    padding: 2rem 1rem;\n  }\n  \n  .demo-hero h2 {\n    font-size: 1.5rem;\n  }\n  \n  .demo-content {\n    padding: 1rem;\n  }\n}\n\n/* Tablo */\n.property-table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: var(--spacing-medium) 0;\n}\n\n.property-table th,\n.property-table td {\n  border: 1px solid var(--border-color);\n  padding: 0.8rem;\n  text-align: left;\n  vertical-align: top;\n}\n\n.property-table th {\n  background: #1a1a20;\n  color: var(--primary-color);\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n}\n\n.property-table td {\n  color: #c0c0d0;\n  font-size: 0.9rem;\n}\n\n.property-table code {\n  background: #0a0a0c;\n  padding: 0.2rem 0.4rem;\n  border-radius: 4px;\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  color: var(--primary-color);\n}\n\n.info-note {\n  background: rgba(232, 255, 71, 0.1);\n  border-left: 3px solid var(--primary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.warning-note {\n  background: rgba(255, 100, 100, 0.1);\n  border-left: 3px solid var(--secondary-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.success-note {\n  background: rgba(107, 203, 119, 0.1);\n  border-left: 3px solid var(--success-color);\n  padding: var(--spacing-medium);\n  margin: var(--spacing-medium) 0;\n  font-size: 0.9rem;\n}\n\n.footer {\n  text-align: center;\n  padding: 2rem;\n  border-top: 1px solid var(--border-color);\n  color: var(--muted-color);\n  font-size: 0.8rem;\n  font-family: var(--font-mono);\n  margin-top: 2rem;\n}\n\n@media (max-width: 768px) {\n  .container {\n    padding: 1rem;\n  }\n  .property-table th,\n  .property-table td {\n    padding: 0.5rem;\n    font-size: 0.75rem;\n  }\n}";
+
+    function openPreview() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.add('show');
+      const frame = document.getElementById('overlay-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:0;padding:1.5rem;font-family:sans-serif}' + cssCode + '</style></head><body>' + htmlCode + '</body></html>');
+      doc.close();
+    }
+
+    function closePreview() {
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    document.getElementById('overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePreview();
+    });
+  </script>
+</body>
+</html>
